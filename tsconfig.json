@@ -1,0 +1,46 @@
+{
+  // 包含文件夹中的所有 TypeScript 文件
+  "include": ["./**/*.ts", "./**/*.d.ts"],
+  // 排除 "node_modules" 文件夹
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    // 自动生成 .d.ts 文件
+    "declaration": true,
+    // 设置输出文件夹
+    "outDir": "./dist",
+    // 使用 Node.js 模块解析
+    "moduleResolution": "NodeNext",
+    // 允许导入 ts 文件
+    "allowImportingTsExtensions": true,
+    // 目标为 ESNext
+    "target": "ESNext",
+    // 使用 ESNext 模块
+    "module": "ESNext",
+    // 开启严格类型检查
+    "strict": true,
+    // 启用 ES 模块交互
+    "esModuleInterop": true,
+    // 解析 JSON 模块
+    "resolveJsonModule": true,
+    // 启用隔离模块
+    "isolatedModules": true,
+    // 保持文件名一致的大小写
+    "forceConsistentCasingInFileNames": true,
+    // 跳过库检查
+    "skipLibCheck": true,
+    // 检查未使用的局部变量
+    "noUnusedLocals": true,
+    // 检查未使用的参数
+    "noUnusedParameters": true,
+    // 禁用隐式 any
+    "noImplicitAny": true,
+    // 禁用隐式返回
+    "noImplicitReturns": true,
+    "paths": {
+      "@builtInPlugins/*": ["./builtInPlugins/*"],
+      "@plugins/*": ["./plugins/*"],
+      "@libs/*": ["./libs/*"],
+      "@": ["./*"]
+    }
+  }
+}

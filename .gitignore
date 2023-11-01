@@ -1,0 +1,7 @@
+/node_modules
+/.pnpm-store
+/temp
+/config
+*.log
+pnpm-lock.yaml
+test.js

@@ -1,0 +1,12 @@
+{
+  "client": "mysql2",
+  "connection": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "",
+    "database": "kkbot"
+  },
+  // 独立debug开关(打印所有执行的sql命令)
+  "debug": false
+}
