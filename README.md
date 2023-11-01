@@ -4,8 +4,9 @@
 
 ## TODO
 
-- [x] 一直系统插件
-- [ ] 移植支持库部分(还剩下网络请求)
+- [x] 移植系统插件
+- [x] 移植支持库部分
+- [ ] 移植已有的插件
 
 ## 🎉[更新日志](./CHANGELOG.md)
 
@@ -13,4 +14,4 @@
 
 ## ⭐ 星星
 
-[![Stargazers over time](https://starchart.cc/huankong233/kkbot.svg)](https://starchart.cc/huankong233/kkbot)
+[![Stargazers over time](https://starchart.cc/huankong233/kkbot-ts.svg)](https://starchart.cc/huankong233/kkbot-ts)

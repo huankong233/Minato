@@ -41,7 +41,7 @@ for (const pluginDir of pluginDirs) {
   }
 }
 
-const packagePath = path.join(baseDir, '../package.json')
+const packagePath = path.join(baseDir, 'package.json')
 let packageJSON = jsonc.parse(await fs.readFile(packagePath, { encoding: 'utf-8' }))
 packageJSON.dependencies = originPackages
 await fs.writeFile(packagePath, JSON.stringify(packageJSON))

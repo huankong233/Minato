@@ -19,49 +19,50 @@ export const deleteFolder = async (folder: string) => {
   await fs.rmdir(folder)
 }
 
-// /**
-//  * 内部方法!!!请勿调用
-//  * @param {String} url
-//  * @param {String} fullPath
-//  * @returns
-//  */
-// async function _download(url, fullPath) {
-//   const res = await fetch(url)
-//   fullPath += '.temp'
-//   const dest = fs.createWriteStream(fullPath)
-//   res.body.pipe(dest)
-//   return new Promise((resolve, reject) => {
-//     dest.on('finish', res => {
-//       resolve(fullPath)
-//     })
-//     dest.on('error', error => {
-//       reject(error)
-//     })
-//   })
-// }
+import { retryGet } from './axios.ts'
 
-// import { getRangeCode } from './random.js'
-// import * as mime from 'mime-types'
-// /**
-//  * 下载文件
-//  * @param {String} url
-//  * @param {String} ext 下载的文件后缀
-//  * @returns {Promise<String>} 完整的下载路径
-//  */
-// export async function downloadFile(url, ext = '.png') {
-//   const fileName = getRangeCode(10)
-//   const outPath = path.join(baseDir, 'temp')
-//   const fullPath = path.join(outPath, fileName)
-//   const tempPath = await _download(url, fullPath)
-//   const contentType = mime.lookup(tempPath)
-//   if (contentType) {
-//     let extension = mime.extension(contentType)
-//     ext = extension ? '.' + extension : ext
-//   }
+/**
+ * 内部方法!!!请勿调用
+ * @param url 地址
+ * @param fullPath 完整路径
+ * @returns
+ */
+async function _download(url: string, fullPath: string): Promise<string> {
+  fullPath += '.temp'
 
-//   fs.renameSync(tempPath, fullPath + ext)
-//   return fullPath + ext
-// }
+  return new Promise((resolve, reject) => {
+    retryGet(url, { responseType: 'arraybuffer' })
+      .then(async res => {
+        const buffer = Buffer.from(res.data, 'binary')
+        await fs.writeFile(fullPath, buffer)
+        resolve(fullPath)
+      })
+      .catch(error => reject(error))
+  })
+}
+
+import { getRangeCode } from './random.js'
+import * as mime from 'mime-types'
+/**
+ * 下载文件
+ * @param url 下载链接
+ * @param ext 如果是下载文件类型未知则使用的文件后缀
+ * @returns 完整的下载路径
+ */
+export async function downloadFile(url: string, ext = '.png') {
+  const fileName = getRangeCode(10)
+  const outPath = path.join(baseDir, 'temp')
+  const fullPath = path.join(outPath, fileName)
+  const tempPath = await _download(url, fullPath)
+  const contentType = mime.lookup(tempPath)
+  if (contentType) {
+    let extension = mime.extension(contentType)
+    ext = extension ? '.' + extension : ext
+  }
+
+  await fs.rename(tempPath, fullPath + ext)
+  return fullPath + ext
+}
 
 /**
  * 删除指定数量的老文件
