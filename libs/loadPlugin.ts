@@ -2,7 +2,7 @@ import { loadConfig } from '@/libs/loadConfig.ts'
 import { makeSystemLogger } from '@/libs/logger.ts'
 import { execSync } from 'child_process'
 import { compare } from 'compare-versions'
-import fs from 'fs/promises'
+import fs from 'fs'
 import { jsonc } from 'jsonc'
 import path from 'path'
 import { pathToFileURL } from 'url'
@@ -35,38 +35,19 @@ export async function loadPlugin(pluginName: string, pluginDir = 'plugins', _loa
   // 插件绝对路径
   const pluginAbsoluteDir = path.join(baseDir, pluginDir, pluginName)
 
-  try {
-    await fs.stat(pluginAbsoluteDir)
-  } catch (error: any) {
-    if (error.toString().includes('no such file or directory')) {
-      logger.WARNING(`插件 ${pluginName} 文件夹不存在`)
-    } else {
-      logger.WARNING(`插件 ${pluginName} 文件夹状态获取异常`)
-      logger.ERROR(error)
-    }
-    return
-  }
+  if (!fs.existsSync(pluginAbsoluteDir)) return logger.WARNING(`插件 ${pluginName} 文件夹不存在`)
 
   // 插件manifest路径
   let manifestPath = path.join(pluginAbsoluteDir, `manifest.jsonc`)
 
-  try {
-    await fs.stat(manifestPath)
-  } catch (error: any) {
-    if (error.toString().includes('no such file or directory')) {
-      logger.WARNING(`插件 ${pluginName} mainifest.jsonc 不存在`)
-    } else {
-      logger.WARNING(`插件 ${pluginName} mainifest.jsonc 状态获取异常`)
-      logger.ERROR(error)
-    }
-    return
-  }
+  if (!fs.existsSync(manifestPath))
+    return logger.WARNING(`插件 ${pluginName} mainifest.jsonc 不存在`)
 
   let manifest: manifest
 
   // 检查插件兼容情况
   try {
-    manifest = jsonc.parse(await fs.readFile(manifestPath, { encoding: 'utf-8' }))
+    manifest = jsonc.parse(fs.readFileSync(manifestPath, { encoding: 'utf-8' }))
   } catch (error) {
     logger.WARNING(`插件 ${pluginName} manifest.jsonc 加载失败`)
     logger.ERROR(error)
@@ -114,7 +95,7 @@ export async function loadPlugin(pluginName: string, pluginDir = 'plugins', _loa
 
     // 回写manifest文件
     manifest.installed = true
-    await fs.writeFile(manifestPath, jsonc.stringify(manifest))
+    fs.writeFileSync(manifestPath, jsonc.stringify(manifest))
   }
 
   // 检查是否存在依赖
@@ -139,18 +120,7 @@ export async function loadPlugin(pluginName: string, pluginDir = 'plugins', _loa
 
   const filePath = path.join(pluginAbsoluteDir, 'index.ts')
 
-  try {
-    await fs.stat(filePath)
-  } catch (error: any) {
-    if (error.toString().includes('no such file or directory')) {
-      //创建文件夹
-      logger.WARNING(`插件 ${pluginName} 的 index.ts 文件不存在`)
-    } else {
-      logger.WARNING(`插件 ${pluginName} 的 index.ts 文件状态获取异常`)
-      logger.ERROR(error)
-    }
-    return
-  }
+  if (!fs.existsSync(filePath)) return logger.WARNING(`插件 ${pluginName} 的 index.ts 文件不存在`)
 
   let program
 
@@ -226,21 +196,8 @@ export async function loadPluginDir(pluginDir: string) {
   //获取文件夹内文件
   let plugins
 
-  try {
-    await fs.stat(pluginDir)
-  } catch (error) {
-    logger.WARNING(`文件夹 ${pluginDir} 不存在`)
-    return
-  }
-
-  try {
-    plugins = await fs.readdir(pluginDir)
-  } catch (error) {
-    logger.WARNING('获取文件夹内容失败')
-    logger.ERROR(error)
-    return
-  }
-
+  if (!fs.existsSync(pluginDir)) return logger.WARNING(`文件夹 ${pluginDir} 不存在`)
+  plugins = fs.readdirSync(pluginDir)
   await loadPlugins(plugins, pluginDir, true)
   if (debug) logger.DEBUG(`文件夹: ${pluginDir} 中的插件已全部加载!`)
 }

@@ -1,5 +1,5 @@
 import { makeSystemLogger } from '@/libs/logger.js'
-import fs from 'fs/promises'
+import fs from 'fs'
 import { jsonc } from 'jsonc'
 import path from 'path'
 
@@ -26,9 +26,9 @@ export async function loadConfig(
   const defaultConfigFullPath = path.join(configPath, `${configName}.default.jsonc`)
 
   // 检查配置文件是否存在
-  if (!(await checkConfigExists(configFullPath))) {
+  if (!fs.existsSync(configFullPath)) {
     // 检查默认配置文件是否存在
-    if (!(await checkConfigExists(defaultConfigFullPath))) {
+    if (!fs.existsSync(defaultConfigFullPath)) {
       logger.WARNING(`插件 ${configPath} 需要手动配置信息`)
     } else {
       logger.WARNING(`插件 ${configPath} 配置的自动加载的配置文件不存在`)
@@ -38,7 +38,7 @@ export async function loadConfig(
 
   try {
     //获取配置文件内容
-    const configData = jsonc.parse(await fs.readFile(configFullPath, { encoding: 'utf-8' }))
+    const configData = jsonc.parse(fs.readFileSync(configFullPath, { encoding: 'utf-8' }))
 
     if (RegToGlobal) {
       const { config } = global
@@ -66,18 +66,5 @@ export async function loadConfig(
     logger.WARNING(`配置文件 ${configFullPath} 加载失败,请检查`)
     logger.ERROR(error)
     return 'unloaded'
-  }
-}
-
-async function checkConfigExists(path: string) {
-  try {
-    await fs.stat(path)
-    return true
-  } catch (error: any) {
-    if (!error.toString().includes('no such file or directory')) {
-      logger.WARNING(`配置文件 ${path} 文件状态获取异常`)
-      logger.ERROR(error)
-    }
-    return false
   }
 }

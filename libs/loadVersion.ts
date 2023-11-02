@@ -1,13 +1,13 @@
-import fs from 'fs/promises'
+import fs from 'fs'
 import { jsonc } from 'jsonc'
 import path from 'path'
 
 /**
  * 加载框架信息
  */
-export const getPackage = async () =>
+export const getPackage = () =>
   jsonc.parse(
-    await fs.readFile(path.join(global.baseDir, 'package.json'), {
+    fs.readFileSync(path.join(global.baseDir, 'package.json'), {
       encoding: 'utf-8'
     })
   )

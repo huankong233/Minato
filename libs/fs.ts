@@ -1,22 +1,23 @@
-import fs from 'fs/promises'
+import fs from 'fs'
 import path from 'path'
 
 /**
  * 删除文件夹
  * @param folder
  */
-export const deleteFolder = async (folder: string) => {
-  let files = await fs.readdir(folder)
+export const deleteFolder = (folder: string) => {
+  let files = fs.readdirSync(folder)
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
     const dirPath = path.join(folder, file)
-    if ((await fs.stat(dirPath)).isDirectory()) {
+
+    if (fs.existsSync(dirPath)) {
       deleteFolder(dirPath)
     } else {
-      await fs.unlink(dirPath)
+      fs.unlinkSync(dirPath)
     }
   }
-  await fs.rmdir(folder)
+  fs.rmdirSync(folder)
 }
 
 import { retryGet } from './axios.ts'
@@ -32,9 +33,9 @@ async function _download(url: string, fullPath: string): Promise<string> {
 
   return new Promise((resolve, reject) => {
     retryGet(url, { responseType: 'arraybuffer' })
-      .then(async res => {
+      .then(res => {
         const buffer = Buffer.from(res.data, 'binary')
-        await fs.writeFile(fullPath, buffer)
+        fs.writeFileSync(fullPath, buffer)
         resolve(fullPath)
       })
       .catch(error => reject(error))
@@ -60,7 +61,7 @@ export async function downloadFile(url: string, ext = '.png') {
     ext = extension ? '.' + extension : ext
   }
 
-  await fs.rename(tempPath, fullPath + ext)
+  fs.renameSync(tempPath, fullPath + ext)
   return fullPath + ext
 }
 
@@ -70,11 +71,11 @@ export async function downloadFile(url: string, ext = '.png') {
  * @param count 删除多少个
  */
 export async function deleteOldestFiles(dirPath: string, count: number) {
-  const files = await fs.readdir(dirPath)
+  const files = fs.readdirSync(dirPath)
   const sortedFiles = await Promise.all(
     files.map(async file => {
       const filePath = path.join(dirPath, file)
-      const { birthtime } = await fs.stat(filePath)
+      const { birthtime } = fs.statSync(filePath)
       return { file, birthtime }
     })
   )
@@ -83,7 +84,7 @@ export async function deleteOldestFiles(dirPath: string, count: number) {
   await Promise.all(
     oldestFiles.map(file => {
       const filePath = path.join(dirPath, file)
-      return fs.unlink(filePath)
+      return fs.unlinkSync(filePath)
     })
   )
 }

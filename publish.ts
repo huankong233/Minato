@@ -1,6 +1,6 @@
 import { getDir } from '@/libs/getDirName.ts'
 import { makeSystemLogger } from '@/libs/logger.ts'
-import fs from 'fs/promises'
+import fs from 'fs'
 import { jsonc } from 'jsonc'
 import path from 'path'
 
@@ -21,13 +21,13 @@ const originPackages = {
 }
 
 for (const pluginDir of pluginDirs) {
-  const plugins = await fs.readdir(path.join(baseDir, pluginDir))
+  const plugins = fs.readdirSync(path.join(baseDir, pluginDir))
   for (const plugin of plugins) {
     const manifestPath = path.join(baseDir, pluginDir, plugin, 'manifest.jsonc')
     try {
-      const manifest = jsonc.parse(await fs.readFile(manifestPath, 'utf-8'))
+      const manifest = jsonc.parse(fs.readFileSync(manifestPath, 'utf-8'))
       delete manifest.installed
-      await fs.writeFile(manifestPath, jsonc.stringify(manifest))
+      fs.writeFileSync(manifestPath, jsonc.stringify(manifest))
       logger.SUCCESS(`已删除插件 ${plugin} 的 installed 字段`)
     } catch (error) {
       logger.DEBUG(error)
@@ -36,7 +36,7 @@ for (const pluginDir of pluginDirs) {
 }
 
 const packagePath = path.join(baseDir, 'package.json')
-let packageJSON = jsonc.parse(await fs.readFile(packagePath, { encoding: 'utf-8' }))
+let packageJSON = jsonc.parse(fs.readFileSync(packagePath, { encoding: 'utf-8' }))
 packageJSON.dependencies = originPackages
-await fs.writeFile(packagePath, JSON.stringify(packageJSON))
+fs.writeFileSync(packagePath, JSON.stringify(packageJSON))
 logger.SUCCESS(`package.json 回写完成`)
