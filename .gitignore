@@ -1,7 +1,5 @@
-/node_modules
+/.vscode
 /.pnpm-store
+/node_modules
 /temp
-/config
-*.log
-pnpm-lock.yaml
-test.js
+/logs
