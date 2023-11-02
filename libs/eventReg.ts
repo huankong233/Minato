@@ -1,8 +1,8 @@
 import type { botConfig } from '@/builtInPlugins/bot/config.d.ts'
-import type { messageCallback, noticeCallback, requestCallback } from '../global.d.ts'
-import { CQ, CQEvent } from '@huan_kong/go-cqwebsocket'
-import { replyMsg } from './sendMsg.js'
 import { sortObjectArray } from '@/libs/array.ts'
+import { CQ, CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { messageCallback, noticeCallback, requestCallback } from '../global.d.ts'
+import { replyMsg } from './sendMsg.js'
 
 /**
  * 事件快捷注册

@@ -1,0 +1,146 @@
+{
+  "debug.console.fontFamily": "JetBrains Mono",
+  // 控制在运行预启动任务后遇到错误时应该怎么做。debugAnyway: 忽略任务错误并开始调试。
+  "debug.onTaskErrors": "debugAnyway",
+  // 控制编辑器是否应在对屏幕阅读器进行了优化的模式下运行。设置为“开”将禁用自动换行。
+  "editor.accessibilitySupport": "off",
+  // 控制是否启用平滑插入动画
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.find.addExtraSpaceOnTop": false,
+  // 控制编辑器是否应呈现垂直字形边距。字形边距最常用于调试。
+  "editor.glyphMargin": true,
+  // 控制是否在编辑器中自动显示内联建议。
+  "editor.inlineSuggest.enabled": true,
+  // 关闭自动设置tabsize
+  "editor.detectIndentation": false,
+  // 重新设定tabsize
+  "editor.tabSize": 2,
+  // 每次保存的时候自动格式化；
+  "editor.formatOnSave": true,
+  // 每次保存的时候将代码按eslint格式进行修复
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true, // 在保存时使用 eslint 格式化
+    "source.organizeImports": true // 保存时整理 import ，去掉没用的导包
+  },
+  // 启用链接编辑
+  "editor.linkedEditing": true,
+  // 默认启用prettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // 让函数(名)和后面的括号之间是否加个空格
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+  // prettier配置
+  // 详见:https://prettier.io/docs/en/options.html
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+  "prettier.arrowParens": "avoid",
+  "prettier.bracketSpacing": true,
+  "prettier.printWidth": 100,
+  "prettier.trailingComma": "none",
+
+  // Manta's Stylus Supremacy配置
+  // 详见:https://thisismanta.github.io/stylus-supremacy/#options
+  "stylusSupremacy.insertColons": false,
+  "stylusSupremacy.insertSemicolons": false,
+  "stylusSupremacy.insertBraces": false,
+  "stylusSupremacy.insertNewLineAroundImports": false,
+  "stylusSupremacy.insertNewLineAroundBlocks": false,
+
+  // eslint配置
+  // 详见:https://eslint.org/docs/latest/rules/
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "vue",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "css",
+    "scss",
+    "less",
+    "mpx",
+    "json",
+    "markdown"
+  ],
+
+  // 失去焦点自动保存
+  "files.autoSave": "onFocusChange",
+  // 删除时不提示
+  "explorer.confirmDelete": false,
+  // liveServer隐藏详情
+  "liveServer.settings.donotShowInfoMsg": true,
+  // 在没有从上一会话中恢复出信息的情况下，在启动时不打开编辑器。
+  "workbench.startupEditor": "none",
+  // 信任所有文件
+  "security.workspace.trust.untrustedFiles": "open",
+  // 修改默认终端为cmd
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "editor.fontSize": 15,
+  "editor.minimap.enabled": false,
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  },
+  "workbench.iconTheme": "vscode-icons",
+  "vsicons.dontShowNewVersionMessage": true,
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "http.proxy": "http://localhost:7890",
+  "editor.parameterHints.cycle": true,
+  "editor.parameterHints.enabled": true,
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
+  "files.associations": {
+    "*.css": "css"
+  },
+  "explorer.confirmDragAndDrop": false,
+  "editor.autoClosingBrackets": "beforeWhitespace",
+  "terminal.integrated.tabs.defaultColor": "terminal.ansiBlue",
+  "terminal.integrated.smoothScrolling": true,
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": ["${env:windir}\\Sysnative\\cmd.exe", "${env:windir}\\System32\\cmd.exe"],
+      "args": [],
+      "icon": "terminal-cmd"
+    }
+  },
+  "terminal.integrated.copyOnSelection": true,
+  "terminal.integrated.fontFamily": "'MesloLGS Nerd Font Mono',Consolas, 'Courier New', monospace",
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "workbench.colorTheme": "One Dark Pro Darker",
+  "[blade]": {
+    "editor.defaultFormatter": "shufo.vscode-blade-formatter"
+  },
+  "terminal.integrated.autoReplies": {},
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.cursorBlinking": true,
+  "git.path": "C:\\Program Files\\Git\\cmd\\git.exe",
+  "Codegeex.Privacy": true,
+  "Codegeex.Explanation.LanguagePreference": "中文",
+  "Codegeex.DisabledFor": {
+    "markdown": true
+  },
+  "Codegeex.OnlyKeyControl": false,
+  "workbench.colorCustomizations": {},
+  "path-intellisense.extensionOnImport": true,
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  "security.allowedUNCHosts": ["nas.huankong.top"],
+  "diffEditor.ignoreTrimWhitespace": false,
+  "Codegeex.EnableExtension": true
+}

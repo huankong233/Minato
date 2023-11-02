@@ -1,8 +1,8 @@
-import path from 'path'
+import { getDir } from '@/libs/getDirName.ts'
+import { makeSystemLogger } from '@/libs/logger.ts'
 import fs from 'fs/promises'
 import { jsonc } from 'jsonc'
-import { makeSystemLogger } from '@/libs/logger.ts'
-import { getDir } from '@/libs/getDirName.ts'
+import path from 'path'
 
 global.debug = true
 const logger = makeSystemLogger({ pluginName: 'publish' })

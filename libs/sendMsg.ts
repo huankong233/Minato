@@ -1,6 +1,6 @@
-import { makeSystemLogger } from './logger.js'
-import * as emoji from 'node-emoji'
 import { CQ, CQEvent, Tags } from '@huan_kong/go-cqwebsocket'
+import * as emoji from 'node-emoji'
+import { makeSystemLogger } from './logger.js'
 
 const logger = makeSystemLogger({ pluginName: 'sendMsg' })
 

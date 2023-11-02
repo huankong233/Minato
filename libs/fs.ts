@@ -41,8 +41,8 @@ async function _download(url: string, fullPath: string): Promise<string> {
   })
 }
 
-import { getRangeCode } from './random.js'
 import * as mime from 'mime-types'
+import { getRangeCode } from './random.js'
 /**
  * 下载文件
  * @param url 下载链接

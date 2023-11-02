@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
-import path from 'path'
 import { jsonc } from 'jsonc'
+import path from 'path'
 
 /**
  * 加载框架信息

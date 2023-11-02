@@ -1,6 +1,6 @@
+import clc from 'cli-color'
 import { jsonc } from 'jsonc'
 import { getTime } from './time.js'
-import clc from 'cli-color'
 
 interface loggerParams {
   pluginName: string

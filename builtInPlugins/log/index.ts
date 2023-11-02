@@ -56,11 +56,11 @@ export default function rewriteConsoleLog() {
   )(console.log)
 }
 
-import fs from 'fs'
-import path from 'path'
-import clc from 'cli-color'
 import { deleteOldestFiles } from '@/libs/fs.js'
 import { getDate } from '@/libs/time.ts'
+import clc from 'cli-color'
+import fs from 'fs'
+import path from 'path'
 
 /**
  * 写入日志文件内

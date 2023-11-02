@@ -1,7 +1,8 @@
+import { bootstrapComplete } from '@/builtInPlugins/bot/index.ts'
+import { makeSystemLogger } from '@/libs/logger.js'
 import init from './init.ts'
 import plugins from './plugins.ts'
-import { makeSystemLogger } from '@/libs/logger.js'
-import { bootstrapComplete } from '@/builtInPlugins/bot/index.ts'
+
 const logger = makeSystemLogger({ pluginName: 'bootStrap' })
 
 await init()
