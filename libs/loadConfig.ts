@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs/promises'
 import { jsonc } from 'jsonc'
-import { makeSystemLogger } from '@libs/logger.js'
+import { makeSystemLogger } from '@/libs/logger.js'
 
 const logger = makeSystemLogger({
   pluginName: 'loadConfig'

@@ -1,11 +1,11 @@
-import { pathToFileURL } from 'url'
 import fs from 'fs/promises'
+import path from 'path'
+import { pathToFileURL } from 'url'
 import { execSync } from 'child_process'
 import { jsonc } from 'jsonc'
 import { compare } from 'compare-versions'
-import { loadConfig } from '@libs/loadConfig.ts'
-import { makeSystemLogger } from '@libs/logger.ts'
-import path from 'path'
+import { loadConfig } from '@/libs/loadConfig.ts'
+import { makeSystemLogger } from '@/libs/logger.ts'
 
 const logger = makeSystemLogger({ pluginName: 'loadPlugin' })
 

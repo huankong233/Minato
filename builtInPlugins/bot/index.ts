@@ -1,9 +1,9 @@
 import type { botData, botConfig } from './config.d.ts'
 import { CQ, CQWebSocket } from '@huan_kong/go-cqwebsocket'
-import { globalReg } from '@libs/globalReg.ts'
-import { makeLogger } from '@libs/logger.ts'
-import { sendMsg } from '@libs/sendMsg.ts'
-import { format } from '@libs/eventReg.ts'
+import { globalReg } from '@/libs/globalReg.ts'
+import { makeLogger } from '@/libs/logger.ts'
+import { sendMsg } from '@/libs/sendMsg.ts'
+import { format } from '@/libs/eventReg.ts'
 import * as emoji from 'node-emoji'
 
 const logger = makeLogger({ pluginName: 'bot', subModule: 'connect' })

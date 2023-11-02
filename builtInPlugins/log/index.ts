@@ -1,4 +1,4 @@
-import { makeLogger } from '@libs/logger.js'
+import { makeLogger } from '@/libs/logger.js'
 
 const levelNumericalCode = {
   SUCCESS: 1,
@@ -59,8 +59,8 @@ export default function rewriteConsoleLog() {
 import fs from 'fs'
 import path from 'path'
 import clc from 'cli-color'
-import { deleteOldestFiles } from '@libs/fs.js'
-import { getDate } from '@libs/time.ts'
+import { deleteOldestFiles } from '@/libs/fs.js'
+import { getDate } from '@/libs/time.ts'
 
 /**
  * 写入日志文件内

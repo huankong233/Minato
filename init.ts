@@ -1,11 +1,11 @@
 import path from 'path'
 import fs from 'fs/promises'
-import { getDir } from '@libs/getDirName.ts'
-import { globalReg } from '@libs/globalReg.ts'
-import { getPackage } from '@libs/loadVersion.ts'
-import { makeSystemLogger } from '@libs/logger.ts'
-import { deleteFolder } from '@libs/fs.ts'
-import { loadPlugin } from '@libs/loadPlugin.ts'
+import { getDir } from '@/libs/getDirName.ts'
+import { globalReg } from '@/libs/globalReg.ts'
+import { getPackage } from '@/libs/loadVersion.ts'
+import { makeSystemLogger } from '@/libs/logger.ts'
+import { deleteFolder } from '@/libs/fs.ts'
+import { loadPlugin } from '@/libs/loadPlugin.ts'
 
 const logger = makeSystemLogger({ pluginName: 'init' })
 

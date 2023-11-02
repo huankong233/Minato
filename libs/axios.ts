@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { retryAsync } from '@libs/retry.ts'
+import { retryAsync } from '@/libs/retry.ts'
 
 // 默认超时时间 30s
 axios.defaults.timeout = 300000

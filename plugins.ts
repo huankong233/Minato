@@ -1,4 +1,4 @@
-import { loadPlugin, loadPlugins, loadPluginDir } from '@libs/loadPlugin.ts'
+import { loadPlugin, loadPluginDir } from '@/libs/loadPlugin.ts'
 
 // 加载插件(存在依赖关系在里面)
 export default async function () {

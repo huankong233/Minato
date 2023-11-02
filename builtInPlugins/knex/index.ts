@@ -1,6 +1,6 @@
-import knex from 'knex'
-import { makeLogger } from '@libs/logger.js'
-import { globalReg } from '@libs/globalReg.js'
+import { knex } from 'knex'
+import { makeLogger } from '@/libs/logger.js'
+import { globalReg } from '@/libs/globalReg.js'
 
 const logger = makeLogger({ pluginName: 'knex' })
 const debuglogger = makeLogger({ pluginName: 'knex', subModule: 'sql' })
@@ -12,7 +12,7 @@ export default async function () {
     const database = knex({
       ...knexConfig,
       log: {
-        debug(message) {
+        debug(message: string) {
           debuglogger.DEBUG('发起一条SQL查询\n', message)
         }
       }
