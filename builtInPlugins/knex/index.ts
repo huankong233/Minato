@@ -1,6 +1,7 @@
 import { globalReg } from '@/libs/globalReg.js'
 import { makeLogger } from '@/libs/logger.js'
-import { knex } from 'knex'
+import Knex from 'knex'
+const { knex } = Knex
 
 const logger = makeLogger({ pluginName: 'knex' })
 const debuglogger = makeLogger({ pluginName: 'knex', subModule: 'sql' })

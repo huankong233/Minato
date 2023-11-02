@@ -14,8 +14,7 @@ const logger = makeSystemLogger({ pluginName: 'sendMsg' })
 export async function replyMsg(
   context: CQEvent<'message'>['context'],
   message: string | Tags.msgTags[],
-  { at = false, reply = false } = {},
-  toEmoji = true
+  { at = false, reply = false, toEmoji = true } = {}
 ) {
   const { message_type, user_id, message_id } = context
 

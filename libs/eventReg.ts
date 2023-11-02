@@ -10,9 +10,9 @@ import { replyMsg } from './sendMsg.js'
  * @param callback 回调函数
  * @param priority 优先级
  */
-export function eventReg(type: 'message', callback: messageCallback, priority: number): void
-export function eventReg(type: 'notice', callback: noticeCallback, priority: number): void
-export function eventReg(type: 'request', callback: requestCallback, priority: number): void
+export function eventReg(type: 'message', callback: messageCallback, priority?: number): void
+export function eventReg(type: 'notice', callback: noticeCallback, priority?: number): void
+export function eventReg(type: 'request', callback: requestCallback, priority?: number): void
 export function eventReg(
   type: 'message' | 'notice' | 'request',
   callback: messageCallback | noticeCallback | requestCallback,

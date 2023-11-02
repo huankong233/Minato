@@ -52,6 +52,7 @@ declare global {
   var packageData: {
     version: string
     plguinVersion: string
+    repository: string
   }
   var bot: CQWebSocket
   var database: Knex

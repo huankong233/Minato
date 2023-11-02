@@ -8,7 +8,7 @@ export default async function () {
   }
 
   await loadPluginDir('builtInPlugins')
+  await loadPluginDir('plugins')
   // await loadPlugins(['pigeon', 'query'])
-  // await loadPluginDir('plugins')
   // await loadPlugins(['searchImage', 'help'])
 }

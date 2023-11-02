@@ -10,19 +10,13 @@ const baseDir = getDir(import.meta)
 
 const pluginDirs = ['./builtInPlugins', './plugins']
 const originPackages = {
-  '@huan_kong/go-cqwebsocket': '^6.2.8',
   axios: '^1.6.0',
   'cli-color': '^2.0.3',
   'compare-versions': '^6.1.0',
   'cz-customizable': '^7.0.0',
   jsonc: '^2.0.0',
-  knex: '3.0.1',
   'mime-types': '^2.1.35',
-  mysql2: '3.6.2',
-  'node-emoji': '^2.1.0',
-  'node-global-proxy': '1.0.1',
   nodemon: '^3.0.1',
-  qs: '^6.11.2',
   tsx: '^3.14.0'
 }
 

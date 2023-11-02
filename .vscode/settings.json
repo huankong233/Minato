@@ -19,8 +19,7 @@
   "editor.formatOnSave": true,
   // 每次保存的时候将代码按eslint格式进行修复
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true, // 在保存时使用 eslint 格式化
-    "source.organizeImports": true // 保存时整理 import ，去掉没用的导包
+    "source.fixAll.eslint": true // 在保存时使用 eslint 格式化
   },
   // 启用链接编辑
   "editor.linkedEditing": true,
@@ -49,31 +48,13 @@
 
   // eslint配置
   // 详见:https://eslint.org/docs/latest/rules/
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "vue",
-    "typescript",
-    "typescriptreact",
-    "html",
-    "css",
-    "scss",
-    "less",
-    "mpx",
-    "json",
-    "markdown"
-  ],
-
+  "eslint.validate": ["javascript", "typescript", "json", "markdown"],
   // 失去焦点自动保存
   "files.autoSave": "onFocusChange",
   // 删除时不提示
   "explorer.confirmDelete": false,
-  // liveServer隐藏详情
-  "liveServer.settings.donotShowInfoMsg": true,
   // 在没有从上一会话中恢复出信息的情况下，在启动时不打开编辑器。
   "workbench.startupEditor": "none",
-  // 信任所有文件
-  "security.workspace.trust.untrustedFiles": "open",
   // 修改默认终端为cmd
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "editor.fontSize": 15,
@@ -86,21 +67,13 @@
   "[xml]": {
     "editor.defaultFormatter": "DotJoshJohnson.xml"
   },
-  "workbench.iconTheme": "vscode-icons",
-  "vsicons.dontShowNewVersionMessage": true,
-  "[php]": {
-    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
-  },
-  "http.proxy": "http://localhost:7890",
+  "workbench.iconTheme": "material-icon-theme",
   "editor.parameterHints.cycle": true,
   "editor.parameterHints.enabled": true,
   "editor.quickSuggestions": {
     "other": true,
     "comments": true,
     "strings": true
-  },
-  "files.associations": {
-    "*.css": "css"
   },
   "explorer.confirmDragAndDrop": false,
   "editor.autoClosingBrackets": "beforeWhitespace",
@@ -119,17 +92,10 @@
   },
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.fontFamily": "'MesloLGS Nerd Font Mono',Consolas, 'Courier New', monospace",
-  "[rust]": {
-    "editor.defaultFormatter": "rust-lang.rust-analyzer"
-  },
   "workbench.colorTheme": "One Dark Pro Darker",
-  "[blade]": {
-    "editor.defaultFormatter": "shufo.vscode-blade-formatter"
-  },
   "terminal.integrated.autoReplies": {},
   "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.cursorBlinking": true,
-  "git.path": "C:\\Program Files\\Git\\cmd\\git.exe",
   "Codegeex.Privacy": true,
   "Codegeex.Explanation.LanguagePreference": "中文",
   "Codegeex.DisabledFor": {
@@ -140,7 +106,7 @@
   "path-intellisense.extensionOnImport": true,
   "javascript.preferences.importModuleSpecifierEnding": "js",
   "typescript.preferences.importModuleSpecifierEnding": "js",
-  "security.allowedUNCHosts": ["nas.huankong.top"],
   "diffEditor.ignoreTrimWhitespace": false,
-  "Codegeex.EnableExtension": true
+  "Codegeex.EnableExtension": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

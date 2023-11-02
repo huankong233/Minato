@@ -18,6 +18,9 @@ export default async function () {
     const { botData } = global.data as { botData: botData }
 
     const bot = new CQWebSocket(botConfig.connect)
+    bot.messageSuccess = () => {}
+    bot.messageFail = () => {}
+
     let attempts = 1
 
     //注册全局变量
