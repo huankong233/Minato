@@ -1,4 +1,4 @@
-import { makeLogger } from '@/libs/logger.js'
+import { makeLogger } from '@/libs/logger.ts'
 import proxy from 'node-global-proxy'
 
 const logger = makeLogger({ pluginName: 'proxy' })

@@ -1,6 +1,6 @@
 import type { fakeContext } from '@/global.d.ts'
 import type { Tags } from '@huan_kong/go-cqwebsocket'
-import { makeSystemLogger } from '@/libs/logger.js'
+import { makeSystemLogger } from '@/libs/logger.ts'
 import { CQ } from '@huan_kong/go-cqwebsocket'
 import * as emoji from 'node-emoji'
 
