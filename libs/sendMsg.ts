@@ -1,5 +1,5 @@
 import type { fakeContext } from '@/global.d.ts'
-import type { Tags } from '@huan_kong/go-cqwebsocket'
+import type { Tags, CQEvent } from '@huan_kong/go-cqwebsocket'
 import { makeSystemLogger } from '@/libs/logger.ts'
 import { CQ } from '@huan_kong/go-cqwebsocket'
 import * as emoji from 'node-emoji'
@@ -13,7 +13,7 @@ const logger = makeSystemLogger({ pluginName: 'sendMsg' })
  * @param params 是否at/reply发送者 是否转换为emoji
  */
 export async function replyMsg(
-  context: fakeContext,
+  context: CQEvent<'message'>['context'] | fakeContext,
   message: string | Tags.msgTags[],
   { at = false, reply = false, toEmoji = true } = {}
 ) {
@@ -24,9 +24,9 @@ export async function replyMsg(
   if (message_type !== 'private') {
     //不是私聊，可以at发送者
     if (at && user_id) message = `${CQ.at(user_id)} ${message}`
-  }
 
-  if (reply && message_id) message = `${CQ.reply(message_id)}${message}`
+    if (reply && message_id) message = `${CQ.reply(message_id)}${message}`
+  }
 
   let response
 
@@ -79,7 +79,10 @@ export async function sendMsg(user_id: number, message: string | Tags.msgTags[],
  * @param context 消息对象
  * @param messages
  */
-export async function sendForwardMsg(context: fakeContext, messages: Tags.CQNode[]) {
+export async function sendForwardMsg(
+  context: CQEvent<'message'>['context'] | fakeContext,
+  messages: Tags.CQNode[]
+) {
   const { message_type } = context
 
   let response

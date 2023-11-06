@@ -7,7 +7,7 @@ import path from 'path'
 const logger = makeSystemLogger({ pluginName: 'publish' })
 const baseDir = getDir(import.meta)
 
-const pluginDirs = ['./builtInPlugins', './plugins']
+const pluginDirs = ['./plugins/builtInPlugins', './plugins/tools']
 const originPackages = {
   axios: '^1.6.0',
   'cli-color': '^2.0.3',

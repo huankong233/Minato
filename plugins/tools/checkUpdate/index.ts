@@ -1,4 +1,4 @@
-import type { botConfig } from '@/builtInPlugins/bot/config.d.ts'
+import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import { retryGet } from '@/libs/axios.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger } from '@/libs/logger.ts'

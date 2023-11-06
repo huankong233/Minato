@@ -1,0 +1,12 @@
+[
+  {
+    "commandName": "拉黑",
+    "commandDescription": ["拉黑 [人/群] [QQ号/群号]"],
+    "admin": true
+  },
+  {
+    "commandName": "解除拉黑",
+    "commandDescription": ["解除拉黑 [人/群] [QQ号/群号]"],
+    "admin": true
+  }
+]

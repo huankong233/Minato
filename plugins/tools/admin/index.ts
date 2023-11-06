@@ -1,5 +1,5 @@
 import type { commandFormat } from '@/libs/eventReg.ts'
-import type { botConfig } from '@/builtInPlugins/bot/config.d.ts'
+import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import type { fakeContext } from '@/global.d.ts'
 import { eventReg, missingParams } from '@/libs/eventReg.ts'

@@ -28,7 +28,7 @@ export default async function () {
   globalReg({ packageData: await getPackage() })
 
   // 记录日志
-  await loadPlugin('log', 'builtInPlugins')
+  await loadPlugin('log', './plugins/builtInPlugins')
 
   // 清空 temp 文件夹
   const tempDir = path.join(global.baseDir, 'temp')

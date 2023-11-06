@@ -28,7 +28,7 @@ export async function loadConfig(
   // 检查配置文件是否存在
   if (!fs.existsSync(configFullPath)) {
     // 检查默认配置文件是否存在
-    if (!fs.existsSync(defaultConfigFullPath)) {
+    if (fs.existsSync(defaultConfigFullPath)) {
       logger.WARNING(`插件 ${configPath} 需要手动配置信息`)
     } else {
       logger.WARNING(`插件 ${configPath} 配置的自动加载的配置文件不存在`)

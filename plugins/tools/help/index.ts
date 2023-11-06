@@ -1,4 +1,4 @@
-import type { botConfig } from '@/builtInPlugins/bot/config.d.ts'
+import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import type { commandFormat } from '@/libs/eventReg.ts'
 import fs from 'fs'
@@ -55,14 +55,14 @@ async function help(context: CQEvent<'message'>['context'], command: commandForm
     await replyMsg(
       context,
       [
-        `命令:${command.commandName}`,
-        `简介( [ ] 为必选参数  ( ) 为可选参数 ):`,
+        `命令: ${command.commandName}`,
+        `简介([ ] 为必选参数 ( ) 为可选参数): `,
         `${command.commandDescription.join('\n')}`
       ].join('\n'),
       { reply: true }
     )
   } else {
-    let str = [`使用"${botConfig.prefix}帮助 命令名称"来获取详情`, `命令列表:`]
+    let str: string[] = []
     helpData.commandList.forEach(command => {
       if (command.admin) {
         if (user_id === botConfig.admin) str.push(command.commandName)
@@ -70,6 +70,11 @@ async function help(context: CQEvent<'message'>['context'], command: commandForm
         str.push(command.commandName)
       }
     })
-    await replyMsg(context, str.join('\n'), { reply: true })
+
+    await replyMsg(
+      context,
+      [`使用"${botConfig.prefix}帮助 命令名称"来获取详情`, `命令列表: `].join('\n') + str.join(','),
+      { reply: true }
+    )
   }
 }
