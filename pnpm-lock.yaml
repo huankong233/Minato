@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@huan_kong/go-cqwebsocket':
-    specifier: 6.2.9
-    version: 6.2.9
+    specifier: 6.2.10
+    version: 6.2.10
   axios:
     specifier: ^1.6.0
     version: 1.6.0
@@ -28,13 +28,13 @@ dependencies:
     version: 2.0.0
   knex:
     specifier: 3.0.1
-    version: 3.0.1(mysql2@3.6.2)
+    version: 3.0.1(mysql2@3.6.3)
   mime-types:
     specifier: ^2.1.35
     version: 2.1.35
   mysql2:
-    specifier: 3.6.2
-    version: 3.6.2
+    specifier: 3.6.3
+    version: 3.6.3
   node-emoji:
     specifier: 2.1.0
     version: 2.1.0
@@ -262,8 +262,8 @@ packages:
     dev: false
     optional: true
 
-  /@huan_kong/go-cqwebsocket@6.2.9:
-    resolution: {integrity: sha512-UaJC+jL/FcZxG8XQogjlKJigBG9uzePiKv4bI5/HuGpT1h0NWcmWr1lghcmBiUMHjBJkQjy9mRdSieml6iHm4g==}
+  /@huan_kong/go-cqwebsocket@6.2.10:
+    resolution: {integrity: sha512-p5QHHYorUIv0ZaUJvQCNu+prkcNhJrPHZpyJQrDo7NhvbzAXCNvRnulyRt7U5DMiEctpA8RN0UwYWjz2TerFwA==}
     engines: {node: '>=14'}
     dependencies:
       ws: 8.14.2
@@ -986,7 +986,7 @@ packages:
       strip-json-comments: 3.1.1
     dev: false
 
-  /knex@3.0.1(mysql2@3.6.2):
+  /knex@3.0.1(mysql2@3.6.3):
     resolution: {integrity: sha512-ruASxC6xPyDklRdrcDy6a9iqK+R9cGK214aiQa+D9gX2ZnHZKv6o6JC9ZfgxILxVAul4bZ13c3tgOAHSuQ7/9g==}
     engines: {node: '>=16'}
     hasBin: true
@@ -1023,7 +1023,7 @@ packages:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql2: 3.6.2
+      mysql2: 3.6.3
       pg-connection-string: 2.6.1
       rechoir: 0.8.0
       resolve-from: 5.0.0
@@ -1135,8 +1135,8 @@ packages:
     resolution: {integrity: sha512-r65nCZhrbXXb6dXOACihYApHw2Q6pV0M3V0PSxd74N0+D8nzAdEAITq2oAjA1jVnKI+tGvEBUpqiMh0+rW6zDQ==}
     dev: false
 
-  /mysql2@3.6.2:
-    resolution: {integrity: sha512-m5erE6bMoWfPXW1D5UrVwlT8PowAoSX69KcZzPuARQ3wY1RJ52NW9PdvdPo076XiSIkQ5IBTis7hxdlrQTlyug==}
+  /mysql2@3.6.3:
+    resolution: {integrity: sha512-qYd/1CDuW1KYZjD4tzg2O8YS3X/UWuGH8ZMHyMeggMTXL3yOdMisbwZ5SNkHzDGlZXKYLAvV8tMrEH+NUMz3fw==}
     engines: {node: '>= 8.0'}
     dependencies:
       denque: 2.1.0

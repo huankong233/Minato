@@ -1,5 +1,8 @@
 import fs from 'fs'
 import path from 'path'
+import * as mime from 'mime-types'
+import { retryGet } from '@/libs/axios.ts'
+import { getRangeCode } from '@/libs/random.ts'
 
 /**
  * 删除文件夹
@@ -19,8 +22,6 @@ export const deleteFolder = (folder: string) => {
   }
   fs.rmdirSync(folder)
 }
-
-import { retryGet } from './axios.ts'
 
 /**
  * 内部方法!!!请勿调用
@@ -42,8 +43,6 @@ async function _download(url: string, fullPath: string): Promise<string> {
   })
 }
 
-import * as mime from 'mime-types'
-import { getRangeCode } from './random.js'
 /**
  * 下载文件
  * @param url 下载链接

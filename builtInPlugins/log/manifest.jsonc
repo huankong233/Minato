@@ -1,1 +1,1 @@
-{"name":"log","description":"记录日志","version":"0.0.1","plguinVersion":"3.0","author":[{"name":"huan_kong","link":"https://github.com/huankong233"}],"dependPackages":{},"dependPlugins":{},"disableLoadInDir":true}
+{"name":"log","description":"记录日志","version":"0.2.0","plguinVersion":"3.0","author":[{"name":"huan_kong","link":"https://github.com/huankong233"}],"dependPackages":{},"dependPlugins":{},"disableLoadInDir":true,"disableAutoLoadConfig":false}

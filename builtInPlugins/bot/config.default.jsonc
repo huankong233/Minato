@@ -11,7 +11,7 @@
   // (如果打开DEV模式将会强制关闭)
   "online": {
     "enable": true,
-    "msg": "已上线"
+    "msg": "启动成功"
   },
   // 连接信息
   // 正向websocket(go-cqhttp)

@@ -1,6 +1,6 @@
 import clc from 'cli-color'
 import { jsonc } from 'jsonc'
-import { getTime } from './time.js'
+import { getTime } from '@/libs/time.ts'
 
 interface loggerParams {
   pluginName: string
@@ -60,6 +60,7 @@ export class Logger {
    * @param messages
    */
   DEBUG(...messages: any[]) {
+    if (!debug) throw new Error('请不要在非DEBUG模式使用DEBUG输出!')
     this.print(clc.magenta(`[DEBUG]`), ...messages)
   }
 
@@ -71,7 +72,7 @@ export class Logger {
     global.debug ? this.DEBUG(...messages) : this.WARNING(...messages)
   }
 
-  private formatMessages = (messages: any[]): any[] =>
+  private formatMessages = (messages: any[]): string[] =>
     messages.map(item => {
       if (typeof item === 'string') {
         try {
@@ -79,11 +80,11 @@ export class Logger {
         } catch (error) {
           return item
         }
-      } else if (Array.isArray(item)) {
-        return item.join(' ')
-      } else {
+      } else if (typeof item === 'object') {
         return item
       }
+
+      return item.toString()
     })
 
   private print(...messages: any[]) {
@@ -118,7 +119,7 @@ export class Logger {
  * 构造一个logger输出
  */
 export function makeLogger(params: loggerParams) {
-  return new Logger(params)
+  return new Logger({ ...params, type: 'PLUGIN' })
 }
 
 /**

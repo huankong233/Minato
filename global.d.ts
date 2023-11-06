@@ -3,14 +3,29 @@ import type { manifest } from '@/libs/loadPlugin.ts'
 import type { CQEvent, CQWebSocket } from '@huan_kong/go-cqwebsocket'
 import type { Knex } from 'knex'
 
+export type fakeContext = PrivateMessage | GroupMessage
+
+interface PrivateMessage {
+  message_type: 'private'
+  user_id: number
+  message_id?: number
+}
+
+interface GroupMessage {
+  message_type: 'group'
+  user_id: number
+  group_id: number
+  message_id?: number
+}
+
 export type messageCallback = (
   event: CQEvent<'message'>,
   command: commandFormat | false
-) => Promise<void | 'quit'>
+) => Promise<undefined | any | 'quit'>
 
-export type noticeCallback = (event: CQEvent<'notice'>) => Promise<void | 'quit'>
+export type noticeCallback = (event: CQEvent<'notice'>) => Promise<undefined | any | 'quit'>
 
-export type requestCallback = (event: CQEvent<'request'>) => Promise<void | 'quit'>
+export type requestCallback = (event: CQEvent<'request'>) => Promise<undefined | any | 'quit'>
 interface messageEvent {
   callback: messageCallback
   priority: number

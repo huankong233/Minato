@@ -6,10 +6,9 @@ const logger = makeLogger({ pluginName: 'proxy' })
 export default function () {
   const { proxyConfig } = global.config as { proxyConfig: proxyConfig }
   if (proxyConfig.enable) {
-    proxy.default.setConfig(proxyConfig.proxy)
-    proxy.default.start()
-    logger.NOTICE('=====================================================')
-    logger.NOTICE('代理已启动')
-    logger.NOTICE('=====================================================')
+    const NodeGlobalProxy = proxy.default
+    NodeGlobalProxy.setConfig(proxyConfig.proxy)
+    NodeGlobalProxy.start()
+    logger.SUCCESS('代理已启动')
   }
 }

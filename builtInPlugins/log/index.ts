@@ -1,3 +1,9 @@
+import fs from 'fs'
+import path from 'path'
+import clc from 'cli-color'
+import { jsonc } from 'jsonc'
+import { getDate } from '@/libs/time.ts'
+import { deleteOldestFiles } from '@/libs/fs.js'
 import { makeLogger } from '@/libs/logger.js'
 
 const levelNumericalCode = {
@@ -39,7 +45,7 @@ export default function rewriteConsoleLog() {
     oriLogFunc =>
     (...args) => {
       if (global.debug) {
-        save2File(logConfig.max, ...args)
+        save2File(logConfig.max, args)
       } else if (args[2]) {
         let type: null | string = args[2].match(regex)
         if (type) {
@@ -47,7 +53,7 @@ export default function rewriteConsoleLog() {
             levelNumericalCode[type[1] as 'SUCCESS' | 'WARNING' | 'NOTICE' | 'INFO' | 'DEBUG']
           if (level && level <= nowLevel) {
             // 存储到日志中
-            save2File(logConfig.max, ...args)
+            save2File(logConfig.max, args)
           }
         }
       }
@@ -56,25 +62,31 @@ export default function rewriteConsoleLog() {
   )(console.log)
 }
 
-import { deleteOldestFiles } from '@/libs/fs.js'
-import { getDate } from '@/libs/time.ts'
-import clc from 'cli-color'
-import fs from 'fs'
-import path from 'path'
-
 /**
  * 写入日志文件内
  * @param max
  * @param msg
  */
-function save2File(max: number, ...msg: string[]) {
+function save2File(max: number, msg: any[]) {
   const fileDir = path.join(baseDir, 'logs')
   const filePath = path.join(fileDir, `${getDate()}.log`)
-  msg = msg.map(function (item) {
+
+  msg = msg.map(item => {
+    if (typeof item === 'string') return item
+
     if (typeof item === 'object') {
-      return JSON.stringify(item)
+      // 判断是否是报错
+      if (item.stack) {
+        // new Error
+        return item.stack
+      } else {
+        // object arr func
+        return jsonc.stringify(item)
+      }
     }
-    return item
+
+    // number...
+    return item.toStrig()
   })
 
   const fileData = clc.strip(msg.join(' ')) + '\n'

@@ -34,8 +34,8 @@
     "noUnusedParameters": true,
     // 禁用隐式 any
     "noImplicitAny": true,
-    // 禁用隐式返回
-    "noImplicitReturns": true,
+    // 允许隐式返回
+    "noImplicitReturns": false,
     "paths": {
       "@/*": ["./*"]
     }

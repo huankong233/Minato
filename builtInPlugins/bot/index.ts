@@ -37,9 +37,21 @@ export default async function () {
     bot.on('socket.error', function ({ context }) {
       logger.WARNING(`连接失败[/api]#${attempts}`)
       logger.ERROR(context)
-      if (context.code === 1006 && context.reason === '') reject('可能是go-cqhttp地址错误')
-      if (attempts++ === botConfig.connect.reconnectionAttempts + 1) {
-        reject(`重试次数超过设置的${botConfig.connect.reconnectionAttempts}次!`)
+
+      if (!botConfig.connect.reconnection) {
+        if (context.code === 1006 && context.reason === '') {
+          reject('可能是go-cqhttp地址错误')
+        } else {
+          reject(`连接失败!`)
+        }
+      }
+
+      if (attempts++ >= botConfig.connect.reconnectionAttempts + 1) {
+        if (context.code === 1006 && context.reason === '') {
+          reject('可能是go-cqhttp地址错误')
+        } else {
+          reject(`重试次数超过设置的${botConfig.connect.reconnectionAttempts}次!`)
+        }
       } else {
         setTimeout(() => bot.reconnect(), botConfig.connect.reconnectionDelay)
       }
@@ -57,6 +69,7 @@ export default async function () {
       } else {
         botData.wsType = '/api'
       }
+      attempts = 0
     })
 
     bot.on('socket.openEvent', function () {
@@ -144,11 +157,12 @@ function initEvents() {
  */
 export async function bootstrapComplete() {
   const { botConfig } = global.config as { botConfig: botConfig }
-  const { botData } = global.config as { botData: botData }
-  if (dev || !botConfig.online.enable) return
-  if (botConfig.admin <= 0) return logger.NOTICE('未设置管理员账户,请检查!')
-  await sendMsg(botConfig.admin, `${botConfig.online.msg}`)
+  const { botData } = global.data as { botData: botData }
 
   botData.ffmpeg = (await bot.can_send_record()).yes
   botData.info = await bot.get_login_info()
+
+  if (dev || !botConfig.online.enable) return
+  if (botConfig.admin <= 0) return logger.NOTICE('未设置管理员账户,请检查!')
+  await sendMsg(botConfig.admin, `${botConfig.online.msg}`)
 }

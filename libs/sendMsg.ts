@@ -1,6 +1,8 @@
-import { CQ, CQEvent, Tags } from '@huan_kong/go-cqwebsocket'
+import type { fakeContext } from '@/global.d.ts'
+import type { Tags } from '@huan_kong/go-cqwebsocket'
+import { makeSystemLogger } from '@/libs/logger.js'
+import { CQ } from '@huan_kong/go-cqwebsocket'
 import * as emoji from 'node-emoji'
-import { makeSystemLogger } from './logger.js'
 
 const logger = makeSystemLogger({ pluginName: 'sendMsg' })
 
@@ -8,17 +10,16 @@ const logger = makeSystemLogger({ pluginName: 'sendMsg' })
  * 回复消息
  * @param context 消息上下文
  * @param message 回复内容
- * @param params 是否at/reply发送者
- * @param toEmoji 是否转换为emoji
+ * @param params 是否at/reply发送者 是否转换为emoji
  */
 export async function replyMsg(
-  context: CQEvent<'message'>['context'],
+  context: fakeContext,
   message: string | Tags.msgTags[],
   { at = false, reply = false, toEmoji = true } = {}
 ) {
   const { message_type, user_id, message_id } = context
 
-  if (toEmoji) message = parseToEmoji(message.toString())
+  if (toEmoji) message = parseToEmoji(message)
 
   if (message_type !== 'private') {
     //不是私聊，可以at发送者
@@ -36,14 +37,15 @@ export async function replyMsg(
       break
     case 'group':
       //回复群
-      response = await bot.send_group_msg(context.group_id, message)
+      const { group_id } = context
+      response = await bot.send_group_msg(group_id, message)
       break
   }
 
   if (debug) {
     logger.DEBUG(`发送回复消息:${message}`)
     logger.DEBUG(`响应:\n`, response)
-    const stack = new Error().stack?.split('\n') ?? ['unknownStack']
+    const stack = new Error().stack!.split('\n')
     logger.DEBUG(`stack信息:\n`, stack.slice(1).join('\n'))
   }
 
@@ -57,14 +59,14 @@ export async function replyMsg(
  * @param toEmoji 是否转换为emoji
  */
 export async function sendMsg(user_id: number, message: string | Tags.msgTags[], toEmoji = true) {
-  if (toEmoji) message = parseToEmoji(message.toString())
+  if (toEmoji) message = parseToEmoji(message)
 
   const response = await bot.send_private_msg(user_id, message)
 
   if (debug) {
     logger.DEBUG(`发送私聊消息:${message}`)
     logger.DEBUG(`响应:\n`, response)
-    const stack = new Error().stack?.split('\n') ?? ['unknownStack']
+    const stack = new Error().stack!.split('\n')
     logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
   }
 
@@ -77,10 +79,7 @@ export async function sendMsg(user_id: number, message: string | Tags.msgTags[],
  * @param context 消息对象
  * @param messages
  */
-export async function sendForwardMsg(
-  context: CQEvent<'message'>['context'],
-  messages: Tags.CQNode[]
-) {
+export async function sendForwardMsg(context: fakeContext, messages: Tags.CQNode[]) {
   const { message_type } = context
 
   let response
@@ -97,7 +96,7 @@ export async function sendForwardMsg(
   if (debug) {
     logger.DEBUG(`发送合并消息:\n`, messages)
     logger.DEBUG(`响应:\n`, response)
-    const stack = new Error().stack?.split('\n') ?? ['unknownStack']
+    const stack = new Error().stack!.split('\n')
     logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
   }
 
@@ -106,13 +105,6 @@ export async function sendForwardMsg(
 
 /**
  * 消息反转义为emoji
- * @param message
+ * @param message 消息
  */
-export const parseToEmoji = (message: string) => {
-  if (typeof message === 'string') {
-    return emoji.emojify(message)
-  } else {
-    if (debug) logger.DEBUG(`不支持转换对象形式的信息,请手动转换`)
-    return message
-  }
-}
+export const parseToEmoji = (message: any) => emoji.emojify(message.toString())

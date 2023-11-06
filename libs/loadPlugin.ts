@@ -1,11 +1,11 @@
-import { loadConfig } from '@/libs/loadConfig.ts'
-import { makeSystemLogger } from '@/libs/logger.ts'
 import { execSync } from 'child_process'
 import { compare } from 'compare-versions'
 import fs from 'fs'
-import { jsonc } from 'jsonc'
+import url from 'url'
 import path from 'path'
-import { pathToFileURL } from 'url'
+import { jsonc } from 'jsonc'
+import { loadConfig } from '@/libs/loadConfig.ts'
+import { makeSystemLogger } from '@/libs/logger.ts'
 
 const logger = makeSystemLogger({ pluginName: 'loadPlugin' })
 
@@ -55,7 +55,7 @@ export async function loadPlugin(pluginName: string, pluginDir = 'plugins', _loa
   }
 
   const {
-    plguinVersion,
+    plguinVersion = '0.0.0',
     dependPackages = {},
     dependPlugins = {},
     installed = false,
@@ -70,7 +70,9 @@ export async function loadPlugin(pluginName: string, pluginDir = 'plugins', _loa
   }
 
   if (compare(plguinVersion, packageData.plguinVersion, '<')) {
-    logger.NOTICE(`插件 ${pluginName} 兼容的插件系统版本低于当前插件系统版本，可能有兼容问题`)
+    logger.NOTICE(
+      `插件 ${pluginName}@${plguinVersion} 兼容的插件系统版本低于当前插件系统版本，可能有兼容问题`
+    )
   }
 
   // 如果还没安装就安装一次
@@ -105,10 +107,11 @@ export async function loadPlugin(pluginName: string, pluginDir = 'plugins', _loa
       const requireVersion = dependPlugins[key]
       const depend = plugins[key]
 
-      if (!depend) {
-        logger.WARNING(`插件 ${pluginName} 缺少依赖,所依赖的插件有:`, dependPluginsKeys.toString())
-        return
-      }
+      if (!depend)
+        return logger.WARNING(
+          `插件 ${pluginName} 缺少依赖,所依赖的插件有:`,
+          dependPluginsKeys.toString()
+        )
 
       const dependVersion = depend.manifest.version
 
@@ -125,41 +128,29 @@ export async function loadPlugin(pluginName: string, pluginDir = 'plugins', _loa
   let program
 
   try {
-    program = await import(pathToFileURL(filePath).toString())
+    program = await import(url.pathToFileURL(filePath).toString())
   } catch (error) {
     logger.WARNING(`插件 ${pluginName} 代码有误,导入失败`)
     logger.ERROR(error)
     return
   }
 
-  if (program.enable === false) {
-    logger.NOTICE(`插件 ${pluginName} 未启用`)
-    return
-  }
+  if (program.enable === false) return logger.NOTICE(`插件 ${pluginName} 未启用`)
 
   plugins[pluginName] = { manifest, pluginPath: pluginAbsoluteDir, configPath: null, loaded: false }
 
   // 自动加载配置文件
   if (!disableAutoLoadConfig) {
     // 加载配置文件
-    if ((await loadConfig(configName, true, pluginAbsoluteDir, false, pluginName)) === 'unloaded') {
-      logger.WARNING(`加载 ${pluginName} 插件的配置文件出错`)
-      return
-    }
+    if ((await loadConfig(configName, true, pluginAbsoluteDir, false, pluginName)) === 'unloaded')
+      return logger.WARNING(`加载 ${pluginName} 插件的配置文件出错`)
   }
 
   data[`${pluginName}Data`] = {}
 
   // 循环检查是否存在
-  if (plugins[pluginName]?.loaded) {
-    if (debug) logger.DEBUG(`插件 ${pluginName} 已经加载过了`)
-    return
-  }
-
-  if (!program.default) {
-    logger.WARNING(`加载插件 ${pluginName} 失败，插件不存在默认导出函数`)
-    return
-  }
+  if (plugins[pluginName]?.loaded) return logger.WARNING(`插件 ${pluginName} 已经加载过了`)
+  if (!program.default) return logger.WARNING(`加载插件 ${pluginName} 失败，插件不存在默认导出函数`)
 
   try {
     global.nowLoadPluginName = pluginName

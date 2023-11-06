@@ -3,11 +3,7 @@ import { retryGet } from '@/libs/axios.js'
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import { replyMsg, sendMsg } from '@/libs/sendMsg.js'
-import type {
-  DiscussMessage,
-  GroupMessage,
-  PrivateMessage
-} from '@huan_kong/go-cqwebsocket/out/Interfaces.d.ts'
+import { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { compare } from 'compare-versions'
 import { CronJob } from 'cron'
 
@@ -44,22 +40,13 @@ async function init() {
   )
 }
 
-async function checkUpdate(
-  manual = false,
-  context?: PrivateMessage | GroupMessage | DiscussMessage
-) {
-  const { botConfig, checkUpdateConfig, proxyConfig } = global.config as {
+async function checkUpdate(manual = false, context?: CQEvent<'message'>['context']) {
+  const { botConfig, checkUpdateConfig } = global.config as {
     botConfig: botConfig
     checkUpdateConfig: checkUpdateConfig
-    proxyConfig: proxyConfig
   }
 
-  let { proxy, url } = checkUpdateConfig
-
-  // 如果已经启用了全局代理就禁用git代理
-  if (!proxyConfig.enable) {
-    url = proxy + url
-  }
+  let { url } = checkUpdateConfig
 
   const local_version = packageData.version
   let remote_version: string = '0.0.0'
@@ -89,6 +76,9 @@ async function checkUpdate(
         `最新版本: ${remote_version}`,
         `当前版本: ${local_version}`
       ].join('\n')
+    } else {
+      // 无需发送
+      return
     }
   }
 

@@ -1,0 +1,22 @@
+{
+  /*
+   * agree = 自动同意
+   * message = 通知
+   */
+
+  //入群
+  "invite": {
+    "message": true,
+    "agree": false
+  },
+  // 加群
+  "add": {
+    "message": true,
+    "agree": false
+  },
+  // 好友
+  "friend": {
+    "message": true,
+    "agree": true
+  }
+}

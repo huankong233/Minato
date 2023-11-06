@@ -4,7 +4,6 @@ import fs from 'fs'
 import { jsonc } from 'jsonc'
 import path from 'path'
 
-global.debug = true
 const logger = makeSystemLogger({ pluginName: 'publish' })
 const baseDir = getDir(import.meta)
 
@@ -24,14 +23,10 @@ for (const pluginDir of pluginDirs) {
   const plugins = fs.readdirSync(path.join(baseDir, pluginDir))
   for (const plugin of plugins) {
     const manifestPath = path.join(baseDir, pluginDir, plugin, 'manifest.jsonc')
-    try {
-      const manifest = jsonc.parse(fs.readFileSync(manifestPath, 'utf-8'))
-      delete manifest.installed
-      fs.writeFileSync(manifestPath, jsonc.stringify(manifest))
-      logger.SUCCESS(`已删除插件 ${plugin} 的 installed 字段`)
-    } catch (error) {
-      logger.DEBUG(error)
-    }
+    const manifest = jsonc.parse(fs.readFileSync(manifestPath, 'utf-8'))
+    delete manifest.installed
+    fs.writeFileSync(manifestPath, jsonc.stringify(manifest))
+    logger.SUCCESS(`已删除插件 ${plugin} 的 installed 字段`)
   }
 }
 
