@@ -1,0 +1,16 @@
+{
+  // 检测到小程序时是否鄙视
+  "despise": true,
+  // 当小程序分享解析成功时是否撤回该小程序，仅在群组内且有管理员权限且发送者是普通成员时有效
+  "recallMiniProgram": true,
+  "getInfo": {
+    // 是否获取并输出视频信息
+    "getVideoInfo": true,
+    // 是否获取并输出动态内容
+    "getDynamicInfo": true,
+    // 是否获取并输出专栏信息
+    "getArticleInfo": true,
+    // 是否获取并输出直播间信息
+    "getLiveRoomInfo": true
+  }
+}

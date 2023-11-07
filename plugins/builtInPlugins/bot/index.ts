@@ -17,73 +17,80 @@ export default async function () {
     const { botConfig } = global.config as { botConfig: botConfig }
     const { botData } = global.data as { botData: botData }
 
-    const bot = new CQWebSocket(botConfig.connect)
-    bot.messageSuccess = () => {}
-    bot.messageFail = () => {}
+    if (botConfig.driver === 'go-cqhttp') {
+      const bot = new CQWebSocket(botConfig.goCqhttpConnect)
+      bot.messageSuccess = () => {}
+      bot.messageFail = () => {}
 
-    let attempts = 1
+      let attempts = 1
 
-    //注册全局变量
-    globalReg({ bot })
+      //注册全局变量
+      globalReg({ bot })
 
-    bot.on('socket.connecting', function () {
-      logger.INFO(`连接中[/api]#${attempts}`)
-    })
+      bot.on('socket.connecting', function () {
+        logger.INFO(`连接中[/api]#${attempts}`)
+      })
 
-    bot.on('socket.connectingEvent', function () {
-      logger.INFO(`连接中[/event]#${attempts}`)
-    })
+      bot.on('socket.connectingEvent', function () {
+        logger.INFO(`连接中[/event]#${attempts}`)
+      })
 
-    bot.on('socket.error', function ({ context }) {
-      logger.WARNING(`连接失败[/api]#${attempts}`)
-      logger.ERROR(context)
+      bot.on('socket.error', function ({ context }) {
+        logger.WARNING(`连接失败[/api]#${attempts}`)
+        logger.ERROR(context)
+      })
 
-      if (!botConfig.connect.reconnection) {
-        if (context.code === 1006 && context.reason === '') {
-          reject('可能是go-cqhttp地址错误')
-        } else {
-          reject(`连接失败!`)
+      bot.on('socket.errorEvent', function ({ context }) {
+        logger.WARNING(`连接失败[/event]#${attempts}`)
+        logger.ERROR(context)
+
+        if (!botConfig.goCqhttpConnect.reconnection) {
+          if (context.code === 1006 && context.reason === '') {
+            reject('可能是go-cqhttp地址错误')
+          } else {
+            reject(`连接失败!`)
+          }
         }
-      }
 
-      if (attempts++ >= botConfig.connect.reconnectionAttempts + 1) {
-        if (context.code === 1006 && context.reason === '') {
-          reject('可能是go-cqhttp地址错误')
+        if (attempts++ >= botConfig.goCqhttpConnect.reconnectionAttempts + 1) {
+          if (context.code === 1006 && context.reason === '') {
+            reject('可能是go-cqhttp地址错误')
+          } else {
+            reject(`重试次数超过设置的${botConfig.goCqhttpConnect.reconnectionAttempts}次!`)
+          }
         } else {
-          reject(`重试次数超过设置的${botConfig.connect.reconnectionAttempts}次!`)
+          setTimeout(() => bot.reconnect(), botConfig.goCqhttpConnect.reconnectionDelay)
         }
-      } else {
-        setTimeout(() => bot.reconnect(), botConfig.connect.reconnectionDelay)
-      }
-    })
+      })
 
-    bot.on('socket.errorEvent', function ({ context }) {
-      logger.WARNING(`连接失败[/event]#${attempts}`)
-      logger.ERROR(context)
-    })
+      bot.on('socket.open', function () {
+        logger.SUCCESS(`连接成功[/api]#${attempts}`)
+        if (botData.wsType === '/event') {
+          resolve(true)
+        } else {
+          botData.wsType = '/api'
+        }
+        attempts = 0
+      })
 
-    bot.on('socket.open', function () {
-      logger.SUCCESS(`连接成功[/api]#${attempts}`)
-      if (botData.wsType === '/event') {
-        resolve(true)
-      } else {
-        botData.wsType = '/api'
-      }
-      attempts = 0
-    })
+      bot.on('socket.openEvent', function () {
+        logger.SUCCESS(`连接成功[/event]#${attempts}`)
+        if (botData.wsType === '/api') {
+          resolve(true)
+        } else {
+          botData.wsType = '/event'
+        }
+        attempts = 0
+      })
 
-    bot.on('socket.openEvent', function () {
-      logger.SUCCESS(`连接成功[/event]#${attempts}`)
-      if (botData.wsType === '/api') {
-        resolve(true)
-      } else {
-        botData.wsType = '/event'
-      }
-    })
+      initEvents()
 
-    initEvents()
-
-    bot.connect()
+      bot.connect()
+    } else if (botConfig.driver === 'red') {
+      // TODO: 未支持
+    } else {
+      throw new Error('未知驱动器')
+    }
   })
 }
 

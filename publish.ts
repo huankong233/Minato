@@ -16,7 +16,8 @@ const originPackages = {
   jsonc: '^2.0.0',
   'mime-types': '^2.1.35',
   nodemon: '^3.0.1',
-  tsx: '^3.14.0'
+  tsx: '^3.14.0',
+  qs: '^6.11.2'
 }
 
 for (const pluginDir of pluginDirs) {
