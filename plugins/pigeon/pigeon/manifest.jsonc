@@ -1,0 +1,12 @@
+{
+  "name": "pigeon",
+  "description": "鸽子核心功能",
+  "version": "0.2.0",
+  "plguinVersion": "3.0",
+  "author": [{ "name": "huan_kong", "link": "https://github.com/huankong233" }],
+  "disableLoadInDir": true,
+  "disableAutoLoadConfig": true,
+  "dependPackages": {},
+  "dependPlugins": { "knex": "0.2.0" },
+  "installed": true
+}

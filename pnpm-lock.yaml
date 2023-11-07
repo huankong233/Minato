@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@huan_kong/go-cqwebsocket':
-    specifier: 6.2.10
-    version: 6.2.10
+    specifier: 6.2.11
+    version: 6.2.11
   axios:
     specifier: ^1.6.0
     version: 1.6.0
@@ -268,8 +268,8 @@ packages:
     dev: false
     optional: true
 
-  /@huan_kong/go-cqwebsocket@6.2.10:
-    resolution: {integrity: sha512-p5QHHYorUIv0ZaUJvQCNu+prkcNhJrPHZpyJQrDo7NhvbzAXCNvRnulyRt7U5DMiEctpA8RN0UwYWjz2TerFwA==}
+  /@huan_kong/go-cqwebsocket@6.2.11:
+    resolution: {integrity: sha512-xnhkJU0RbSj53S6KMu6YizO8bjhxcgxMlk8q3H83ObEOrJ2ajQFjnjrnnOCJ9I7sUO3CX60fj3EvvjvNDf8aAQ==}
     engines: {node: '>=14'}
     dependencies:
       ws: 8.14.2
