@@ -4,7 +4,7 @@
 
 ### 11-08 v0.2
 
-- 移植插件 `gugu` `mute` `poke` `repeat`
+- 移植插件 `gugu` `mute` `poke` `repeat` `redPacket` `transfer`
 
 ### 11-07 v0.2
 
