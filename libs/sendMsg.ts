@@ -14,7 +14,7 @@ const logger = makeSystemLogger({ pluginName: 'sendMsg' })
  */
 export async function replyMsg(
   context: CQEvent<'message'>['context'] | fakeContext,
-  message: string | Tags.msgTags[],
+  message: string,
   { at = false, reply = false, toEmoji = true } = {}
 ) {
   const { message_type, user_id, message_id } = context
@@ -58,7 +58,7 @@ export async function replyMsg(
  * @param message
  * @param toEmoji 是否转换为emoji
  */
-export async function sendMsg(user_id: number, message: string | Tags.msgTags[], toEmoji = true) {
+export async function sendMsg(user_id: number, message: string, toEmoji = true) {
   if (toEmoji) message = parseToEmoji(message)
 
   const response = await bot.send_private_msg(user_id, message)

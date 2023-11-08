@@ -64,7 +64,7 @@ export default async function () {
       })
 
       bot.on('socket.open', function () {
-        logger.SUCCESS(`连接成功[/api]#${attempts}`)
+        logger.NOTICE(`连接成功[/api]#${attempts}`)
         if (botData.wsType === '/event') {
           resolve(true)
         } else {
@@ -74,7 +74,7 @@ export default async function () {
       })
 
       bot.on('socket.openEvent', function () {
-        logger.SUCCESS(`连接成功[/event]#${attempts}`)
+        logger.NOTICE(`连接成功[/event]#${attempts}`)
         if (botData.wsType === '/api') {
           resolve(true)
         } else {

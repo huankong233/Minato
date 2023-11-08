@@ -1,7 +1,7 @@
 [
   {
     "commandName": "检查更新",
-    "commandDescription": ["检查更新"],
+    "commandDescription": ["检查更新", "检查是否需要更新"],
     "admin": true
   }
 ]

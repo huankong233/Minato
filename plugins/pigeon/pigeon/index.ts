@@ -28,7 +28,9 @@ export default function event() {
  * 获取用户信息
  * @param user_id qq号
  */
-export async function getUserData(user_id: number) {
+export async function getUserData(
+  user_id: number
+): Promise<{ user_id: number; pigeon_num: number; update_time: number } | false> {
   const data = await database.select('*').where('user_id', user_id).from('pigeon').first()
   return data ?? false
 }

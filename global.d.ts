@@ -8,12 +8,14 @@ export type fakeContext = PrivateMessage | GroupMessage
 interface PrivateMessage {
   message_type: 'private'
   user_id: number
+  self_id?: number
   message_id?: number
 }
 
 interface GroupMessage {
   message_type: 'group'
   user_id: number
+  self_id?: number
   group_id: number
   message_id?: number
 }

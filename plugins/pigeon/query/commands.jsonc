@@ -9,6 +9,6 @@
   },
   {
     "commandName": "鸽子排行榜",
-    "commandDescription": ["鸽子排行榜"]
+    "commandDescription": ["鸽子排行榜", "获得鸽子的排行榜"]
   }
 ]
