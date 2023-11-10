@@ -2,6 +2,10 @@
 
 ## 2023
 
+### 11-08 v0.2.0
+
+- 优化插件 `block` 的精细化控制
+
 ### 11-08 v0.2
 
 - 移植插件 `gugu` `mute` `poke` `repeat` `redPacket` `transfer`

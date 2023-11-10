@@ -40,35 +40,86 @@ async function checkBan(
 ) {
   const { blockConfig } = global.config as { blockConfig: blockConfig }
 
-  const { user_id, group_id } = context as any
-  if (user_id || user_id) return
-
-  if (blockConfig.blockUsers.includes(user_id)) {
-    if (debug) logger.DEBUG(`用户 ${user_id} 处于黑名单中`)
-    return 'quit'
+  if ('user_id' in context) {
+    const { user_id } = context
+    if (blockConfig.blockUsers.includes(user_id)) {
+      if (debug) logger.DEBUG(`用户 ${user_id} 处于黑名单中`)
+      return 'quit'
+    }
   }
 
-  if (blockConfig.blockGroups.includes(group_id)) {
-    if (debug) logger.DEBUG(`群组 ${group_id} 处于黑名单中`)
-    return 'quit'
+  if ('group_id' in context) {
+    const { group_id } = context
+    if (blockConfig.blockGroups.includes(group_id)) {
+      if (debug) logger.DEBUG(`群组 ${group_id} 处于黑名单中`)
+      return 'quit'
+    }
   }
 
   if (!command) return
 
-  if (context.post_type === 'message' && context.sub_type === 'normal') {
-    const { group_id } = context
+  if (context.post_type === 'message') {
     for (let i = 0; i < blockConfig.blockedCommands.length; i++) {
       const element = blockConfig.blockedCommands[i]
 
-      if (element.groupId !== '*' && !element.groupId.includes(group_id)) {
-        continue
+      // 白名单优先
+      if ('group_id' in context) {
+        const { group_id } = context
+        if (
+          element.whiteGroup &&
+          (element.whiteGroup === '*' || element.whiteGroup.includes(group_id))
+        ) {
+          continue
+        }
+
+        if (
+          element.blackGroup &&
+          (element.blackGroup === '*' || element.blackGroup.includes(group_id))
+        ) {
+          if ((await check(context, command, element, blockConfig.defaultReply)) === 'quit') {
+            return 'quit'
+          }
+        }
       }
-      if (command.name.match(element.regexp)) {
-        if (element.reply !== '') await replyMsg(context, element.reply ?? blockConfig.defaultReply)
-        if (debug) logger.DEBUG(`群组 ${group_id} 的命令 ${element.regexp} 处于黑名单中`)
-        return 'quit'
+
+      if ('user_id' in context) {
+        const { user_id } = context
+        if (
+          element.whiteUser &&
+          (element.whiteUser === '*' || element.whiteUser.includes(user_id))
+        ) {
+          continue
+        }
+
+        if (
+          element.blackUser &&
+          (element.blackUser === '*' || element.blackUser.includes(user_id))
+        ) {
+          if ((await check(context, command, element, blockConfig.defaultReply)) === 'quit') {
+            return 'quit'
+          }
+        }
       }
     }
+  }
+}
+
+async function check(
+  context: CQEvent<'message'>['context'],
+  command: commandFormat,
+  element: blockRule,
+  defaultReply: string
+) {
+  if (command.name.match(element.regexp)) {
+    if (element.reply !== '') await replyMsg(context, element.reply ?? defaultReply)
+    if (debug) {
+      if ('group_id' in context) {
+        logger.DEBUG(`群组 ${context.group_id} 的命令 ${element.regexp} 处于黑名单中`)
+      } else if ('user_id' in context) {
+        logger.DEBUG(`用户 ${context.user_id} 的命令 ${element.regexp} 处于黑名单中`)
+      }
+    }
+    return 'quit'
   }
 }
 

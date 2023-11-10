@@ -7,6 +7,9 @@ interface blockConfig {
 
 interface blockRule {
   regexp: RegExp
-  reply: string
-  groupId: number[] | '*'
+  reply: string | null | undefined
+  whiteUser?: number[] | '*'
+  blackUser?: number[] | '*'
+  whiteGroup?: number[] | '*'
+  blackGroup?: number[] | '*'
 }
