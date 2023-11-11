@@ -63,40 +63,44 @@ async function checkBan(
       const element = blockConfig.blockedCommands[i]
 
       // 白名单优先
-      if ('group_id' in context) {
-        const { group_id } = context
-        if (
-          element.whiteGroup &&
-          (element.whiteGroup === '*' || element.whiteGroup.includes(group_id))
-        ) {
-          continue
+      if ('user_id' in context) {
+        const { user_id } = context
+        if (element.whiteUser) {
+          if (element.whiteUser === '*' || element.whiteUser.includes(user_id)) {
+            continue
+          } else {
+            if ((await check(context, command, element, blockConfig.defaultReply)) === 'quit') {
+              return 'quit'
+            }
+          }
         }
 
-        if (
-          element.blackGroup &&
-          (element.blackGroup === '*' || element.blackGroup.includes(group_id))
-        ) {
-          if ((await check(context, command, element, blockConfig.defaultReply)) === 'quit') {
-            return 'quit'
+        if (element.blackUser) {
+          if (element.blackUser === '*' || element.blackUser.includes(user_id)) {
+            if ((await check(context, command, element, blockConfig.defaultReply)) === 'quit') {
+              return 'quit'
+            }
           }
         }
       }
 
-      if ('user_id' in context) {
-        const { user_id } = context
-        if (
-          element.whiteUser &&
-          (element.whiteUser === '*' || element.whiteUser.includes(user_id))
-        ) {
-          continue
+      if ('group_id' in context) {
+        const { group_id } = context
+        if (element.whiteGroup) {
+          if (element.whiteGroup === '*' || element.whiteGroup.includes(group_id)) {
+            continue
+          } else {
+            if ((await check(context, command, element, blockConfig.defaultReply)) === 'quit') {
+              return 'quit'
+            }
+          }
         }
 
-        if (
-          element.blackUser &&
-          (element.blackUser === '*' || element.blackUser.includes(user_id))
-        ) {
-          if ((await check(context, command, element, blockConfig.defaultReply)) === 'quit') {
-            return 'quit'
+        if (element.blackGroup) {
+          if (element.blackGroup === '*' || element.blackGroup.includes(group_id)) {
+            if ((await check(context, command, element, blockConfig.defaultReply)) === 'quit') {
+              return 'quit'
+            }
           }
         }
       }
