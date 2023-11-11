@@ -25,7 +25,7 @@ function event() {
 
 async function initial() {
   const { plugins } = global
-  let { helpData } = global.data as { helpData: helpData }
+  const { helpData } = global.data as { helpData: helpData }
   const commandList = []
 
   for (const key in plugins) {

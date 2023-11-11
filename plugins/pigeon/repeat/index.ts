@@ -17,12 +17,10 @@ function event() {
 
 async function repeat(context: CQEvent<'message'>['context']) {
   if (context.message_type === 'private') return
-
   const { group_id, user_id, message } = context
   const { repeatConfig } = global.config as { repeatConfig: repeatConfig }
-  const {
-    repeatData: { repeat }
-  } = global.data as { repeatData: repeatData }
+  const { repeatData } = global.data as { repeatData: repeatData }
+  const { repeat } = repeatData
 
   if (!repeat[group_id]) {
     repeat[group_id] = {

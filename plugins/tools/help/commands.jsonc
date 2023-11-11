@@ -1,0 +1,7 @@
+[
+  {
+    "commandName": "帮助",
+    "commandDescription": ["帮助 (查询的命令)"],
+    "admin": true
+  }
+]

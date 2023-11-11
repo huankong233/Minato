@@ -1,7 +1,7 @@
 [
   {
     "commandName": "我的鸽子",
-    "commandDescription": ["查询我的鸽子"]
+    "commandDescription": ["我的鸽子", "查询我的鸽子"]
   },
   {
     "commandName": "查鸽子",

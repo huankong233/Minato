@@ -1,11 +1,11 @@
 interface repeatConfig {
-  times: 3
-  commonProb: 0.05
+  times: number
+  commonProb: number
 }
 
 interface repeatData {
   repeat: {
-    [key: number]: repeat
+    [group_id: number]: repeat
   }
 }
 

@@ -44,8 +44,9 @@ async function give(context: CQEvent<'message'>['context'], command: commandForm
   //口令
   const code = params[2] ?? getRangeCode()
 
-  if (redPacket_num <= 0 || pigeon_num <= 0)
+  if (redPacket_num <= 0 || pigeon_num <= 0) {
     return await replyMsg(context, '红包发送失败,红包数量和鸽子数都不能<=0', { reply: true })
+  }
 
   const item = await database.select('*').where({ code }).from('red_packet').first()
   if (item) return await replyMsg(context, '红包发送失败,该口令已存在', { reply: true })
@@ -53,14 +54,17 @@ async function give(context: CQEvent<'message'>['context'], command: commandForm
   //校验合理性
   const pre = pigeon_num / redPacket_num
 
-  if (pre < 1)
+  if (pre < 1) {
     return await replyMsg(context, '红包发送失败,每个包需要至少一只鸽子', { reply: true })
+  }
 
-  if (Math.floor(pre) !== pre)
+  if (Math.floor(pre) !== pre) {
     return await replyMsg(context, '红包发送失败,每个包里的鸽子数需要为整数', { reply: true })
+  }
 
-  if (!(await reduce(user_id, pigeon_num, `发送鸽子红包_${code}`)))
+  if (!(await reduce(user_id, pigeon_num, `发送鸽子红包_${code}`))) {
     return await replyMsg(context, '红包发送失败,账户鸽子不足', { reply: true })
+  }
 
   //插入红包
   await database
@@ -81,17 +85,17 @@ async function give(context: CQEvent<'message'>['context'], command: commandForm
 async function get(context: CQEvent<'message'>['context']) {
   const { user_id, message } = context
   const { redPacketData } = global.data as { redPacketData: redPacketData }
+  const { redPackets } = redPacketData
 
-  for (let i = 0; i < redPacketData.redpackets.length; i++) {
-    const item = redPacketData.redpackets[i]
+  for (let i = 0; i < redPackets.length; i++) {
+    const item = redPackets[i]
     const { pigeon_num, redPacket_num, picked_user } = item
-
-    const pickedUserJSON = jsonc.parse(picked_user)
 
     //口令不正确
     if (message !== item.code) continue
 
     //领取过
+    const pickedUserJSON = jsonc.parse(picked_user)
     if (pickedUserJSON.indexOf(user_id) !== -1) {
       await replyMsg(context, '红包领取过了哦,不要贪心啦~', { reply: true })
       continue
@@ -109,7 +113,7 @@ async function get(context: CQEvent<'message'>['context']) {
       .update({
         redPacket_num: redPacket_num - 1,
         pigeon_num: pigeon_num - getPigeonNum,
-        picked_user: JSON.stringify(pickedUserJSON)
+        picked_user: jsonc.stringify(pickedUserJSON)
       })
       .where('id', item.id)
       .from('red_packet')
@@ -124,34 +128,35 @@ async function get(context: CQEvent<'message'>['context']) {
 }
 
 async function getAll(context: CQEvent<'message'>['context']) {
-  const { redPacketData } = global.data
-  if (redPacketData.length !== 0) {
-    let msg = ['剩余红包:']
-
-    for (let i = 0; i < redPacketData.length; i++) {
-      const item = redPacketData[i]
-      msg.push(
-        [
-          '由',
-          await bot.get_stranger_info(item.send_user_id).then(res => res.nickname),
-          '发送的口令: ',
-          item.code,
-          ' ,剩余',
-          item.pigeon_num,
-          '只鸽子'
-        ].join()
-      )
-    }
-
-    await replyMsg(context, msg.join('\n'), { reply: true })
-  } else {
-    await replyMsg(context, '暂时还没有红包哦~要不你发一个?', { reply: true })
+  const { redPacketData } = global.data as { redPacketData: redPacketData }
+  const { redPackets } = redPacketData
+  if (redPackets.length === 0) {
+    return await replyMsg(context, '暂时还没有红包哦~要不你发一个?', { reply: true })
   }
+
+  let msg = ['剩余红包:']
+
+  for (let i = 0; i < redPackets.length; i++) {
+    const item = redPackets[i]
+    msg.push(
+      [
+        '由',
+        await bot.get_stranger_info(item.send_user_id).then(res => res.nickname),
+        '发送的口令: ',
+        item.code,
+        ' ,剩余',
+        item.pigeon_num,
+        '只鸽子'
+      ].join()
+    )
+  }
+
+  await replyMsg(context, msg.join('\n'), { reply: true })
 }
 
 async function freshRedPacketList() {
   const { redPacketData } = global.data as { redPacketData: redPacketData }
-  redPacketData.redpackets = await database
+  redPacketData.redPackets = await database
     .select('*')
     .where('pigeon_num', '>', 0)
     .from('red_packet')

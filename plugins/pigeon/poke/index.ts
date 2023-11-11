@@ -16,7 +16,6 @@ function event() {
       context.notice_type === 'notify' &&
       context.sub_type === 'poke' &&
       context.post_type === 'notice' &&
-      context.group_id !== undefined &&
       context.target_id === context.self_id
     ) {
       await poke(context)

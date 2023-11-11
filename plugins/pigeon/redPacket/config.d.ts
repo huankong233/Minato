@@ -1,5 +1,5 @@
 interface redPacketData {
-  redpackets: redPacket[]
+  redPackets: redPacket[]
 }
 
 interface redPacket {
