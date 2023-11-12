@@ -1,8 +1,10 @@
-import { CQ } from 'go-cqwebsocket'
-import { eventReg } from '../../libs/eventReg.js'
-import { replyMsg } from '../../libs/sendMsg.js'
-import { reduce, add } from '../pigeon/index.js'
-import { missingParams } from '../../libs/eventReg.js'
+import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import { CQ } from '@huan_kong/go-cqwebsocket'
+import { eventReg } from '@/libs/eventReg.ts'
+import { replyMsg } from '@/libs/sendMsg.ts'
+import { reduce, add } from '@/plugins/pigeon/pigeon/index.ts'
+import { missingParams } from '@/libs/eventReg.ts'
 
 const ENUM_SCENCE = {
   a: ['private', 'group'],
@@ -22,9 +24,8 @@ export default async () => {
 }
 
 function event() {
-  eventReg('message', async (event, context, tags) => {
-    const { botConfig } = global.config
-    const { command } = context
+  eventReg('message', async ({ context }, command) => {
+    const { botConfig } = global.config as { botConfig: botConfig }
 
     if (command) {
       if (command.name === `${botConfig.botName}学习`) {
@@ -43,7 +44,7 @@ function isCtxMatchScence({ message_type }, scence) {
   return ENUM_SCENCE[scence].includes(message_type)
 }
 
-async function corpus(context) {
+async function corpus(context: CQEvent<'message'>['context']) {
   const { message, user_id, message_type } = context
   const { corpusData } = global.data
 

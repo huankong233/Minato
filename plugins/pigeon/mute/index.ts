@@ -1,8 +1,8 @@
 import type { fakeContext } from '@/global.d.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { randomInt } from '@/libs/random.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import { eventReg } from '@/libs/eventReg.ts'
-import { CQEvent } from '@huan_kong/go-cqwebsocket'
 
 export default async () => {
   event()

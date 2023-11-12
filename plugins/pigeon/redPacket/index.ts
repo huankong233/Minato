@@ -1,6 +1,6 @@
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import type { commandFormat } from '@/libs/eventReg.ts'
-import { add, reduce } from '../pigeon/index.ts'
+import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { missingParams } from '@/libs/eventReg.ts'
 import { getRangeCode, randomInt } from '@/libs/random.ts'

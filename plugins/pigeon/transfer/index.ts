@@ -1,6 +1,6 @@
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import type { commandFormat } from '@/libs/eventReg.js'
-import { add, reduce, getUserData } from '../pigeon/index.js'
+import { add, reduce, getUserData } from '@/plugins/pigeon/pigeon/index.js'
 import { missingParams } from '@/libs/eventReg.js'
 import { replyMsg } from '@/libs/sendMsg.js'
 import { eventReg } from '@/libs/eventReg.js'

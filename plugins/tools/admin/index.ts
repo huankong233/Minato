@@ -4,7 +4,6 @@ import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import type { fakeContext } from '@/global.d.ts'
 import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { sendMsg, replyMsg } from '@/libs/sendMsg.ts'
-import { sleep } from '@/libs/sleep.ts'
 
 export default async () => {
   event()
@@ -75,14 +74,12 @@ async function request(context: CQEvent<'request'>['context']) {
       //申请加群
       await sendNotice(context, '加群', adminConfig.add.agree)
       if (adminConfig.add.agree) {
-        await sleep(3000)
         await invite(context, { name: '加群', params: ['批准', context.flag] })
       }
     } else if (sub_type === 'invite') {
       //邀请机器人入群
       await sendNotice(context, '入群', adminConfig.invite.agree)
       if (adminConfig.invite.agree) {
-        await sleep(3000)
         await invite(context, { name: '入群', params: ['批准', context.flag] })
       }
     }
@@ -90,7 +87,6 @@ async function request(context: CQEvent<'request'>['context']) {
     //添加好友
     await sendNotice(context, '好友', adminConfig.friend.agree)
     if (adminConfig.friend.agree) {
-      await sleep(3000)
       await friend(context, { name: 'freind', params: ['批准', context.flag] })
     }
   }
@@ -132,7 +128,7 @@ async function invite(
   if (context.post_type === 'message') {
     // 判断是否为管理员
     if (botConfig.admin !== context.user_id)
-      return await replyMsg(context, '你不是管理员', { reply: true })
+      return await replyMsg(context, '你不是咱的管理员喵~', { reply: true })
 
     if (await missingParams(context, command, 2)) return
   }
@@ -143,9 +139,19 @@ async function invite(
   const flag = params[1]
   const reason = params[2]
   const sub_type = name === '加群' ? 'friend' : 'group'
-  await bot.set_group_add_request(flag, sub_type, approve, reason)
 
-  if (context.post_type === 'message') await replyMsg(context, '执行成功(不代表处理结果)')
+  await bot
+    .set_group_add_request(flag, sub_type, approve, reason)
+    .catch(async response => {
+      response.status === 'failed'
+        ? context.post_type === 'message'
+          ? await replyMsg(context, [`执行失败,失败原因:`, `${response.wording}`].join('\n'))
+          : await sendMsg(botConfig.admin, [`执行失败,失败原因:`, `${response.wording}`].join('\n'))
+        : null
+    })
+    .finally(async () =>
+      context.post_type === 'message' ? await replyMsg(context, '执行成功(不代表处理结果)') : null
+    )
 }
 
 //同意加好友请求
@@ -158,7 +164,7 @@ async function friend(
   if (context.post_type === 'message') {
     // 判断是否为管理员
     if (botConfig.admin !== context.user_id)
-      return await replyMsg(context, '你不是管理员', { reply: true })
+      return await replyMsg(context, '你不是咱的管理员喵~', { reply: true })
 
     if (await missingParams(context, command, 2)) return
   }
@@ -166,7 +172,17 @@ async function friend(
   const { params } = command
   const approve = params[0] === '批准'
   const flag = params[1]
-  await bot.set_friend_add_request(flag, approve)
 
-  if (context.post_type === 'message') await replyMsg(context, '执行成功(不代表处理结果)')
+  await bot
+    .set_friend_add_request(flag, approve)
+    .catch(async response => {
+      response.status === 'failed'
+        ? context.post_type === 'message'
+          ? await replyMsg(context, [`执行失败,失败原因:`, `${response.wording}`].join('\n'))
+          : await sendMsg(botConfig.admin, [`执行失败,失败原因:`, `${response.wording}`].join('\n'))
+        : null
+    })
+    .finally(async () =>
+      context.post_type === 'message' ? await replyMsg(context, '执行成功(不代表处理结果)') : null
+    )
 }
