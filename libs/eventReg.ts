@@ -1,6 +1,7 @@
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import type { messageCallback, noticeCallback, requestCallback } from '@/global.d.ts'
-import { CQ, CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import { CQ } from '@huan_kong/go-cqwebsocket'
 import { sortObjectArray } from '@/libs/array.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 

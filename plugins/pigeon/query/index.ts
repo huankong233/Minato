@@ -1,4 +1,4 @@
-import { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { getUserData } from '@/plugins/pigeon/pigeon/index.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import { commandFormat, eventReg } from '@/libs/eventReg.ts'
