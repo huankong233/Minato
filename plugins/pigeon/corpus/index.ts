@@ -1,7 +1,8 @@
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQImage } from '@huan_kong/go-cqwebsocket/out/tags.js'
 import { CQ } from '@huan_kong/go-cqwebsocket'
-import { eventReg } from '@/libs/eventReg.ts'
+import { commandFormat, eventReg } from '@/libs/eventReg.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import { reduce, add } from '@/plugins/pigeon/pigeon/index.ts'
 import { missingParams } from '@/libs/eventReg.ts'
@@ -27,25 +28,26 @@ function event() {
   eventReg('message', async ({ context }, command) => {
     const { botConfig } = global.config as { botConfig: botConfig }
 
-    if (command) {
-      if (command.name === `${botConfig.botName}学习`) {
-        await learn(context)
-      } else if (command.name === `${botConfig.botName}忘记`) {
-        await forget(context)
-      }
-    } else {
-      await corpus(context)
+    if (!command) return await corpus(context)
+
+    if (command.name === `${botConfig.botName}学习`) {
+      await learn(context, command)
+    } else if (command.name === `${botConfig.botName}忘记`) {
+      await forget(context, command)
     }
   })
 }
 
-function isCtxMatchScence({ message_type }, scence) {
+function isCtxMatchScence(
+  { message_type }: CQEvent<'message'>['context'],
+  scence: 'a' | 'g' | 'p'
+) {
   if (!(scence in ENUM_SCENCE)) return false
   return ENUM_SCENCE[scence].includes(message_type)
 }
 
 async function corpus(context: CQEvent<'message'>['context']) {
-  const { message, user_id, message_type } = context
+  const { message } = context
   const { corpusData } = global.data
 
   for (let { regexp, reply, scene } of corpusData.rules) {
@@ -53,62 +55,73 @@ async function corpus(context: CQEvent<'message'>['context']) {
     if (!isCtxMatchScence(context, scene)) continue
 
     // 执行正则判断
-    const reg = new RegExp(regexp)
-    const exec = reg.exec(message)
+    const exec = regexp.exec(message.toString())
     if (!exec) continue
 
-    reply = reply.replace(/\[CQ:at\]/g, message_type === 'private' ? '' : CQ.at(user_id))
-
-    let msg = exec[0].replace(reg, reply)
-    if (msg.length) await replyMsg(context, msg)
+    await replyMsg(context, reply)
   }
 }
 
 async function loadRules() {
-  const { corpusData } = global.data
+  const { corpusData } = global.data as { corpusData: corpusData }
   corpusData.rules = []
-  const data = await database.select('*').from('corpus').where('hide', 0)
+
+  const data: {
+    id: number
+    user_id: number
+    keyword: string
+    reply: string
+    scene: string
+    mode: number
+    hide: number
+  }[] = await database.select('*').from('corpus').where('hide', 0)
+
   data.forEach(value => {
     let obj = {
       reply: value.reply,
-      scene: value.scene
+      scene: value.scene,
+      regexp: new RegExp(/default/)
     }
+
     if (value.mode === 0) {
-      obj.regexp = value.keyword
+      obj.regexp = new RegExp(value.keyword)
     } else if (value.mode === 1) {
-      obj.regexp = '^' + value.keyword + '$'
+      obj.regexp = new RegExp('^' + value.keyword + '$')
     }
+
     corpusData.rules.push(obj)
   })
 }
 
 // 学习
-async function learn(context) {
-  const {
-    user_id,
-    command: { params }
-  } = context
-  const { corpusConfig, botConfig } = global.config
+async function learn(context: CQEvent<'message'>['context'], command: commandFormat) {
+  const { user_id } = context
+  const { corpusConfig, botConfig } = global.config as {
+    corpusConfig: corpusConfig
+    botConfig: botConfig
+  }
+  const { params } = command
 
-  if (await missingParams(context, 4)) return
+  if (await missingParams(context, command, 4)) return
 
-  if (!(await reduce({ user_id, number: corpusConfig.add, reason: '添加关键字' }))) {
+  if (!(await reduce(user_id, corpusConfig.add, '添加关键字'))) {
     return await replyMsg(context, '鸽子不足~', { reply: true })
   }
 
   const messages = CQ.parse(params[0])
-  let keyword, mode
+  let keyword,
+    mode = 0
 
   let type = null
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i]
     if (type === null) {
       type = message._type
-      type === 'text'
-        ? ([keyword, mode] = [message._data.text, parseInt(params[2])])
-        : ([keyword, mode] = [`[CQ:image,file=${message.file}`, 0])
+      type === 'image'
+        ? ([keyword, mode] = [`\\[CQ:image,file=${(message as CQImage).file}`, 0])
+        : ([keyword, mode] = [message._data.text, parseInt(params[2])])
     } else {
-      await add({ user_id, number: corpusConfig.add, reason: '添加关键词失败' })
+      await add(user_id, corpusConfig.add, '添加关键词失败')
       return await replyMsg(context, `不能同时存在图片或文字哦~`, { reply: true })
     }
   }
@@ -118,7 +131,7 @@ async function learn(context) {
 
   //判断参数是否合法
   if (!available.mode.includes(mode)) {
-    await add({ user_id, number: corpusConfig.add, reason: '添加关键词失败' })
+    await add(user_id, corpusConfig.add, '添加关键词失败')
     return await replyMsg(
       context,
       `模式不合法,请发送"${botConfig.prefix}帮助 ${botConfig.botName}学习"查看细节`,
@@ -127,7 +140,7 @@ async function learn(context) {
   }
 
   if (!available.scene.includes(scene)) {
-    await add({ user_id, number: corpusConfig.add, reason: '添加关键词失败' })
+    await add(user_id, corpusConfig.add, '添加关键词失败')
     return await replyMsg(
       context,
       `生效范围不合法,请发送"${botConfig.prefix}帮助 ${botConfig.botName}学习"查看细节`,
@@ -139,7 +152,7 @@ async function learn(context) {
   const repeat = await database.select('*').from('corpus').where({ keyword, hide: 0 })
 
   if (repeat.length !== 0) {
-    await add({ user_id, number: corpusConfig.add, reason: '添加关键词失败' })
+    await add(user_id, corpusConfig.add, '添加关键词失败')
     return await replyMsg(context, '这个"关键词"已经存在啦~', { reply: true })
   }
 
@@ -147,22 +160,23 @@ async function learn(context) {
     await loadRules()
     await replyMsg(context, `${botConfig.botName}学会啦~`, { reply: true })
   } else {
-    await add({ user_id, number: corpusConfig.add, reason: '添加关键词失败' })
+    await add(user_id, corpusConfig.add, '添加关键词失败')
     await replyMsg(context, '学习失败~', { reply: true })
   }
 }
 
 //忘记
-async function forget(context) {
-  const {
-    user_id,
-    command: { params }
-  } = context
-  const { corpusConfig, botConfig } = global.config
+async function forget(context: CQEvent<'message'>['context'], command: commandFormat) {
+  const { user_id } = context
+  const { corpusConfig, botConfig } = global.config as {
+    corpusConfig: corpusConfig
+    botConfig: botConfig
+  }
+  const { params } = command
 
-  if (await missingParams(context, 1)) return
+  if (await missingParams(context, command, 1)) return
 
-  if (!(await reduce({ user_id, number: corpusConfig.delete, reason: '删除关键词' }))) {
+  if (!(await reduce(user_id, corpusConfig.delete, '删除关键词'))) {
     return await replyMsg(context, '鸽子不足~', { reply: true })
   }
 
@@ -172,13 +186,13 @@ async function forget(context) {
   const data = await database.select('*').from('corpus').where({ keyword, hide: 0 }).first()
 
   if (!data) {
-    await add({ user_id, number: corpusConfig.delete, reason: '删除关键词失败' })
+    await add(user_id, corpusConfig.delete, '删除关键词失败')
     return await replyMsg(context, '这个关键词不存在哦~', { reply: true })
   }
 
   //判断所有者
   if (data.user_id !== user_id && botConfig.admin !== user_id) {
-    await add({ user_id, number: corpusConfig.delete, reason: '删除关键词失败' })
+    await add(user_id, corpusConfig.delete, '删除关键词失败')
     return await replyMsg(context, '删除失败，这不是你的词条哦', { reply: true })
   }
 
