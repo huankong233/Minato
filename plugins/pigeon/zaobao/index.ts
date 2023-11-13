@@ -33,7 +33,7 @@ async function init() {
   new CronJob(
     zaobaoConfig.crontab,
     async () => {
-      const message = await prepareMessage()
+      const message = await prepareMessage(true)
 
       for (let i = 0; i < zaobaoConfig.groups.length; i++) {
         const group_id = zaobaoConfig.groups[i]
@@ -54,7 +54,7 @@ async function init() {
 }
 
 async function zaobao(context: CQEvent<'message'>['context']) {
-  await replyMsg(context, await prepareMessage())
+  await replyMsg(context, await prepareMessage(false))
 }
 
 const urls = new Map([
@@ -78,7 +78,7 @@ const urls = new Map([
   ]
 ])
 
-async function prepareMessage() {
+async function prepareMessage(checkDate: boolean) {
   const { zaobaoConfig } = global.config as { zaobaoConfig: zaobaoConfig }
   const params = urls.get(zaobaoConfig.type)
   if (!params) throw new Error('错误的类型')
@@ -91,7 +91,7 @@ async function prepareMessage() {
         const res = await retryGet(params.api).then(res => res.data)
         if (!params['checkSuccess'](res)) {
           throw new Error('早报获取失败')
-        } else if (!params['checkDate'](res)) {
+        } else if (checkDate && !params['checkDate'](res)) {
           throw new Error('时间检验失败')
         } else {
           response = res
