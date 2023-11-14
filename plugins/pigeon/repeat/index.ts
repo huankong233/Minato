@@ -4,9 +4,13 @@ import { replyMsg } from '@/libs/sendMsg.ts'
 import { randomFloat } from '@/libs/random.ts'
 
 export default async () => {
-  event()
-
   init()
+  event()
+}
+
+function init() {
+  const { repeatData } = global.data as { repeatData: repeatData }
+  repeatData.repeat = {}
 }
 
 function event() {
@@ -15,11 +19,6 @@ function event() {
     if (command) return
     await repeat(context)
   })
-}
-
-function init() {
-  let { repeatData } = global.data as { repeatData: repeatData }
-  repeatData.repeat = {}
 }
 
 async function repeat(context: CQEvent<'message'>['context']) {
