@@ -1,4 +1,4 @@
-import type { LoginInfo } from '@huan_kong/go-cqwebsocket'
+import type { LoginInfo } from '@huan_kong/go-cqwebsocket/out/Interfaces.js'
 
 export interface botConfig {
   configName: string

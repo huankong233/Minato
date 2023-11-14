@@ -37,7 +37,7 @@ async function prprme(context: CQEvent<'message'>['context']) {
   const { userList } = prprmeData
 
   if (!(await isFriend(user_id))) {
-    await replyMsg(context, '先加一下好友叭~咱也是会害羞的', { reply: true })
+    return await replyMsg(context, '先加一下好友叭~咱也是会害羞的', { reply: true })
   }
 
   await sendMsg(
