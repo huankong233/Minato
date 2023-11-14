@@ -48,7 +48,7 @@ function isCtxMatchScence(
 
 async function corpus(context: CQEvent<'message'>['context']) {
   const { message } = context
-  const { corpusData } = global.data
+  const { corpusData } = global.data as { corpusData: corpusData }
 
   for (let { regexp, reply, scene } of corpusData.rules) {
     // 判断生效范围
@@ -71,7 +71,7 @@ async function loadRules() {
     user_id: number
     keyword: string
     reply: string
-    scene: string
+    scene: 'a' | 'g' | 'p'
     mode: number
     hide: number
   }[] = await database.select('*').from('corpus').where('hide', 0)
@@ -109,8 +109,8 @@ async function learn(context: CQEvent<'message'>['context'], command: commandFor
   }
 
   const messages = CQ.parse(params[0])
-  let keyword,
-    mode = 0
+  let keyword = 'default keyword'
+  let mode = 0
 
   let type = null
   for (let i = 0; i < messages.length; i++) {

@@ -63,9 +63,10 @@ export default async function () {
         }
       })
 
-      bot.on('socket.open', function () {
+      bot.on('socket.open', async function () {
         logger.NOTICE(`连接成功[/api]#${attempts}`)
         if (botData.wsType === '/event') {
+          await connectSuccess()
           resolve(true)
         } else {
           botData.wsType = '/api'
@@ -73,9 +74,10 @@ export default async function () {
         attempts = 0
       })
 
-      bot.on('socket.openEvent', function () {
+      bot.on('socket.openEvent', async function () {
         logger.NOTICE(`连接成功[/event]#${attempts}`)
         if (botData.wsType === '/api') {
+          await connectSuccess()
           resolve(true)
         } else {
           botData.wsType = '/event'
@@ -160,9 +162,9 @@ function initEvents() {
 }
 
 /**
- * 机器人启动成功
+ * 机器人连接成功
  */
-export async function bootstrapComplete() {
+export async function connectSuccess() {
   const { botConfig } = global.config as { botConfig: botConfig }
   const { botData } = global.data as { botData: botData }
 
