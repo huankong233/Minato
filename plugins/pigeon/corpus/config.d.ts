@@ -10,5 +10,5 @@ interface corpusData {
 interface rule {
   regexp: RegExp
   reply: string
-  scene: string
+  scene: 'a' | 'g' | 'p'
 }
