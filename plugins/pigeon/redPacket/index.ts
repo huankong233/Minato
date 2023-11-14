@@ -6,6 +6,7 @@ import { missingParams } from '@/libs/eventReg.ts'
 import { getRangeCode, randomInt } from '@/libs/random.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import { jsonc } from 'jsonc'
+import { getUserName } from '@/libs/Api.ts'
 
 export default async () => {
   event()
@@ -141,7 +142,7 @@ async function getAll(context: CQEvent<'message'>['context']) {
     msg.push(
       [
         '由',
-        await bot.get_stranger_info(item.send_user_id).then(res => res.nickname),
+        await getUserName(item.send_user_id),
         '发送的口令: ',
         item.code,
         ' ,剩余',

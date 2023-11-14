@@ -4,6 +4,7 @@ import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import type { fakeContext } from '@/global.d.ts'
 import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { sendMsg, replyMsg } from '@/libs/sendMsg.ts'
+import { getUserName } from '@/libs/Api.ts'
 
 export default async () => {
   event()
@@ -50,15 +51,9 @@ async function notice(context: CQEvent<'notice'>['context']) {
     }
 
     if (sub_type === 'approve') {
-      await replyMsg(
-        fakeContext,
-        `${await bot.get_stranger_info(user_id).then(res => res.nickname)} 欢迎加群呀~ ヾ(≧▽≦*)o`
-      )
+      await replyMsg(fakeContext, `${await getUserName(user_id)} 欢迎加群呀~ ヾ(≧▽≦*)o`)
     } else if (sub_type === 'leave') {
-      await replyMsg(
-        fakeContext,
-        `${await bot.get_stranger_info(user_id).then(res => res.nickname)} 退群了 (*>.<*)`
-      )
+      await replyMsg(fakeContext, `${await getUserName(user_id)} 退群了 (*>.<*)`)
     }
   }
 }

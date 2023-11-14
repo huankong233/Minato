@@ -1,6 +1,6 @@
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
-import type { CQImage } from '@huan_kong/go-cqwebsocket/out/tags.js'
+import type { CQImage } from '@huan_kong/go-cqwebsocket/out/tags.ts'
 import { CQ } from '@huan_kong/go-cqwebsocket'
 import { commandFormat, eventReg } from '@/libs/eventReg.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
