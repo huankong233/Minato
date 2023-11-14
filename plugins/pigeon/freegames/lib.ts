@@ -3,8 +3,9 @@
  * https://github.com/DIYgod/RSSHub/blob/master/lib/v2/epicgames/index.js
  */
 
+import { retryGet } from '@/libs/axios.ts'
 import dayjs from 'dayjs'
-import { get } from '../../libs/fetch.js'
+
 export const epicApi = async () => {
   const locale = 'zh-CN'
   const country = 'CN'
@@ -13,24 +14,24 @@ export const epicApi = async () => {
   const apiUrl = `https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=${locale}&country=${country}&allowCountries=${country}`
   const contentBaseUrl = `https://store-content-ipv4.ak.epicgames.com/api/${locale}/content`
 
-  const response = await get({ url: apiUrl }).then(res => res.json())
+  const response = await retryGet(apiUrl).then(res => res.data)
 
   const now = dayjs()
 
   const items = response.data.Catalog.searchStore.elements
     .filter(
-      item =>
+      (item: any) =>
         item.promotions &&
         item.promotions.promotionalOffers &&
         item.promotions.promotionalOffers[0] &&
         dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].startDate) <= now &&
         dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].endDate) > now
     )
-    .map(async item => {
+    .map(async (item: any) => {
       let link = `${rootUrl}/${locale}/p/`
       let contentUrl = `${contentBaseUrl}/products/`
       let isBundles = false
-      item.categories.some(category => {
+      item.categories.some((category: any) => {
         if (category.path === 'bundles') {
           link = `${rootUrl}/${locale}/bundles/`
           isBundles = true
@@ -51,9 +52,7 @@ export const epicApi = async () => {
       contentUrl += linkSlug
       let description = item.description
       if (item.offerType !== 'BASE_GAME') {
-        const contentResp = await get({
-          url: contentUrl
-        }).then(res => res.json())
+        const contentResp = await retryGet(contentUrl).then(res => res.data)
 
         description = isBundles
           ? contentResp.data.about.shortDescription
@@ -61,7 +60,7 @@ export const epicApi = async () => {
       }
 
       let image = item.keyImages[0].url
-      item.keyImages.some(keyImage => {
+      item.keyImages.some((keyImage: any) => {
         if (keyImage.type === 'DieselStoreFrontWide') {
           image = keyImage.url
           return true
@@ -85,33 +84,28 @@ export const epicApi = async () => {
 }
 
 import * as cheerio from 'cheerio'
-import _ from 'lodash'
 export const steamApi = async () => {
-  const html = await get(
-    {
-      url: 'https://store.steampowered.com/search',
-      data: {
-        maxprice: 'free',
-        supportedlang: 'schinese',
-        specials: 1
-      }
-    },
-    10
-  ).then(res => res.text())
+  const html = await retryGet('https://store.steampowered.com/search', {
+    params: {
+      maxprice: 'free',
+      supportedlang: 'schinese',
+      specials: 1
+    }
+  }).then(res => res.data)
 
   const $ = cheerio.load(html, { decodeEntities: true })
-  return _.map($('#search_resultsRows a'), item => {
-    item = $(item)
-    const info = item.find('.responsive_search_name_combined')
-    const id = item.attr('data-ds-appid')
-    const releasedTime = dayjs(item.find('.search_released').text()).format('YYYY年MM月DD日')
+  return $('#search_resultsRows a')
+    .map((_index, item) => {
+      const info = $(item).find('.responsive_search_name_combined')
+      const id = $(item).attr('data-ds-appid')
 
-    return {
-      id,
-      url: `https://store.steampowered.com/app/${id}`,
-      img: item.find('.search_capsule img').attr('src'),
-      title: info.find('.search_name .title', item).text(),
-      releasedTime
-    }
-  })
+      return {
+        id,
+        url: `https://store.steampowered.com/app/${id}`,
+        img: $(item).find('.search_capsule img').attr('src'),
+        title: info.find('.search_name .title').text(),
+        releasedTime: dayjs($(item).find('.search_released').text()).format('YYYY年MM月DD日')
+      }
+    })
+    .toArray()
 }

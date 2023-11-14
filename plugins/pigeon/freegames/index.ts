@@ -1,10 +1,13 @@
-import { sleep } from '../../libs/sleep.js'
-import { replyMsg, sendForwardMsg } from '../../libs/sendMsg.js'
-import { makeLogger } from '../../libs/logger.js'
+import type { fakeContext } from '@/global.d.ts'
+import type { botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import { sleep } from '@/libs/sleep.ts'
+import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
+import { makeLogger } from '@/libs/logger.ts'
 import { CronJob } from 'cron'
-import { eventReg } from '../../libs/eventReg.js'
-import { epicApi, steamApi } from './lib.js'
-import { CQ } from 'go-cqwebsocket'
+import { eventReg } from '@/libs/eventReg.ts'
+import { epicApi, steamApi } from './lib.ts'
+import { CQ } from '@huan_kong/go-cqwebsocket'
 
 const logger = makeLogger({ pluginName: 'freegames' })
 
@@ -15,24 +18,19 @@ export default async () => {
 }
 
 function event() {
-  eventReg('message', async (event, context, tags) => {
-    if (context.command) {
-      const { name } = context.command
-
-      if (name === 'freegames') {
-        await freegames(context)
-      }
-    }
+  eventReg('message', async ({ context }, command) => {
+    if (!command) return
+    if (command.name === 'freegames') await freegames(context)
   })
 }
 
 async function init() {
-  const { freegamesConfig } = global.config
+  const { freegamesConfig } = global.config as { freegamesConfig: freegamesConfig }
+
+  if (freegamesConfig.groups.length === 0) return
   new CronJob(
     freegamesConfig.crontab,
     async function () {
-      if (freegamesConfig.groups.length === 0) return
-
       let messages
       try {
         messages = await prepareMessage()
@@ -45,13 +43,14 @@ async function init() {
       for (let i = 0; i < freegamesConfig.groups.length; i++) {
         const group_id = freegamesConfig.groups[i]
 
-        const fakeContext = {
+        const fakeContext: fakeContext = {
           message_type: 'group',
-          group_id
+          group_id,
+          user_id: 0
         }
 
         await sendForwardMsg(fakeContext, messages)
-        await sleep(freegamesConfig.cd)
+        await sleep(freegamesConfig.cd * 1000)
       }
     },
     null,
@@ -59,7 +58,7 @@ async function init() {
   )
 }
 
-async function freegames(context) {
+async function freegames(context: CQEvent<'message'>['context']) {
   let messages
   try {
     messages = await prepareMessage()
@@ -68,15 +67,13 @@ async function freegames(context) {
     logger.ERROR(error)
     return await replyMsg(context, `接口请求失败`, { reply: true })
   }
-  const response = await sendForwardMsg(context, messages)
-
-  if (response.status === 'failed') {
+  await sendForwardMsg(context, messages).catch(async () => {
     await replyMsg(context, '发送合并消息失败，可以尝试私聊我哦~', { reply: true })
-  }
+  })
 }
 
 async function prepareMessage() {
-  const { botData } = global.data
+  const { botData } = global.data as { botData: botData }
   const epic = await epicApi()
   const steam = await steamApi()
 
@@ -113,7 +110,7 @@ async function prepareMessage() {
         botData.info.nickname,
         botData.info.user_id,
         [
-          `${CQ.image(item.img)}`,
+          item.img ? `${CQ.image(item.img)}` : null,
           `游戏名:${item.title}`,
           `发行日期:${item.releasedTime}`,
           `购买链接:${item.url}`
