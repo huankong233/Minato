@@ -1,9 +1,12 @@
-import { confuseURL } from '../../libs/handleUrl.js'
-import { formatTime } from '../../libs/time.js'
-import { CQ } from 'go-cqwebsocket'
+import { confuseURL } from '@/libs/handleUrl.ts'
+import { formatTime } from '@/libs/time.ts'
+import { getFileBase64 } from '@/libs/fs.ts'
+import { CQ } from '@huan_kong/go-cqwebsocket'
 
 class CParser {
-  ascii2d = function (item) {
+  [key: string]: (item: any) => Promise<string> | string
+
+  ascii2d = function (item: any) {
     let message = [`图片信息:${item.info}`, `链接:${confuseURL(item.source.link, true)}`]
 
     if (item.author && (item.author.text || item.author.link)) {
@@ -19,7 +22,7 @@ class CParser {
     return `${CQ.image(item.image)}${message.join('\n')}`
   }
 
-  SauceNAO = async function (item) {
+  SauceNAO = async function (item: any) {
     let message = [`标题: ${item.title}`, `相似度: ${item.similarity}`, `图片信息:`]
 
     message.push(...joinContent(item.content))
@@ -28,12 +31,12 @@ class CParser {
 
     return `${
       item.image !== 'https://saucenao.com/' || item.image !== ''
-        ? CQ.image(`base64://${await getImageBase64(item.image)}`)
+        ? CQ.image(`base64://${await getFileBase64(item.image)}`)
         : ''
     }${message.join('\n')}`
   }
 
-  IqDB = async function (item) {
+  IqDB = async function (item: any) {
     let message = [
       `分辨率: ${item.resolution}`,
       `相似度: ${item.similarity}`,
@@ -41,10 +44,10 @@ class CParser {
       ``
     ]
 
-    return `${CQ.image(`base64://${await getImageBase64(item.image)}`)}${message.join('\n')}`
+    return `${CQ.image(`base64://${await getFileBase64(item.image)}`)}${message.join('\n')}`
   }
 
-  TraceMoe = async function (item) {
+  TraceMoe = async function (item: any) {
     let message = [
       // `预览视频:${item.video ?? '无'}`,
       `相似度: ${parseInt(item.similarity)}`,
@@ -56,10 +59,10 @@ class CParser {
       ``
     ]
 
-    return `${CQ.image(`base64://${await getImageBase64(item.image)}`)}${message.join('\n')}`
+    return `${CQ.image(`base64://${await getFileBase64(item.image)}`)}${message.join('\n')}`
   }
 
-  AnimeTraceAnime = function (item) {
+  AnimeTraceAnime = function (item: any) {
     const { searchImageConfig } = global.config
 
     const preview =
@@ -76,12 +79,13 @@ class CParser {
 
     return `${preview}${message.join('\n')}`
   }
+
   AnimeTraceGame = this.AnimeTraceAnime
 }
 
 export const Parser = new CParser()
 
-function joinContent(data) {
+function joinContent(data: { text: string; link: string }[]) {
   // 初始化一个空数组
   let result = []
   // 初始化一个临时字符串
@@ -107,13 +111,4 @@ function joinContent(data) {
   }
   // 返回结果数组
   return result
-}
-
-import { get } from '../../libs/fetch.js'
-
-// 转换图片为 base64 格式
-export async function getImageBase64(url) {
-  return await get({ url })
-    .then(response => response.arrayBuffer())
-    .then(buffer => Buffer.from(buffer).toString('base64'))
 }

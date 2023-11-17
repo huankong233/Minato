@@ -1,9 +1,9 @@
-import { execSync } from 'child_process'
-import { compare } from 'compare-versions'
 import fs from 'fs'
 import url from 'url'
 import path from 'path'
 import { jsonc } from 'jsonc'
+import { execSync } from 'child_process'
+import { compare } from 'compare-versions'
 import { loadConfig } from '@/libs/loadConfig.ts'
 import { makeSystemLogger } from '@/libs/logger.ts'
 

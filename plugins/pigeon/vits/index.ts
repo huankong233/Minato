@@ -1,11 +1,12 @@
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import type { botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
+import type { commandFormat } from '@/libs/eventReg.ts'
 import { retryGet } from '@/libs/axios.ts'
 import { add, reduce } from '../pigeon/index.ts'
-import { commandFormat, missingParams } from '@/libs/eventReg.ts'
+import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import { makeLogger } from '@/libs/logger.ts'
-import { CQ, CQEvent } from '@huan_kong/go-cqwebsocket'
-import { eventReg } from '@/libs/eventReg.ts'
+import { CQ } from '@huan_kong/go-cqwebsocket'
 
 const logger = makeLogger({ pluginName: 'vits' })
 

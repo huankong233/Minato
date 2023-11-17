@@ -1,13 +1,14 @@
 import type { botConfig, botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
-import { CQ, CQEvent } from '@huan_kong/go-cqwebsocket'
-import { commandFormat, eventReg } from '@/libs/eventReg.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQNode } from '@huan_kong/go-cqwebsocket/out/tags.ts'
+import type { commandFormat } from '@/libs/eventReg.ts'
+import { CQ } from '@huan_kong/go-cqwebsocket'
+import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
 import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
-import { missingParams } from '@/libs/eventReg.ts'
 import { retryGet } from '@/libs/axios.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import * as cheerio from 'cheerio'
-import { CQNode } from '@huan_kong/go-cqwebsocket/out/tags.js'
 
 const logger = makeLogger({ pluginName: 'btSearch' })
 

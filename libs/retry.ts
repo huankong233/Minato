@@ -19,7 +19,11 @@ export async function retryAsync<T extends anyAsyncFunction>(
     try {
       return await func()
     } catch (e) {
-      if (debug) makeSystemLogger({ pluginName: 'retry' }).DEBUG(e)
+      if (debug) {
+        const logger = makeSystemLogger({ pluginName: 'retry' })
+        logger.WARNING('执行失败')
+        logger.DEBUG(e)
+      }
       if (times === 0) throw e
       if (ms !== 0) await sleep(ms)
     }

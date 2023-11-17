@@ -1,4 +1,4 @@
-import { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { retryGet } from '@/libs/axios.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger } from '@/libs/logger.ts'

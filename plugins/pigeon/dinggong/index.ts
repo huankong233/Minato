@@ -1,10 +1,11 @@
 import type { botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import fs from 'fs'
 import path from 'path'
 import { eventReg } from '@/libs/eventReg.ts'
 import { randomInt } from '@/libs/random.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
-import { CQ, CQEvent } from '@huan_kong/go-cqwebsocket'
+import { CQ } from '@huan_kong/go-cqwebsocket'
 import { getDir } from '@/libs/getDirName.ts'
 import { makeLogger } from '@/libs/logger.ts'
 
