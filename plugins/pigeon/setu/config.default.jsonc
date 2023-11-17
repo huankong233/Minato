@@ -15,10 +15,8 @@
   //3.同时操作
   "antiShieldingMode": 3,
   //pixiv代理服务器(如果开启了proxy插件则不会生效!!!)
-  // 推荐自己搭 pixiv.re
+  // 推荐自己搭地址: pixiv.re
   "proxy": { "enable": true, "url": "i.pixiv.re" },
   //短链(服务仓库:https://github.com/huankong233/easyShortUrl)
-  "short": { "enable": false, "url": "" },
-  // 禁用的群组
-  "blackList": []
+  "short": { "enable": false, "url": "" }
 }

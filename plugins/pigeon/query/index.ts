@@ -1,7 +1,8 @@
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { commandFormat } from '@/libs/eventReg.ts'
 import { getUserData } from '@/plugins/pigeon/pigeon/index.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
-import { commandFormat, eventReg } from '@/libs/eventReg.ts'
+import { eventReg } from '@/libs/eventReg.ts'
 import { getUserName } from '@/libs/Api.ts'
 
 export default () => {

@@ -87,3 +87,13 @@ export async function deleteOldestFiles(dirPath: string, count: number) {
     })
   )
 }
+
+/**
+ * 获取指定文件的base64
+ * @param url 地址
+ */
+export async function getFileBase64(url: string) {
+  return await retryGet(url, { responseType: 'arraybuffer' })
+    .then(res => res.data)
+    .then(buffer => Buffer.from(buffer).toString('base64'))
+}
