@@ -1,6 +1,6 @@
 FROM alpine
 
-WORKDIR /kkbot
+WORKDIR /kkbot-ts
 
 RUN apk update && apk upgrade
 RUN apk add nodejs npm
