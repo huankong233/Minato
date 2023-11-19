@@ -59,6 +59,9 @@ async function checkUpdate(context?: CQEvent<'message'>['context']) {
           `最新版本: ${remote_version}`,
           `当前版本: ${local_version}`
         ].join('\n')
+        context
+          ? await replyMsg(context, message, { reply: true })
+          : await sendMsg(botConfig.admin, message)
       }
     } else {
       //需要更新，通知admin
@@ -67,10 +70,9 @@ async function checkUpdate(context?: CQEvent<'message'>['context']) {
         `最新版本: ${remote_version}`,
         `当前版本: ${local_version}`
       ].join('\n')
+      context
+        ? await replyMsg(context, message, { reply: true })
+        : await sendMsg(botConfig.admin, message)
     }
   }
-
-  context
-    ? await replyMsg(context, message, { reply: true })
-    : await sendMsg(botConfig.admin, message)
 }
