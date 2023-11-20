@@ -28,7 +28,17 @@ async function event() {
 
 async function init() {
   const { checkUpdateConfig } = global.config
-  new CronJob(checkUpdateConfig.crontab, checkUpdate, null, true)
+  new CronJob(
+    checkUpdateConfig.crontab,
+    async () => {
+      await checkUpdate().catch(err => {
+        logger.ERROR(err)
+        logger.WARNING('检查更新失败')
+      })
+    },
+    null,
+    true
+  )
 }
 
 async function checkUpdate(context?: CQEvent<'message'>['context']) {

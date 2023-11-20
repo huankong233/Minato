@@ -49,7 +49,10 @@ async function init() {
           user_id: 0
         }
 
-        await sendForwardMsg(fakeContext, messages)
+        await sendForwardMsg(fakeContext, messages).catch(err => {
+          logger.ERROR(err)
+          logger.WARNING('发送每日免费游戏失败', { group_id })
+        })
         await sleep(freegamesConfig.cd * 1000)
       }
     },

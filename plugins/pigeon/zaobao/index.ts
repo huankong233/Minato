@@ -44,7 +44,10 @@ async function init() {
           user_id: 123
         }
 
-        await replyMsg(fakeContext, message)
+        await replyMsg(fakeContext, message).catch(err => {
+          logger.ERROR(err)
+          logger.WARNING('早报发送失败', { group_id })
+        })
         await sleep(zaobaoConfig.cd * 1000)
       }
     },
