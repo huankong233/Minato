@@ -53,6 +53,7 @@ async function prprme(context: CQEvent<'message'>['context']) {
       clearInterval(userList[user_id])
       logger.WARNING(`请求接口失败`)
       logger.ERROR(error)
+      clearInterval(userList[user_id])
       return await replyMsg(context, `接口请求失败`)
     }
   }, 3000)
