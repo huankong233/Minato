@@ -1,29 +1,29 @@
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
-import type { botConfig, botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
-import type {
-  searchImageConfig,
-  searchImageCallback,
-  searchImageResult,
-  searchImageSuccessResult,
-  searchImageFailResult
-} from './config.d.ts'
 import { eventReg } from '@/libs/eventReg.ts'
-import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
-import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
-import { getUniversalImgURL } from '@/libs/handleUrl.ts'
 import { downloadFile } from '@/libs/fs.ts'
-import { ascii2d, SauceNAO, IqDB, TraceMoe, AnimeTrace } from 'image_searcher'
-import {
-  searchInitialization,
-  turnOnSearchMode,
-  turnOffSearchMode,
-  isSearchMode,
-  refreshTimeOfAutoLeave
-} from './control.ts'
-import { Parser } from './parse.ts'
+import { getUniversalImgURL } from '@/libs/handleUrl.ts'
 import { makeLogger } from '@/libs/logger.ts'
+import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
+import type { botConfig, botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
+import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { CQ } from '@huan_kong/go-cqwebsocket'
 import fs from 'fs'
+import { AnimeTrace, IqDB, SauceNAO, TraceMoe, ascii2d } from 'image_searcher'
+import type {
+  searchImageCallback,
+  searchImageConfig,
+  searchImageFailResult,
+  searchImageResult,
+  searchImageSuccessResult
+} from './config.d.ts'
+import {
+  isSearchMode,
+  refreshTimeOfAutoLeave,
+  searchInitialization,
+  turnOffSearchMode,
+  turnOnSearchMode
+} from './control.ts'
+import { Parser } from './parse.ts'
 
 export const logger = makeLogger({ pluginName: 'searchImage' })
 

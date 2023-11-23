@@ -1,8 +1,8 @@
-import fs from 'fs'
-import path from 'path'
-import * as mime from 'mime-types'
 import { retryGet } from '@/libs/axios.ts'
 import { getRangeCode } from '@/libs/random.ts'
+import fs from 'fs'
+import * as mime from 'mime-types'
+import path from 'path'
 
 /**
  * 删除文件夹

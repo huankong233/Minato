@@ -1,9 +1,9 @@
 import type { fakeContext } from '@/global.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { eventReg } from '@/libs/eventReg.ts'
-import { mute } from '@/plugins/pigeon/mute/index.ts'
-import { replyMsg } from '@/libs/sendMsg.ts'
 import { randomFloat, randomInt } from '@/libs/random.ts'
+import { replyMsg } from '@/libs/sendMsg.ts'
+import { mute } from '@/plugins/pigeon/mute/index.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 
 export default () => {
   init()

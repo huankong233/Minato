@@ -1,13 +1,13 @@
 import type { fakeContext } from '@/global.d.ts'
+import { eventReg } from '@/libs/eventReg.ts'
+import { makeLogger } from '@/libs/logger.ts'
+import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
+import { sleep } from '@/libs/sleep.ts'
 import type { botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
-import { sleep } from '@/libs/sleep.ts'
-import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
-import { makeLogger } from '@/libs/logger.ts'
-import { CronJob } from 'cron'
-import { eventReg } from '@/libs/eventReg.ts'
-import { epicApi, steamApi } from './lib.ts'
 import { CQ } from '@huan_kong/go-cqwebsocket'
+import { CronJob } from 'cron'
+import { epicApi, steamApi } from './lib.ts'
 
 const logger = makeLogger({ pluginName: 'freegames' })
 

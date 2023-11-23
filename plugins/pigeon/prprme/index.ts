@@ -1,11 +1,11 @@
+import { isFriend } from '@/libs/Api.ts'
+import { retryGet } from '@/libs/axios.ts'
+import { eventReg } from '@/libs/eventReg.ts'
+import { makeLogger } from '@/libs/logger.ts'
+import { replyMsg, sendMsg } from '@/libs/sendMsg.ts'
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { CQ } from '@huan_kong/go-cqwebsocket'
-import { eventReg } from '@/libs/eventReg.ts'
-import { retryGet } from '@/libs/axios.ts'
-import { isFriend } from '@/libs/Api.ts'
-import { replyMsg, sendMsg } from '@/libs/sendMsg.ts'
-import { makeLogger } from '@/libs/logger.ts'
 
 const logger = makeLogger({ pluginName: 'prprme' })
 

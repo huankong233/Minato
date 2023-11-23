@@ -1,9 +1,9 @@
-import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { retryGet } from '@/libs/axios.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import { replyMsg, sendMsg } from '@/libs/sendMsg.ts'
+import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { compare } from 'compare-versions'
 import { CronJob } from 'cron'
 

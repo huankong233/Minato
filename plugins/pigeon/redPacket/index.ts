@@ -1,11 +1,11 @@
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import { getUserName } from '@/libs/Api.ts'
 import type { commandFormat } from '@/libs/eventReg.ts'
-import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
 import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { getRangeCode, randomInt } from '@/libs/random.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
+import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { jsonc } from 'jsonc'
-import { getUserName } from '@/libs/Api.ts'
 
 export default async () => {
   event()

@@ -1,13 +1,12 @@
-import type { botConfig, botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
-import type { CQNode } from '@huan_kong/go-cqwebsocket/out/tags.ts'
-import type { commandFormat } from '@/libs/eventReg.ts'
-import { CQ } from '@huan_kong/go-cqwebsocket'
-import { eventReg, missingParams } from '@/libs/eventReg.ts'
-import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
-import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
 import { retryGet } from '@/libs/axios.ts'
+import type { commandFormat } from '@/libs/eventReg.ts'
+import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
+import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
+import type { botConfig, botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
+import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
+import type { CQEvent, Tags } from '@huan_kong/go-cqwebsocket'
+import { CQ } from '@huan_kong/go-cqwebsocket'
 import * as cheerio from 'cheerio'
 
 const logger = makeLogger({ pluginName: 'btSearch' })
@@ -40,7 +39,7 @@ async function search(context: CQEvent<'message'>['context'], command: commandFo
 
   const keyword = params[0]
   const page = parseInt(params[1] ?? '1')
-  let messages: '没有搜索结果' | CQNode[] = '没有搜索结果'
+  let messages: '没有搜索结果' | Tags.CQNode[] = '没有搜索结果'
 
   try {
     const html = await getInfo(keyword, page)

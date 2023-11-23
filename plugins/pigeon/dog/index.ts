@@ -1,8 +1,8 @@
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { retryGet } from '@/libs/axios.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 
 const logger = makeLogger({ pluginName: 'dog' })
 

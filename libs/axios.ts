@@ -1,5 +1,5 @@
-import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { retryAsync } from '@/libs/retry.ts'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 
 // 默认超时时间 30s
