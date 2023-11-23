@@ -1,11 +1,10 @@
-import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
-import type { CQImage } from '@huan_kong/go-cqwebsocket/out/tags.ts'
 import type { commandFormat } from '@/libs/eventReg.ts'
-import { CQ } from '@huan_kong/go-cqwebsocket'
 import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
-import { reduce, add } from '@/plugins/pigeon/pigeon/index.ts'
+import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
+import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
+import type { CQEvent, Tags } from '@huan_kong/go-cqwebsocket'
+import { CQ } from '@huan_kong/go-cqwebsocket'
 
 const ENUM_SCENCE = {
   a: ['private', 'group'],
@@ -118,7 +117,7 @@ async function learn(context: CQEvent<'message'>['context'], command: commandFor
     if (type === null) {
       type = message._type
       type === 'image'
-        ? ([keyword, mode] = [`\\[CQ:image,file=${(message as CQImage).file}`, 0])
+        ? ([keyword, mode] = [`\\[CQ:image,file=${(message as Tags.CQImage).file}`, 0])
         : ([keyword, mode] = [message._data.text, parseInt(params[2])])
     } else {
       await add(user_id, corpusConfig.add, '添加关键词失败')

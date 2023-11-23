@@ -1,6 +1,6 @@
+import { getFileBase64 } from '@/libs/fs.ts'
 import { confuseURL } from '@/libs/handleUrl.ts'
 import { formatTime } from '@/libs/time.ts'
-import { getFileBase64 } from '@/libs/fs.ts'
 import { CQ } from '@huan_kong/go-cqwebsocket'
 
 class CParser {

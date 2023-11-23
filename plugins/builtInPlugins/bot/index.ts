@@ -1,10 +1,10 @@
-import type { botConfig, botData } from './config.d.ts'
 import { format } from '@/libs/eventReg.ts'
 import { globalReg } from '@/libs/globalReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { CQ, CQWebSocket } from '@huan_kong/go-cqwebsocket'
 import * as emoji from 'node-emoji'
+import type { botConfig, botData } from './config.d.ts'
 
 const logger = makeLogger({ pluginName: 'bot', subModule: 'connect' })
 const eventLogger = logger.changeSubModule('events')
@@ -52,7 +52,7 @@ export default async function () {
           }
         }
 
-        if (attempts++ >= botConfig.goCqhttpConnect.reconnectionAttempts + 1) {
+        if (attempts >= botConfig.goCqhttpConnect.reconnectionAttempts) {
           if (context.code === 1006 && context.reason === '') {
             reject('可能是go-cqhttp地址错误')
           } else {
@@ -61,6 +61,8 @@ export default async function () {
         } else {
           setTimeout(() => bot.reconnect(), botConfig.goCqhttpConnect.reconnectionDelay)
         }
+
+        attempts++
       })
 
       bot.on('socket.open', async function () {
@@ -71,7 +73,7 @@ export default async function () {
         } else {
           botData.wsType = '/api'
         }
-        attempts = 0
+        attempts = 1
       })
 
       bot.on('socket.openEvent', async function () {

@@ -1,7 +1,7 @@
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { eventReg } from '@/libs/eventReg.ts'
-import { replyMsg } from '@/libs/sendMsg.ts'
 import { randomFloat } from '@/libs/random.ts'
+import { replyMsg } from '@/libs/sendMsg.ts'
+import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 
 export default async () => {
   init()
