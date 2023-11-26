@@ -9,18 +9,18 @@ import path from 'path'
  * @param folder
  */
 export const deleteFolder = (folder: string) => {
-  let files = fs.readdirSync(folder)
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i]
-    const dirPath = path.join(folder, file)
-
-    if (fs.existsSync(dirPath)) {
-      deleteFolder(dirPath)
-    } else {
-      fs.unlinkSync(dirPath)
-    }
+  if (fs.existsSync(folder)) {
+    let files = fs.readdirSync(folder)
+    files.forEach(file => {
+      let dirPath = path.join(folder, file)
+      if (fs.statSync(dirPath).isDirectory()) {
+        deleteFolder(dirPath)
+      } else {
+        fs.unlinkSync(dirPath)
+      }
+    })
+    fs.rmdirSync(folder)
   }
-  fs.rmdirSync(folder)
 }
 
 /**
