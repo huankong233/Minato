@@ -25,35 +25,82 @@ function event() {
   })
 }
 
+function parseData() {
+  function pushObj(group: groupConfig) {
+    groups[group.crontab ?? zaobaoConfig.crontab] = [
+      ...(groups[group.crontab ?? zaobaoConfig.crontab] ?? []),
+      {
+        group_id: group.group_id,
+        type: group.type ?? zaobaoConfig.type
+      }
+    ]
+  }
+
+  const { zaobaoConfig } = global.config as { zaobaoConfig: zaobaoConfig }
+
+  const groups: {
+    [crontab: string]: { group_id: number; type: '摸鱼人日历' | '每天60秒' }[]
+  } = {}
+
+  zaobaoConfig.groups.forEach(group => {
+    if (typeof group === 'number') {
+      groups[zaobaoConfig.crontab] = [
+        ...(groups[zaobaoConfig.crontab] ?? []),
+        {
+          group_id: group,
+          type: zaobaoConfig.type
+        }
+      ]
+    } else if (Array.isArray(group)) {
+      group.forEach(item => pushObj(item))
+    } else {
+      pushObj(group)
+    }
+  })
+
+  return groups
+}
+
 async function init() {
   const { zaobaoConfig } = global.config as { zaobaoConfig: zaobaoConfig }
 
   if (zaobaoConfig.groups.length === 0) return
 
-  new CronJob(
-    zaobaoConfig.crontab,
-    async () => {
-      const message = await prepareMessage(true)
+  const groups = parseData()
 
-      for (let i = 0; i < zaobaoConfig.groups.length; i++) {
-        const group_id = zaobaoConfig.groups[i]
+  for (const crontab in groups) {
+    new CronJob(
+      crontab,
+      async () => {
+        const temp: { [key: string]: string } = {}
+        for (let i = 0; i < groups[crontab].length; i++) {
+          const { group_id, type } = groups[crontab][i]
 
-        const fakeContext: fakeContext = {
-          message_type: 'group',
-          group_id,
-          user_id: 123
+          let message = ''
+          if (temp[type]) {
+            message = temp[type]
+          } else {
+            message = await prepareMessage(true)
+            temp[type] = message
+          }
+
+          const fakeContext: fakeContext = {
+            message_type: 'group',
+            group_id: groups[crontab][i].group_id,
+            user_id: 123
+          }
+
+          await replyMsg(fakeContext, message).catch(err => {
+            logger.ERROR(err)
+            logger.WARNING('早报发送失败', { group_id })
+          })
+          await sleep(zaobaoConfig.cd * 1000)
         }
-
-        await replyMsg(fakeContext, message).catch(err => {
-          logger.ERROR(err)
-          logger.WARNING('早报发送失败', { group_id })
-        })
-        await sleep(zaobaoConfig.cd * 1000)
-      }
-    },
-    null,
-    true
-  )
+      },
+      null,
+      true
+    )
+  }
 }
 
 async function zaobao(context: CQEvent<'message'>['context']) {
@@ -81,9 +128,9 @@ const urls = new Map([
   ]
 ])
 
-async function prepareMessage(checkDate: boolean) {
+async function prepareMessage(checkDate: boolean, type?: zaobaoConfig['type']) {
   const { zaobaoConfig } = global.config as { zaobaoConfig: zaobaoConfig }
-  const params = urls.get(zaobaoConfig.type)
+  const params = urls.get(type ?? zaobaoConfig.type)
   if (!params) throw new Error('错误的类型')
 
   let response

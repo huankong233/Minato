@@ -6,6 +6,7 @@ import { replyMsg } from '@/libs/sendMsg.ts'
 import { isToday } from '@/libs/time.ts'
 import type { CQEvent } from '@huan_kong/go-cqwebsocket'
 import { CQ } from '@huan_kong/go-cqwebsocket'
+import { AxiosError } from 'axios'
 import { add, reduce } from '../pigeon/index.ts'
 import { imgAntiShielding } from './AntiShielding.ts'
 
@@ -148,8 +149,13 @@ async function handler(context: CQEvent<'message'>['context'], match: RegExpMatc
   } catch (error) {
     logger.WARNING('请求P站图片失败~')
     logger.ERROR(error)
-    await add(user_id, setuConfig.pigeon, '请求P站图片失败~')
-    return await replyMsg(context, '请求P站图片失败~', { reply: true })
+    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      await add(user_id, setuConfig.pigeon, '这张色图被删了,真可惜~')
+      return await replyMsg(context, '这张色图被删了,真可惜~', { reply: true })
+    } else {
+      await add(user_id, setuConfig.pigeon, '请求P站图片失败~')
+      return await replyMsg(context, '请求P站图片失败~', { reply: true })
+    }
   }
 
   const decoder = new TextDecoder('utf-8')
