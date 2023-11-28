@@ -28,9 +28,13 @@ async function nbnhhsh(context: CQEvent<'message'>['context'], command: commandF
       data: { text: params[0] }
     })
       .then(res => res.data)
-      .then(res => res[0])
       .then(async res => {
-        if (!res.trans) {
+        if (!res || res.length <= 0)
+          return await replyMsg(context, '空空也不知道这是什么意思呢~', { reply: true })
+        return res[0]
+      })
+      .then(async res => {
+        if (!res?.trans) {
           return await replyMsg(context, '空空也不知道这是什么意思呢~', { reply: true })
         }
         await replyMsg(context, [`"${data.name}" 可能是:`, `${data.trans.join(', ')}`].join('\n'), {
