@@ -2,7 +2,7 @@ import { format } from '@/libs/eventReg.ts'
 import { globalReg } from '@/libs/globalReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { CQ, CQWebSocket } from '@huan_kong/go-cqwebsocket'
+import { CQ, CQWebSocket } from 'go-cqwebsocket'
 import * as emoji from 'node-emoji'
 import type { botConfig, botData } from './config.d.ts'
 

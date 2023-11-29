@@ -6,8 +6,8 @@ import { retryAsync } from '@/libs/retry.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import { sleep } from '@/libs/sleep.ts'
 import { getDate } from '@/libs/time.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
-import { CQ } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from 'go-cqwebsocket'
+import { CQ } from 'go-cqwebsocket'
 import { CronJob } from 'cron'
 
 const logger = makeLogger({ pluginName: 'zaobao' })

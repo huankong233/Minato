@@ -1,4 +1,4 @@
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from 'go-cqwebsocket'
 
 export interface searchImageConfig {
   reduce: number

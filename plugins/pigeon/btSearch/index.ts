@@ -5,8 +5,8 @@ import { makeLogger } from '@/libs/logger.ts'
 import { replyMsg, sendForwardMsg } from '@/libs/sendMsg.ts'
 import type { botConfig, botData } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
-import type { CQEvent, Tags } from '@huan_kong/go-cqwebsocket'
-import { CQ } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent, Tags } from 'go-cqwebsocket'
+import { CQ } from 'go-cqwebsocket'
 import * as cheerio from 'cheerio'
 
 const logger = makeLogger({ pluginName: 'btSearch' })

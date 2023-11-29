@@ -3,7 +3,7 @@ import type { commandFormat } from '@/libs/eventReg.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import { getUserData } from '@/plugins/pigeon/pigeon/index.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from 'go-cqwebsocket'
 
 export default () => {
   event()
