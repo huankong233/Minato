@@ -4,7 +4,7 @@ import type { commandFormat } from '@/libs/eventReg.ts'
 import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { replyMsg, sendMsg } from '@/libs/sendMsg.ts'
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from 'go-cqwebsocket'
 
 export default async () => {
   event()

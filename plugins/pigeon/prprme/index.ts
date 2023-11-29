@@ -4,8 +4,8 @@ import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import { replyMsg, sendMsg } from '@/libs/sendMsg.ts'
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
-import { CQ } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from 'go-cqwebsocket'
+import { CQ } from 'go-cqwebsocket'
 
 const logger = makeLogger({ pluginName: 'prprme' })
 

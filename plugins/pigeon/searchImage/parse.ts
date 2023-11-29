@@ -1,7 +1,7 @@
 import { getFileBase64 } from '@/libs/fs.ts'
 import { confuseURL } from '@/libs/handleUrl.ts'
 import { formatTime } from '@/libs/time.ts'
-import { CQ } from '@huan_kong/go-cqwebsocket'
+import { CQ } from 'go-cqwebsocket'
 
 class CParser {
   [key: string]: (item: any) => Promise<string> | string

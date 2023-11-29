@@ -1,6 +1,6 @@
 import { replyMsg } from '@/libs/sendMsg.ts'
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from 'go-cqwebsocket'
 import type { searchImageConfig, searchImageData } from './config.d.ts'
 
 export const searchInitialization = () => {

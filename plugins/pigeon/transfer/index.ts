@@ -2,7 +2,7 @@ import type { commandFormat } from '@/libs/eventReg.ts'
 import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import { add, getUserData, reduce } from '@/plugins/pigeon/pigeon/index.ts'
-import type { CQEvent } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent } from 'go-cqwebsocket'
 
 export default async () => {
   event()

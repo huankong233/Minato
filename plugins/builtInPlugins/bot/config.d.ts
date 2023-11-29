@@ -1,4 +1,4 @@
-import type { Interfaces } from '@huan_kong/go-cqwebsocket'
+import type { Interfaces } from 'go-cqwebsocket'
 
 export interface botConfig {
   configName: string

@@ -3,8 +3,8 @@ import { eventReg, missingParams } from '@/libs/eventReg.ts'
 import { replyMsg } from '@/libs/sendMsg.ts'
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
-import type { CQEvent, Tags } from '@huan_kong/go-cqwebsocket'
-import { CQ } from '@huan_kong/go-cqwebsocket'
+import type { CQEvent, Tags } from 'go-cqwebsocket'
+import { CQ } from 'go-cqwebsocket'
 
 const ENUM_SCENCE = {
   a: ['private', 'group'],
