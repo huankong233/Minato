@@ -80,7 +80,7 @@ async function init() {
           if (temp[type]) {
             message = temp[type]
           } else {
-            message = await prepareMessage(true)
+            message = await prepareMessage(true, type)
             temp[type] = message
           }
 
