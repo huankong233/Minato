@@ -33,7 +33,7 @@ async function search(context: SocketHandle['message'], command: commandFormat) 
   if (!(await reduce(user_id, btSearchConfig.cost, `BT搜索`))) {
     return await bot.handle_quick_operation_async({
       context,
-      operation: { reply: Text({ text: `搜索失败,鸽子不足~` }), auto_reply: true }
+      operation: { reply: Text({ text: `搜索失败,鸽子不足~` }) }
     })
   }
 
@@ -52,7 +52,7 @@ async function search(context: SocketHandle['message'], command: commandFormat) 
     logger.ERROR(error)
     await bot.handle_quick_operation_async({
       context,
-      operation: { reply: Text({ text: '获取信息失败' }), auto_reply: true }
+      operation: { reply: Text({ text: '获取信息失败' }) }
     })
     await add(user_id, btSearchConfig.cost, `BT搜索失败`)
   }
@@ -71,7 +71,7 @@ async function search(context: SocketHandle['message'], command: commandFormat) 
     logger.ERROR(error)
     await bot.handle_quick_operation_async({
       context,
-      operation: { reply: Text({ text: '发送失败,请尝试私聊' }), auto_reply: true }
+      operation: { reply: Text({ text: '发送失败,请尝试私聊' }) }
     })
     await add(user_id, btSearchConfig.cost, `BT搜索失败`)
   }

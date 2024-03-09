@@ -120,7 +120,7 @@ async function invite(
     if (botConfig.admin !== context.user_id)
       return await bot.handle_quick_operation_async({
         context,
-        operation: { reply: '你不是咱的管理员喵~', auto_reply: true }
+        operation: { reply: '你不是咱的管理员喵~' }
       })
 
     if (await missingParams(context, command, 2)) return
@@ -171,8 +171,7 @@ async function friend(
       return await bot.handle_quick_operation_async({
         context,
         operation: {
-          reply: '你不是咱的管理员喵~',
-          auto_reply: true
+          reply: '你不是咱的管理员喵~'
         }
       })
 

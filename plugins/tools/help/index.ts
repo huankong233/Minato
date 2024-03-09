@@ -52,7 +52,7 @@ async function help(context: SocketHandle['message'], command: commandFormat) {
     if (!command)
       return await bot.handle_quick_operation_async({
         context,
-        operation: { reply: '没有这个命令哦~', auto_reply: true }
+        operation: { reply: '没有这个命令哦~' }
       })
 
     await bot.handle_quick_operation_async({
@@ -62,8 +62,7 @@ async function help(context: SocketHandle['message'], command: commandFormat) {
           `命令: ${command.commandName}`,
           `简介([ ] 为必选参数 ( ) 为可选参数): `,
           `${command.commandDescription.join('\n')}`
-        ].join('\n'),
-        auto_reply: true
+        ].join('\n')
       }
     })
   } else {
@@ -81,8 +80,7 @@ async function help(context: SocketHandle['message'], command: commandFormat) {
       operation: {
         reply:
           [`使用"${botConfig.prefix}帮助 命令名称"来获取详情`, `命令列表: `].join('\n') +
-          str.join(','),
-        auto_reply: true
+          str.join(',')
       }
     })
   }

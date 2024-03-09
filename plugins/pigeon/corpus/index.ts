@@ -52,7 +52,7 @@ async function corpus(context: SocketHandle['message']) {
     const exec = regexp.exec(message.toString())
     if (!exec) continue
 
-    await bot.handle_quick_operation_async({ context, operation: { reply } })
+    await bot.handle_quick_operation_async({ context, operation: { reply, auto_reply: false } })
   }
 }
 

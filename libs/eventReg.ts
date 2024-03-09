@@ -144,8 +144,7 @@ export async function missingParams(
     return bot.handle_quick_operation_async({
       context,
       operation: {
-        reply: `参数不足，请发送"${botConfig.prefix}帮助 ${command.name}"查看帮助`,
-        auto_reply: true
+        reply: `参数不足，请发送"${botConfig.prefix}帮助 ${command.name}"查看帮助`
       }
     })
   } else {

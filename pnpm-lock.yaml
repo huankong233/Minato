@@ -27,7 +27,7 @@ dependencies:
     specifier: 1.11.10
     version: 1.11.10
   image_searcher:
-    specifier: ^0.2.5
+    specifier: 0.2.5
     version: 0.2.5
   jimp:
     specifier: 0.22.10
