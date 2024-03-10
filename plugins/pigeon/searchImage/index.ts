@@ -22,7 +22,13 @@ import {
   turnOnSearchMode
 } from './control.ts'
 import { Parser } from './parse.ts'
-import { Image, Node, SocketHandle, convertCQCodeToJSON } from 'node-open-shamrock'
+import {
+  Image,
+  Node,
+  SocketHandle,
+  convertCQCodeToJSON,
+  convertJSONToCQCode
+} from 'node-open-shamrock'
 
 export const logger = makeLogger({ pluginName: 'searchImage' })
 
@@ -282,7 +288,7 @@ async function parse(
 
           for (let i = 0; i < limit; i++) {
             const item = datum.res[i]
-            message += await Parser[datum.name](item)
+            message += convertJSONToCQCode(await Parser[datum.name](item))
           }
         }
 
