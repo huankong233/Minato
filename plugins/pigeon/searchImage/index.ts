@@ -25,9 +25,10 @@ import { Parser } from './parse.ts'
 import {
   Image,
   Node,
+  SendMessageArray,
   SocketHandle,
-  convertCQCodeToJSON,
-  convertJSONToCQCode
+  Text,
+  convertCQCodeToJSON
 } from 'node-open-shamrock'
 
 export const logger = makeLogger({ pluginName: 'searchImage' })
@@ -279,16 +280,18 @@ async function parse(
           })
         }
 
-        let message = `${datum.name}(耗时:${Math.floor(datum.cost)}ms):\n`
+        let message: SendMessageArray = [
+          Text({ text: `${datum.name}(耗时:${Math.floor(datum.cost)}ms):\n` })
+        ]
         if (datum.res.length === 0) {
-          message += '没有搜索结果~'
+          message.push(Text({ text: '没有搜索结果~' }))
         } else {
           let limit =
             datum.res.length >= searchImageConfig.limit ? searchImageConfig.limit : datum.res.length
 
           for (let i = 0; i < limit; i++) {
             const item = datum.res[i]
-            message += convertJSONToCQCode(await Parser[datum.name](item))
+            message.push(...(await Parser[datum.name](item)))
           }
         }
 
@@ -301,6 +304,8 @@ async function parse(
   }
 
   const messages = [Node({ content: Image({ url: originUrl }) }), ...(await Promise.all(promises))]
+
+  // console.dir(messages, { depth: null })
 
   //发送
   await sendForwardMsg(context, messages).catch(async () => {
