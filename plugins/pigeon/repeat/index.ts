@@ -1,5 +1,6 @@
 import { eventReg } from '@/libs/eventReg.ts'
 import { randomFloat } from '@/libs/random.ts'
+import { quickOperation } from '@/libs/sendMsg.ts'
 import { SocketHandle } from 'node-open-shamrock'
 
 export default async () => {
@@ -52,7 +53,7 @@ async function repeat(context: SocketHandle['message']) {
         repeat[group_id].count++
         //判断次数
         if (repeat[group_id].count === repeatConfig.times) {
-          await bot.handle_quick_operation_async({
+          await quickOperation({
             context,
             operation: {
               reply: message,
@@ -66,7 +67,7 @@ async function repeat(context: SocketHandle['message']) {
 
   //所有规则外还有一定概率触发
   if (randomFloat(0, 100) <= repeatConfig.commonProb) {
-    await bot.handle_quick_operation_async({
+    await quickOperation({
       context,
       operation: {
         reply: message,

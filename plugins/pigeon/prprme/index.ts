@@ -2,6 +2,7 @@ import { isFriend } from '@/libs/Api.ts'
 import { retryGet } from '@/libs/axios.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
+import { quickOperation, sendMsg } from '@/libs/sendMsg.ts'
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import { Image, SocketHandle } from 'node-open-shamrock'
 
@@ -35,14 +36,14 @@ async function prprme(context: SocketHandle['message']) {
   const { userList } = prprmeData
 
   if (!(await isFriend(user_id)))
-    return await bot.handle_quick_operation_async({
+    return await quickOperation({
       context,
       operation: {
         reply: '先加一下好友叭~咱也是会害羞的'
       }
     })
 
-  await bot.handle_quick_operation_async({
+  await quickOperation({
     context,
     operation: {
       reply: [`我真的好喜欢你啊!!`, `(回复"${botConfig.prefix}别舔了"来停止哦~)`].join('\n')
@@ -52,7 +53,7 @@ async function prprme(context: SocketHandle['message']) {
   userList[user_id] = setInterval(async () => {
     try {
       const { data } = await retryGet('https://api.uomg.com/api/rand.qinghua?format=json')
-      await bot.handle_quick_operation_async({
+      await quickOperation({
         context,
         operation: {
           reply: data.content
@@ -63,7 +64,7 @@ async function prprme(context: SocketHandle['message']) {
       logger.WARNING(`请求接口失败`)
       logger.ERROR(error)
       clearInterval(userList[user_id])
-      return await bot.handle_quick_operation_async({
+      return await quickOperation({
         context,
         operation: {
           reply: `接口请求失败`
@@ -81,9 +82,9 @@ async function stoprprme(context: SocketHandle['message']) {
   const id = userList[user_id]
   if (id) {
     clearInterval(id)
-    await bot.send_private_message({
-      user_id,
-      message: Image({ url: 'https://s1.ax1x.com/2023/09/04/pPrn9B9.jpg' })
-    })
+    await sendMsg(
+      { message_type: 'private', user_id },
+      Image({ url: 'https://s1.ax1x.com/2023/09/04/pPrn9B9.jpg' })
+    )
   }
 }

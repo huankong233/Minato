@@ -2,6 +2,7 @@ import type { botConfig, botData } from './config.d.ts'
 import { format } from '@/libs/eventReg.ts'
 import { globalReg } from '@/libs/globalReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
+import { sendMsg } from '@/libs/sendMsg.ts'
 import { SRWebsocket } from 'node-open-shamrock'
 
 const logger = makeLogger({ pluginName: 'bot', subModule: 'connect' })
@@ -159,5 +160,5 @@ export async function connectSuccess() {
   const { botConfig } = global.config as { botConfig: botConfig }
   if (dev || !botConfig.online.enable) return
   if (botConfig.admin <= 0) return logger.NOTICE('未设置管理员账户,请检查!')
-  await bot.send_private_message({ user_id: botConfig.admin, message: `${botConfig.online.msg}` })
+  await sendMsg({ message_type: 'private', user_id: botConfig.admin }, botConfig.online.msg)
 }

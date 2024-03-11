@@ -48,8 +48,8 @@ dependencies:
     specifier: 1.0.1
     version: 1.0.1
   node-open-shamrock:
-    specifier: ^0.0.6
-    version: 0.0.6
+    specifier: ^0.0.9
+    version: 0.0.9
   tsx:
     specifier: ^4.7.1
     version: 4.7.1
@@ -1787,8 +1787,8 @@ packages:
       global-tunnel-ng: 2.7.1
     dev: false
 
-  /node-open-shamrock@0.0.6:
-    resolution: {integrity: sha512-GOQbP2UhcWoS/70k3qV0P5cWcKdHIwGTZyrvxMhrRzCG+5r0QegFktxklxinMq8wzJG31P2fBCCanhBZVE7LTQ==}
+  /node-open-shamrock@0.0.9:
+    resolution: {integrity: sha512-6BTVTWzjABLTsE3JSSksg59a1M+mZUvNHzyR5HPXIZQ9o03zYSEJUgCMtQROxyN4u+f/VyiwIjHQwoWS5oMEzw==}
     dependencies:
       ws: 8.16.0
     transitivePeerDependencies:

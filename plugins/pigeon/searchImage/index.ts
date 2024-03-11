@@ -2,7 +2,7 @@ import { eventReg } from '@/libs/eventReg.ts'
 import { downloadFile } from '@/libs/fs.ts'
 import { getUniversalImgURL } from '@/libs/handleUrl.ts'
 import { makeLogger } from '@/libs/logger.ts'
-import { sendForwardMsg } from '@/libs/sendMsg.ts'
+import { quickOperation, sendForwardMsg } from '@/libs/sendMsg.ts'
 import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import { add, reduce } from '@/plugins/pigeon/pigeon/index.ts'
 import fs from 'fs'
@@ -86,7 +86,7 @@ async function search(context: SocketHandle['message']) {
     if (message.type === 'image') {
       //扣除鸽子
       if (!(await reduce(user_id, searchImageConfig.reduce, '搜图'))) {
-        return await bot.handle_quick_operation_async({
+        return await quickOperation({
           context,
           operation: {
             reply: `搜索失败,鸽子不足~`
@@ -96,7 +96,7 @@ async function search(context: SocketHandle['message']) {
 
       if (!receive) {
         receive = true
-        await bot.handle_quick_operation_async({
+        await quickOperation({
           context,
           operation: {
             reply: `${searchImageConfig.word.receive}`
@@ -305,11 +305,9 @@ async function parse(
 
   const messages = [Node({ content: Image({ url: originUrl }) }), ...(await Promise.all(promises))]
 
-  // console.dir(messages, { depth: null })
-
   //发送
   await sendForwardMsg(context, messages).catch(async () => {
-    await bot.handle_quick_operation_async({
+    await quickOperation({
       context,
       operation: {
         reply: '发送合并消息失败，可以尝试私聊我哦~(鸽子已返还)'
