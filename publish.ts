@@ -16,7 +16,6 @@ const originPackages = {
   'cz-customizable': '^7.0.0',
   jsonc: '^2.0.0',
   'mime-types': '^2.1.35',
-  'node-emoji': '^2.1.3',
   tsx: '^4.7.1'
 }
 

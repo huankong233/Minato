@@ -3,7 +3,6 @@ import { format } from '@/libs/eventReg.ts'
 import { globalReg } from '@/libs/globalReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import { SRWebsocket } from 'node-open-shamrock'
-import * as emoji from 'node-emoji'
 
 const logger = makeLogger({ pluginName: 'bot', subModule: 'connect' })
 const eventLogger = logger.changeSubModule('events')
@@ -16,7 +15,7 @@ export default async function () {
     const { botConfig } = global.config as { botConfig: botConfig }
     const { botData } = global.data as { botData: botData }
 
-    const bot = new SRWebsocket(botConfig.connect)
+    const bot = new SRWebsocket({ ...botConfig.connect, receive: 'CQCode' })
 
     let attempts = 1
 
@@ -95,7 +94,7 @@ function initEvents() {
 
     if (debug) eventLogger.DEBUG(`收到信息:\n`, context)
 
-    context.message = emoji.unemojify(context.message.toString().trim())
+    context.message = context.message.toString().trim()
 
     for (let i = 0; i < events.length; i++) {
       try {
