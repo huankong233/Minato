@@ -43,33 +43,36 @@ async function prprme(context: SocketHandle['message']) {
       }
     })
 
-  await quickOperation({
-    context,
-    operation: {
-      reply: [`我真的好喜欢你啊!!`, `(回复"${botConfig.prefix}别舔了"来停止哦~)`].join('\n')
-    }
-  })
+  await sendMsg(
+    {
+      message_type: 'private',
+      user_id: context.user_id
+    },
+    [`我真的好喜欢你啊!!`, `(回复"${botConfig.prefix}别舔了"来停止哦~)`].join('\n')
+  )
 
   userList[user_id] = setInterval(async () => {
     try {
       const { data } = await retryGet('https://api.uomg.com/api/rand.qinghua?format=json')
-      await quickOperation({
-        context,
-        operation: {
-          reply: data.content
-        }
-      })
+      await sendMsg(
+        {
+          message_type: 'private',
+          user_id: context.user_id
+        },
+        data.content
+      )
     } catch (error) {
       clearInterval(userList[user_id])
       logger.WARNING(`请求接口失败`)
       logger.ERROR(error)
       clearInterval(userList[user_id])
-      return await quickOperation({
-        context,
-        operation: {
-          reply: `接口请求失败`
-        }
-      })
+      return await sendMsg(
+        {
+          message_type: 'private',
+          user_id: context.user_id
+        },
+        `接口请求失败`
+      )
     }
   }, 3000)
 }
