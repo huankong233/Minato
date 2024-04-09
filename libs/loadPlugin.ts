@@ -78,14 +78,14 @@ export async function loadPlugin(pluginName: string, pluginDir = 'plugins', _loa
   // 如果还没安装就安装一次
   if (!installed) {
     // 如果还没安装
-    let installCommand = 'pnpm install'
+    let installCommand = process.argv.includes('bun') ? 'bun install' : 'pnpm install'
 
     for (const key in dependPackages) {
       const value = dependPackages[key]
       installCommand += ` ${key}@${value}`
     }
 
-    if (installCommand !== 'pnpm install') {
+    if (installCommand !== (process.argv.includes('bun') ? 'bun install' : 'pnpm install')) {
       try {
         execSync(installCommand)
       } catch (error) {

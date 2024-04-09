@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@huan_kong/node-global-proxy':
+    specifier: 1.0.2
+    version: 1.0.2
   axios:
     specifier: ^1.6.7
     version: 1.6.7
@@ -44,9 +47,6 @@ dependencies:
   mysql2:
     specifier: 3.6.5
     version: 3.6.5
-  node-global-proxy:
-    specifier: 1.0.1
-    version: 1.0.1
   node-open-shamrock:
     specifier: ^0.0.9
     version: 0.0.9
@@ -279,6 +279,13 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /@huan_kong/node-global-proxy@1.0.2:
+    resolution: {integrity: sha512-LSjcjv/r2H/+hpPcmJU+z0wElK9uLMooyIAstqAmbrnB4ghVXh+yCdl1UdQk0EDM7/E5lEvEKaPrnheQ9T0eQQ==}
+    dependencies:
+      global-agent: 2.2.0
+      global-tunnel-ng: 2.7.1
+    dev: false
 
   /@jimp/bmp@0.22.12(@jimp/custom@0.22.12):
     resolution: {integrity: sha512-aeI64HD0npropd+AR76MCcvvRaa+Qck6loCOS03CkkxGHN5/r336qTM5HPUdHKMDOGzqknuVPA8+kK1t03z12g==}
@@ -867,8 +874,8 @@ packages:
       proto-list: 1.2.4
     dev: false
 
-  /core-js@3.36.0:
-    resolution: {integrity: sha512-mt7+TUBbTFg5+GngsAxeKBTl5/VS0guFeJacYge9OmHb+m058UwwIm41SE9T4Den7ClatV57B6TYTuJ0CX1MAw==}
+  /core-js@3.36.1:
+    resolution: {integrity: sha512-BTvUrwxVBezj5SZ3f10ImnX2oRByMxql3EimVqMysepbC9EeMUOpLwdy6Eoili2x6E4kf+ZUB5k/+Jv55alPfA==}
     requiresBuild: true
     dev: false
 
@@ -1309,7 +1316,7 @@ packages:
     engines: {node: '>=10.0'}
     dependencies:
       boolean: 3.2.0
-      core-js: 3.36.0
+      core-js: 3.36.1
       es6-error: 4.1.1
       matcher: 3.0.0
       roarr: 2.15.4
@@ -1778,13 +1785,6 @@ packages:
       data-uri-to-buffer: 4.0.1
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
-    dev: false
-
-  /node-global-proxy@1.0.1:
-    resolution: {integrity: sha512-pKGD42p81TFbrUudDBtApwri2Ho1xjm3ozmXhHLIRpwgXk18KvPMv0ubDZLD8gNI6q/Jzc2zK6jNbga8j+FRSw==}
-    dependencies:
-      global-agent: 2.2.0
-      global-tunnel-ng: 2.7.1
     dev: false
 
   /node-open-shamrock@0.0.9:

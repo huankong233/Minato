@@ -3,7 +3,7 @@ import { jsonc } from 'jsonc'
 import path from 'path'
 
 /**
- * 加载框架信息
+ * 获取框架信息
  */
 export const getPackage = () =>
   jsonc.parse(
