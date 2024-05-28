@@ -1,9 +1,9 @@
-import type { botConfig, botData } from './config.d.ts'
 import { format } from '@/libs/eventReg.ts'
 import { globalReg } from '@/libs/globalReg.ts'
 import { makeLogger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { SRWebsocket } from 'node-open-shamrock'
+import type { botConfig, botData } from './config.d.ts'
 
 const logger = makeLogger({ pluginName: 'bot', subModule: 'connect' })
 const eventLogger = logger.changeSubModule('events')

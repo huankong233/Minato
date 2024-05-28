@@ -1,6 +1,7 @@
 export interface botConfig {
   configName: string
   botName: string
+  self_id: number
   admin: number
   prefix: string
   online: {

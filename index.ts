@@ -1,8 +1,8 @@
-import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import { makeSystemLogger } from '@/libs/logger.ts'
+import { sendMsg } from '@/libs/sendMsg.ts'
+import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import init from './init.ts'
 import plugins from './plugins.ts'
-import { sendMsg } from '@/libs/sendMsg.ts'
 
 const logger = makeSystemLogger({ pluginName: 'bootStrap' })
 

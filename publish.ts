@@ -9,14 +9,14 @@ const baseDir = getDir(import.meta)
 
 const pluginDirs = ['./plugins/builtInPlugins', './plugins/pigeon', './plugins/tools']
 const originPackages = {
-  'node-open-shamrock': '^0.0.9',
-  axios: '^1.6.7',
+  'node-open-shamrock': '^0.0.11',
+  axios: '^1.7.2',
   'cli-color': '^2.0.4',
   'compare-versions': '^6.1.0',
   'cz-customizable': '^7.0.0',
   jsonc: '^2.0.0',
   'mime-types': '^2.1.35',
-  tsx: '^4.7.1'
+  tsx: '^4.11.0'
 }
 
 for (const pluginDir of pluginDirs) {

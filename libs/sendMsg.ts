@@ -1,4 +1,5 @@
 import { makeSystemLogger } from '@/libs/logger.ts'
+import type { botConfig } from '@/plugins/builtInPlugins/bot/config.d.ts'
 import {
   Send,
   SendMessageArray,
@@ -14,10 +15,15 @@ export async function quickOperation(params: {
   context: SocketHandle['message']
   operation: WSSendParam['.handle_quick_operation_async']['operation']
 }) {
+  const { botConfig } = global.config as { botConfig: botConfig }
+
   let response
 
   try {
-    response = await bot.handle_quick_operation_async(params)
+    response = await bot.handle_quick_operation_async({
+      self_id: botConfig.self_id,
+      ...params
+    })
   } catch (error) {
     if (debug) {
       logger.DEBUG(`执行操作:`, params.operation)
