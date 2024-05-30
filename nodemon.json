@@ -1,0 +1,6 @@
+{
+  "watch": ["."],
+  "ext": ".ts",
+  "ignore": ["manifest.jsonc"],
+  "exec": "tsx src/index.ts --dev"
+}

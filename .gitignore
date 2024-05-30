@@ -1,0 +1,4 @@
+/.pnpm-store
+/node_modules
+/temp
+/logs
