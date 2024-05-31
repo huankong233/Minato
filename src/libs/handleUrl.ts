@@ -6,14 +6,11 @@ const bannedHosts = ['danbooru.donmai.us', 'konachan.com', 'fanbox.cc', 'pixiv.n
  * @param force 是否开启强制处理
  * @returns 处理后的链接
  */
-export function confuseURL(url: string, force: boolean = false) {
+export function confuseURL(url: string, force = false) {
   if (force) {
     const host = url.match('(http|https)://(.*)/')
-    if (host) {
-      return url.replace('//', '//\u200B').replace(host[2], host[2].replace(/\./g, '.\u200B'))
-    } else {
-      return url
-    }
+    if (!host) return url
+    return url.replace('//', '//\u200B').replace(host[2], host[2].replace(/\./g, '.\u200B'))
   } else {
     for (const host of bannedHosts) {
       if (url.includes(host)) {

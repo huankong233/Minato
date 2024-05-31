@@ -4,16 +4,13 @@
  * @returns HH:MM:SS
  */
 export function formatTime(ms: number) {
-  // 使用padStart方法补零
-  let _seconds = Math.floor(ms / 1000) // 毫秒转秒
-  let hours = Math.floor(_seconds / 3600)
-    .toString()
-    .padStart(2, '0')
-  let minutes = Math.floor((_seconds % 3600) / 60)
-    .toString()
-    .padStart(2, '0')
-  let seconds = (_seconds % 60).toString().padStart(2, '0')
-  // 返回HH:MM:SS的字符串
+  // 使用 padStart 方法补零
+  const totalSeconds = Math.floor(ms / 1000) // 毫秒转秒
+  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0')
+  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0')
+  const seconds = String(totalSeconds % 60).padStart(2, '0')
+
+  // 返回 HH:MM:SS 的字符串
   return `${hours}:${minutes}:${seconds}`
 }
 
@@ -22,21 +19,16 @@ export function formatTime(ms: number) {
  * @param timestamp 时间戳
  * @returns 是否是今天
  */
-export function isToday(timestamp: number) {
-  // 获取当前的时间戳
-  let now = Date.now()
-  // 创建一个 Date 对象，用来获取今天的日期
-  let today = new Date(now)
-  // 将今天的日期设置为 0 时 0 分 0 秒 0 毫秒，即今天的起始时间
+export function isBeforeToday(timestamp: number) {
+  // 创建一个新的 Date 对象，并使用传入的时间戳
+  const date = new Date(timestamp)
+
+  // 创建一个表示今天日期的 Date 对象，但不包含时间部分
+  const today = new Date()
   today.setHours(0, 0, 0, 0)
-  // 获取今天的起始时间戳
-  let start = today.getTime()
-  // 如果参数的时间戳大于等于今天的起始时间戳，并且小于明天的起始时间戳，说明是今天
-  if (timestamp >= start && timestamp < start + 24 * 60 * 60 * 1000) {
-    return true
-  } else {
-    return false
-  }
+
+  // 比较传入时间戳的日期是否早于今天
+  return date < today
 }
 
 /**

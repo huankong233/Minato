@@ -6,8 +6,6 @@
   "compilerOptions": {
     // 自动生成 .d.ts 文件
     "declaration": true,
-    // 设置输出文件夹
-    "outDir": "./dist",
     // 使用 Node.js 模块解析
     "moduleResolution": "NodeNext",
     // 允许导入 ts 文件
@@ -37,6 +35,8 @@
     "noImplicitAny": true,
     // 允许隐式返回
     "noImplicitReturns": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "paths": {
       "@/*": ["./src/*"]
     }

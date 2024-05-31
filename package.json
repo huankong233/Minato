@@ -8,13 +8,7 @@
     "dev": "nodemon",
     "start": "tsx index.ts",
     "docker": "pnpm install && pnpm run start",
-    "commit": "pnpm run type-check && git add . && cz-customizable && git push",
     "type-check": "tsc --noEmit -p tsconfig.json --composite false"
-  },
-  "config": {
-    "cz-customizable": {
-      "config": "czconfig.json"
-    }
   },
   "keywords": [
     "QQ",
@@ -26,20 +20,21 @@
   "dependencies": {
     "@huan_kong/node-global-proxy": "1.0.2",
     "axios": "^1.7.2",
-    "better-sqlite3": "^10.0.0",
     "cli-color": "^2.0.4",
     "fs-extra": "^11.2.0",
     "knex": "^3.1.0",
     "mime-types": "^2.1.35",
-    "node-napcat-ts": "^0.0.1",
-    "tsx": "^4.11.0"
+    "mysql2": "^3.10.0",
+    "node-napcat-ts": "^0.0.2",
+    "reflect-metadata": "^0.2.2",
+    "tsx": "^4.11.0",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@types/cli-color": "^2.0.6",
     "@types/fs-extra": "^11.0.4",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.12.13",
-    "cz-customizable": "^7.0.0",
     "nodemon": "^3.1.2",
     "typescript": "^5.4.5"
   }

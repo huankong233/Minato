@@ -1,7 +1,7 @@
 import { getRangeCode } from '@/libs/random.ts'
 import axios from 'axios'
 import fs from 'fs-extra'
-import * as mime from 'mime-types'
+import mime from 'mime-types'
 import path from 'path'
 
 /**
