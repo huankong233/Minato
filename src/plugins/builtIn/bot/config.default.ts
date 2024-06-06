@@ -10,6 +10,7 @@ export interface BotConfig {
   online: {
     enable: boolean
     msg: string
+    to: number
   }
   self_id: number
 }
@@ -28,7 +29,8 @@ export const config: BotConfig = {
   },
   online: {
     enable: true,
-    msg: '上线成功~'
+    msg: '上线成功~',
+    to: 0
   },
   self_id: 0
 }

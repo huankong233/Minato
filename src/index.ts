@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-
 import { getDirname } from '@/libs/getDirname.ts'
 import { loadPlugin } from '@/libs/loadPlugin.ts'
 import { makeSystemLogger } from '@/libs/logger.ts'
@@ -19,13 +17,22 @@ global.baseDir = getDirname(import.meta)
 fs.emptyDirSync(path.join(baseDir, 'temp'))
 
 // 加载日志插件
-await loadPlugin('/builtInPlugins/log')
+await loadPlugin('/builtIn/log')
+const installBotSuccess = await loadPlugin('/builtIn/bot')
+if (!installBotSuccess) {
+  logger.ERROR('加载插件 bot 失败')
+  throw new Error('加载插件 bot 失败')
+}
 
 // 加载剩余插件
 await Promise.all(
   fs
-    .readdirSync(path.join(baseDir, 'plugins', 'builtInPlugins'))
-    .map((path) => loadPlugin(`/builtInPlugins/${path}`))
+    .readdirSync(path.join(baseDir, 'plugins', 'builtIn'))
+    .map((path) => loadPlugin(`/builtIn/${path}`))
+)
+
+await Promise.all(
+  fs.readdirSync(path.join(baseDir, 'plugins', 'tools')).map((path) => loadPlugin(`/tools/${path}`))
 )
 
 await Promise.all(

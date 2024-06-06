@@ -35,8 +35,6 @@
     "noImplicitAny": true,
     // 允许隐式返回
     "noImplicitReturns": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "paths": {
       "@/*": ["./src/*"]
     }
