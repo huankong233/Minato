@@ -1,7 +1,7 @@
-import { Command } from '@/global.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger, type Logger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
+import Bot from '@/plugins/builtIn/bot/index.ts'
 import { MessageHandler, NoticeHandler, RequestHandler } from 'node-napcat-ts'
 import { BlockConfig, config } from './config.ts'
 
@@ -16,7 +16,7 @@ export default class Block {
     eventReg({
       pluginName: 'block',
       type: 'message',
-      callback: (context, command) => this.checkBan(context, command),
+      callback: (context) => this.checkBan(context),
       priority: 102
     })
 
@@ -36,10 +36,13 @@ export default class Block {
   }
 
   async checkBan(
-    context: MessageHandler['message'] | NoticeHandler['notice'] | RequestHandler['request'],
-    command?: Command | false
+    context: MessageHandler['message'] | NoticeHandler['notice'] | RequestHandler['request']
   ) {
     if ((await this._check(config, context)) === 'quit') return 'quit'
+
+    if (context.post_type !== 'message') return
+
+    const command = Bot.parseMessage(context.message)
 
     if (!command) return
 

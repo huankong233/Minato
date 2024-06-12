@@ -36,6 +36,11 @@ export async function loadPlugin(pluginName: string) {
     return
   }
 
+  if (program.enable === false) {
+    logger.INFO(`插件 ${pluginName} 已禁用`)
+    return
+  }
+
   try {
     const plugin = new program.default()
     await plugin.init()

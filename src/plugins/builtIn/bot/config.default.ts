@@ -13,6 +13,8 @@ export interface BotConfig {
     to: number
   }
   self_id: number
+  admin_id: number
+  command_prefix: string
 }
 
 export const config: BotConfig = {
@@ -32,5 +34,7 @@ export const config: BotConfig = {
     msg: '上线成功~',
     to: 0
   },
-  self_id: 0
+  self_id: 0,
+  admin_id: 0,
+  command_prefix: '/'
 }
