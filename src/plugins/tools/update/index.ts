@@ -23,9 +23,10 @@ export default class Update {
   async init() {
     eventReg({
       type: 'command',
+      describe: 'update',
       pluginName: 'update',
       callback: (context, _) => this.message(context),
-      name: '检查更新'
+      name: 'update'
     })
 
     cron.schedule(config.cron, () => this.checkUpdate())

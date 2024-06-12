@@ -1,6 +1,7 @@
 import { Command, commandEvent } from '@/global.ts'
 import { Logger, makeLogger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
+import clc from 'cli-color'
 import { MessageHandler, NCWebsocket } from 'node-napcat-ts'
 import { config } from './config.ts'
 
@@ -125,7 +126,7 @@ export default class Bot {
           const canContinue = await this.checkCommand(context, commandEvent[i], command)
           if (!canContinue) continue
 
-          this.#logger.SUCCESS(`消息符合插件 ${pluginName} 的触发条件`)
+          this.#logger.DEBUG(clc.green(`消息符合插件 ${pluginName} 的触发条件`))
 
           const response = await callback(context, command as Command)
           if (response === 'quit') break
@@ -207,12 +208,8 @@ export default class Bot {
     const { name, params, pluginName } = event
 
     // 检查命令名
-    if (
-      !command ||
-      (name instanceof Array && !name.includes(command.name)) ||
-      (typeof name === 'string' && name !== command.name)
-    ) {
-      this.#logger.DEBUG(`消息不符合插件 ${pluginName} 的触发条件`)
+    if (!command || name !== command.name) {
+      this.#logger.DEBUG(`命令名不符合插件 ${pluginName} ${name} 的触发条件`)
       return false
     }
 
@@ -228,7 +225,7 @@ export default class Bot {
 
             if (!arg) {
               if (!innerParam.default) {
-                this.#logger.DEBUG(`参数长度不符合插件 ${pluginName} 的触发条件`)
+                this.#logger.DEBUG(`参数长度不符合插件 ${pluginName} ${name} 的触发条件`)
                 await sendMsg(context, '参数长度不足~')
                 return false
               }
@@ -238,13 +235,13 @@ export default class Bot {
             }
 
             if (innerParam.type === 'number' && isNaN(Number(arg))) {
-              this.#logger.DEBUG(`参数类型不符合插件 ${pluginName} 的触发条件`)
+              this.#logger.DEBUG(`参数类型不符合插件 ${pluginName} ${name} 的触发条件`)
               await sendMsg(context, `参数不合法~\n参数需要是数字`)
               return false
             }
 
             if (innerParam.type === 'enum' && !innerParam.enum.includes(arg)) {
-              this.#logger.DEBUG(`参数值不在插件 ${pluginName} 的可用范围内`)
+              this.#logger.DEBUG(`参数值不在插件 ${pluginName} ${name} 的可用范围内`)
               await sendMsg(context, `参数不合法~\n参数可用值:[${innerParam.enum}]`)
               return false
             }
@@ -254,7 +251,7 @@ export default class Bot {
 
           if (!arg) {
             if (!param.default) {
-              this.#logger.DEBUG(`参数长度不符合插件 ${pluginName} 的触发条件`)
+              this.#logger.DEBUG(`参数长度不符合插件 ${pluginName} ${name} 的触发条件`)
               await sendMsg(context, '参数长度不足~')
               return false
             }
@@ -264,13 +261,13 @@ export default class Bot {
           }
 
           if (param.type === 'number' && isNaN(Number(arg))) {
-            this.#logger.DEBUG(`参数类型不符合插件 ${pluginName} 的触发条件`)
+            this.#logger.DEBUG(`参数类型不符合插件 ${pluginName} ${name} 的触发条件`)
             await sendMsg(context, `参数不合法~\n参数需要是数字`)
             return false
           }
 
           if (param.type === 'enum' && !param.enum.includes(arg)) {
-            this.#logger.DEBUG(`参数值不在插件 ${pluginName} 的可用范围内`)
+            this.#logger.DEBUG(`参数值不在插件 ${pluginName} ${name} 的可用范围内`)
             await sendMsg(context, `参数不合法~\n参数可用值:[${param.enum}]`)
             return false
           }

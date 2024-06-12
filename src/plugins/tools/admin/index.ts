@@ -19,8 +19,29 @@ export default class Admin {
       type: 'command',
       pluginName: 'admin',
       callback: (context, command) => this.message(command, context),
-      name: ['friend', 'add', 'invite'],
+      name: 'friend',
       params: [{ type: 'enum', enum: ['接受', '拒绝'] }, { type: 'string' }],
+      describe: 'friend 接受/拒绝 flag',
+      priority: 102
+    })
+
+    eventReg({
+      type: 'command',
+      pluginName: 'admin',
+      callback: (context, command) => this.message(command, context),
+      name: 'add',
+      params: [{ type: 'enum', enum: ['接受', '拒绝'] }, { type: 'string' }],
+      describe: 'add 接受/拒绝 flag',
+      priority: 102
+    })
+
+    eventReg({
+      type: 'command',
+      pluginName: 'admin',
+      callback: (context, command) => this.message(command, context),
+      name: 'invite',
+      params: [{ type: 'enum', enum: ['接受', '拒绝'] }, { type: 'string' }],
+      describe: 'invite 接受/拒绝 flag',
       priority: 102
     })
 

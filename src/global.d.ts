@@ -37,8 +37,9 @@ export type Param =
 export interface commandEvent {
   type: 'command'
   callback: (context: AllHandlers['message'], command: Command) => Promise<void | 'quit'>
-  name: string | string[]
-  params?: Param[] | Param[][]
+  name: string
+  describe: string
+  params?: Param[]
   priority?: number
   pluginName: string
 }
