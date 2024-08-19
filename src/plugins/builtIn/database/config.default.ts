@@ -10,7 +10,7 @@ export const config: DatabaseConfig = {
     user: 'root',
     password: '',
     database: 'kkbot',
-    timezone: 'Asia/Shanghai'
+    timezone: '+08:00'
   },
   debug: false
 }

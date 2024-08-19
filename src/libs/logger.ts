@@ -55,6 +55,11 @@ export class Logger {
     this.print(clc.magenta(`[DEBUG]`), ...messages)
   }
 
+  DIR(obj: any) {
+    if (!isDev) return
+    console.dir(obj, { depth: null })
+  }
+
   private formatMessages = (messages: any[]): string[] => {
     return messages.map((item) => {
       if (typeof item === 'string') {

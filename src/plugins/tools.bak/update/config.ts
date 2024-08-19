@@ -1,14 +1,14 @@
 export interface UpdateConfig {
+  //开关
   enable: boolean
+  //github代理地址
   proxy: string
+  // 参考: https://crontab.guru/
   cron: string
 }
 
 export const config: UpdateConfig = {
-  //开关
   enable: true,
-  //github代理地址
   proxy: '',
-  // 参考: https://crontab.guru/
   cron: '0 8 * * *'
 }

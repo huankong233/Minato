@@ -20,6 +20,9 @@ export default class Database {
         }
       })
 
+      global.Pigeon = () => knex('pigeons')
+      global.PigeonHistory = () => knex('pigeon_histories')
+
       this.#logger.SUCCESS('连接数据库成功')
     } catch (error) {
       this.#logger.ERROR('连接数据库失败')

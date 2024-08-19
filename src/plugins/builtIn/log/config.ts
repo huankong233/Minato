@@ -1,11 +1,11 @@
 export interface LogConfig {
+  // 最大数
   max: number
+  // 强制开启记录日志
   force: boolean
 }
 
 export const config: LogConfig = {
-  // 最大数
   max: 100,
-  // 强制开启记录日志
   force: false
 }

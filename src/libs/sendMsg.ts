@@ -37,7 +37,7 @@ export async function sendMsg(
 
   if (isDev) {
     logger.DEBUG(`发送消息:${message}`)
-    logger.DEBUG(`响应:\n`, response)
+    logger.DEBUG(`响应:`, response)
     const stack = new Error().stack!.split('\n')
     logger.DEBUG(`stack信息:\n`, stack.slice(1).join('\n'))
   }
@@ -87,7 +87,7 @@ export async function sendForwardMsg(
 
   if (isDev) {
     logger.DEBUG(`发送合并消息:\n`, message)
-    logger.DEBUG(`响应:\n`, response)
+    logger.DEBUG(`响应:`, response)
     const stack = new Error().stack!.split('\n')
     logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
   }

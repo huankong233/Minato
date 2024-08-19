@@ -1,4 +1,4 @@
-import { Command } from '@/global.js'
+import { Command } from '@/global.ts'
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger, type Logger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'

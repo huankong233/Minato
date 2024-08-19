@@ -1,4 +1,8 @@
 export interface AdminConfig {
+  /**
+   * message: 通知
+   * agree: 自动同意
+   */
   invite: {
     message: boolean
     agree: boolean

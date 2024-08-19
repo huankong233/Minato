@@ -12,6 +12,25 @@ declare global {
     request: requestEvent[]
   }
   var knex: Knex<any, unknown[]>
+  var Pigeon: () => Knex.QueryBuilder<Pigeon, {}>
+  var PigeonHistory: () => Knex.QueryBuilder<PigeonHistory, {}>
+}
+
+export interface Pigeon {
+  user_id: number
+  pigeon_num: number
+  created_at: Date
+  updated_at: Date
+}
+
+export interface PigeonHistory {
+  id: number
+  user_id: number
+  operation: number
+  origin_pigeon: number
+  new_pigeon: number
+  reason: string
+  created_at: Date
 }
 
 export interface Command {
@@ -36,8 +55,8 @@ export type Param =
 
 export interface commandEvent {
   type: 'command'
-  callback: (context: AllHandlers['message'], command: Command) => Promise<void | 'quit'>
-  name: string
+  callback: (context: AllHandlers['message']) => Promise<void | 'quit'>
+  name: string | RegExp
   describe: string
   params?: Param[]
   priority?: number
