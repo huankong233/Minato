@@ -26,19 +26,11 @@ if (!installBotSuccess) {
 
 // 加载剩余插件
 await Promise.all(
-  fs
-    .readdirSync(path.join(baseDir, 'plugins/builtIn'))
-    .map((path) => loadPlugin(`/builtIn/${path}`))
+  ['builtIn', 'tools', 'pigeons'].map((pluginDir) =>
+    fs
+      .readdirSync(path.join(baseDir, `/plugins/${pluginDir}`))
+      .map((pluginName) => loadPlugin(`/${pluginDir}/${pluginName}`))
+  )
 )
-
-// await Promise.all(
-//   fs.readdirSync(path.join(baseDir, 'plugins/tools')).map((path) => loadPlugin(`/tools/${path}`))
-// )
-
-// await Promise.all(
-//   fs
-//     .readdirSync(path.join(baseDir, 'plugins/pigeons'))
-//     .map((path) => loadPlugin(`/pigeons/${path}`))
-// )
 
 logger.SUCCESS('插件加载完成!')

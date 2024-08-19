@@ -1,6 +1,6 @@
 import { Logger, makeLogger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { NCWebsocket } from 'node-napcat-ts'
+import { NCWebsocket, Structs } from 'node-napcat-ts'
 import { config } from './config.ts'
 
 export default class Bot {
@@ -52,7 +52,9 @@ export default class Bot {
     if (config.online.to <= 0) return this.#logger.INFO('未设置发送账户,请注意~')
 
     try {
-      await sendMsg({ message_type: 'private', user_id: config.online.to }, config.online.msg)
+      await sendMsg({ message_type: 'private', user_id: config.online.to }, [
+        Structs.text({ text: config.online.msg })
+      ])
     } catch (error) {
       this.#logger.ERROR('发送上线信息失败!')
       this.#logger.DEBUG(error)
@@ -61,7 +63,6 @@ export default class Bot {
 
   initEvents() {
     global.events = {
-      command: [],
       message: [],
       notice: [],
       request: []
@@ -70,23 +71,6 @@ export default class Bot {
     bot.on('message', async (context) => {
       this.#logger.DEBUG('收到消息:')
       this.#logger.DIR(context)
-
-      const commandEvent = events.command
-
-      for (let i = 0; i < commandEvent.length; i++) {
-        const { callback, pluginName } = commandEvent[i]
-
-        try {
-          const response = await callback(context)
-          if (response === 'quit') break
-        } catch (error) {
-          this.#logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.#logger.ERROR(error)
-
-          const stack = new Error().stack!.split('\n')
-          this.#logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
-        }
-      }
 
       const messageEvents = events.message
 
