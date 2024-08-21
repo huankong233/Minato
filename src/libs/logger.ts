@@ -51,12 +51,12 @@ export class Logger {
    * @param messages
    */
   DEBUG(...messages: any[]) {
-    if (!isDev) return
+    if (!debug) return
     this.print(clc.magenta(`[DEBUG]`), ...messages)
   }
 
   DIR(obj: any) {
-    if (!isDev) return
+    if (!debug) return
     console.dir(obj, { depth: null })
   }
 
@@ -65,7 +65,7 @@ export class Logger {
       if (typeof item === 'string') {
         try {
           return JSON.parse(item)
-        } catch (error) {
+        } catch (_error) {
           return item
         }
       } else if (typeof item === 'object') {

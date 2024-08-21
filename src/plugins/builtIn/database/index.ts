@@ -26,7 +26,7 @@ export default class Database {
       this.#logger.SUCCESS('连接数据库成功')
     } catch (error) {
       this.#logger.ERROR('连接数据库失败')
-      this.#logger.DEBUG(error)
+      this.#logger.ERROR(error)
       this.#logger.ERROR('数据库配置:\n', config)
     }
   }

@@ -32,7 +32,7 @@ export async function loadPlugin(pluginName: string) {
     if (!program.default) return logger.ERROR(`加载插件 ${pluginName} 失败，插件不存在默认导出类`)
   } catch (error) {
     logger.ERROR(`插件 ${pluginName} 导入失败`)
-    logger.DEBUG(error)
+    logger.ERROR(error)
     return
   }
 
@@ -47,7 +47,7 @@ export async function loadPlugin(pluginName: string) {
     logger.SUCCESS(`加载插件 ${pluginName} 成功`)
   } catch (error) {
     logger.ERROR(`加载插件 ${pluginName} 失败`)
-    logger.DEBUG(error)
+    logger.ERROR(error)
     return
   }
 

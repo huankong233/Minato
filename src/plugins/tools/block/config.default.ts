@@ -8,8 +8,8 @@ export type BlockConfig = {
   blockUsers?: user[]
   blockGroups?: group[]
   commands?: {
+    defaultReply?: string
     name: RegExp | string
-    reply?: string
     allowUsers?: number[]
     allowGroups?: number[]
     blockUsers?: user[]
@@ -18,7 +18,7 @@ export type BlockConfig = {
 }
 
 /**
- * 优先使用单元内的reply对象,如果不存在即使用defaultReply
+ * 优先使用单元内的reply字段,如果不存在即使用defaultReply
  * 如果回复内容为空字符串,就不会发送内容
  */
 
@@ -26,5 +26,12 @@ export const config: BlockConfig = {
   defaultReply: '默认回复',
   blockUsers: [],
   blockGroups: [],
-  commands: []
+  commands: [
+    {
+      name: /^空空.*[来來发發给給][张張个個幅点點份]?(?<r18>[Rr]18的?)?(?<tag>.*?)?的?[色瑟][图圖]/,
+      blockUsers: [10001],
+      blockGroups: [{ group_id: 2333, reply: '2333' }],
+      defaultReply: '233'
+    }
+  ]
 }

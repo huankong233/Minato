@@ -5,29 +5,29 @@ export interface AdminConfig {
    */
   invite: {
     message: boolean
-    agree: boolean
+    auto: 'accept' | 'reject' | ''
   }
   add: {
     message: boolean
-    agree: boolean
+    auto: 'accept' | 'reject' | ''
   }
   friend: {
     message: boolean
-    agree: boolean
+    auto: 'accept' | 'reject' | ''
   }
 }
 
 export const config: AdminConfig = {
   invite: {
     message: true,
-    agree: false
+    auto: 'accept'
   },
   add: {
     message: true,
-    agree: false
+    auto: ''
   },
   friend: {
     message: true,
-    agree: true
+    auto: 'accept'
   }
 }

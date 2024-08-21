@@ -1,20 +1,28 @@
-import { type messageEvent, type noticeEvent, type requestEvent } from '@/global.ts'
+import {
+  type commandEvent,
+  type messageEvent,
+  type noticeEvent,
+  type requestEvent
+} from '@/global.ts'
 import { sortObjectArray } from '@/libs/array.ts'
 
 /**
  * 事件快捷注册
  */
-export function eventReg(params: messageEvent | noticeEvent | requestEvent) {
+export function eventReg(params: commandEvent | messageEvent | noticeEvent | requestEvent) {
   params.priority = params.priority ?? 1
   switch (params.type) {
+    case 'command':
+      events.command = sortObjectArray([...events.command, params], 'priority', 'down')
+      break
     case 'message':
-      events.message = sortObjectArray([...events.message, params], 'priority')
+      events.message = sortObjectArray([...events.message, params], 'priority', 'down')
       break
     case 'notice':
-      events.notice = sortObjectArray([...events.notice, params], 'priority')
+      events.notice = sortObjectArray([...events.notice, params], 'priority', 'down')
       break
     case 'request':
-      events.request = sortObjectArray([...events.request, params], 'priority')
+      events.request = sortObjectArray([...events.request, params], 'priority', 'down')
       break
   }
 }

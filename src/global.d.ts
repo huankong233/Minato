@@ -1,18 +1,51 @@
+/* eslint-disable no-var */
 import { type Knex } from 'knex'
 import { type AllHandlers, type NCWebsocket } from 'node-napcat-ts'
 
 declare global {
-  var isDev: boolean
+  var debug: boolean
   var baseDir: string
   var bot: NCWebsocket
   var events: {
+    command: commandEvent[]
     message: messageEvent[]
     notice: noticeEvent[]
     request: requestEvent[]
   }
-  var knex: Knex<any, unknown[]>
-  var Pigeon: () => Knex.QueryBuilder<Pigeon, {}>
-  var PigeonHistory: () => Knex.QueryBuilder<PigeonHistory, {}>
+  var knex: Knex<unknown, unknown[]>
+  var Pigeon: () => Knex.QueryBuilder<Pigeon, unknown>
+  var PigeonHistory: () => Knex.QueryBuilder<PigeonHistory, unknown>
+}
+
+export interface Command {
+  name: string
+  args: string[]
+}
+
+export type Param =
+  | {
+      type: 'string'
+      default?: string
+    }
+  | {
+      type: 'enum'
+      enum: string[]
+      default?: string
+    }
+  | {
+      type: 'number'
+      default?: string
+    }
+
+export interface commandEvent {
+  type: 'command'
+  callback: (context: AllHandlers['message'], command: Command) => Promise<void | 'quit'>
+  commandName: string | RegExp
+  description: string
+  params?: Param[]
+  priority?: number
+  hide?: boolean
+  pluginName: string
 }
 
 export interface messageEvent {

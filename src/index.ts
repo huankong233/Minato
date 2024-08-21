@@ -3,14 +3,27 @@ import { loadPlugin } from '@/libs/loadPlugin.ts'
 import { makeSystemLogger } from '@/libs/logger.ts'
 import fs from 'fs-extra'
 import path from 'path'
+import { Command } from 'commander'
+import { version } from '@/../package.json'
 
 const logger = makeSystemLogger({ pluginName: 'bootstrap' })
 
+const opts = new Command()
+  .name('kkbot')
+  .description('A simple qqbot based on node-napcat-ts')
+  .version(version)
+  .option('-D, --debug', 'run in debug mode', false)
+  .option('-TZ, --timezone', 'specify the timezone', 'Asia/Shanghai')
+  .allowExcessArguments(true)
+  .allowUnknownOption(true)
+  .parse()
+  .opts()
+
 // 修改时区
-process.env.TZ = 'Asia/Shanghai'
+process.env.TZ = opts.TZ
 
 // 是否启用DEBUG模式
-global.isDev = typeof process.argv.find((item) => item === '--dev') !== 'undefined'
+global.debug = opts.debug
 global.baseDir = getDirname(import.meta)
 
 // 清空缓存文件夹
@@ -25,12 +38,12 @@ if (!installBotSuccess) {
 }
 
 // 加载剩余插件
-await Promise.all(
-  ['builtIn', 'tools', 'pigeons'].map((pluginDir) =>
-    fs
-      .readdirSync(path.join(baseDir, `/plugins/${pluginDir}`))
-      .map((pluginName) => loadPlugin(`/${pluginDir}/${pluginName}`))
-  )
+const plugins = ['builtIn', 'tools', 'pigeons'].flatMap((pluginDir) =>
+  fs
+    .readdirSync(path.join(baseDir, `/plugins/${pluginDir}`))
+    .flatMap((pluginName) => `/${pluginDir}/${pluginName}`)
 )
 
-logger.SUCCESS('插件加载完成!')
+for (const plugin of plugins) await loadPlugin(plugin)
+
+logger.SUCCESS('所有插件已加载完成!')

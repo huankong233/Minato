@@ -7,12 +7,12 @@
  */
 export function sortObjectArray<T extends { [key: string]: any }>(
   arr: T[],
-  property: string,
+  property: keyof T,
   sortType: 'up' | 'down' = 'up'
-) {
+): T[] {
   return arr.sort((a, b) => {
-    if (a[property] > b[property]) return sortType === 'up' ? -1 : 1
-    if (a[property] < b[property]) return sortType === 'up' ? 1 : -1
+    if (a[property] > b[property]) return sortType === 'up' ? 1 : -1
+    if (a[property] < b[property]) return sortType === 'up' ? -1 : 1
     return 0
   })
 }

@@ -9,6 +9,9 @@ export async function sendMsg(
     | { message_type: 'group'; group_id: number },
   message: Send[keyof Send][]
 ) {
+  logger.DEBUG(`发送消息:`)
+  logger.DIR(message)
+
   const { message_type } = context
 
   let response
@@ -27,17 +30,18 @@ export async function sendMsg(
         break
     }
   } catch (error) {
-    logger.DEBUG(`发送消息:${message}`)
-    const stack = new Error().stack!.split('\n')
-    logger.DEBUG(`stack信息:\n`, stack.slice(1).join('\n'))
+    logger.ERROR('发送消息失败!!!')
+    logger.ERROR('error信息:')
+    logger.ERROR(error)
+    logger.ERROR(`stack信息:\n${new Error().stack}`)
 
-    throw error
+    return
   }
 
-  logger.DEBUG(`发送消息:${message}`)
-  logger.DEBUG(`响应:`, response)
-  const stack = new Error().stack!.split('\n')
-  logger.DEBUG(`stack信息:\n`, stack.slice(1).join('\n'))
+  logger.DEBUG('发送消息成功!!!')
+  logger.DEBUG(`响应:`)
+  logger.DIR(response)
+  logger.DEBUG(`stack信息:\n${new Error().stack}`)
 
   return response
 }
@@ -54,6 +58,9 @@ export async function sendForwardMsg(
     | { message_type: 'private'; user_id: number },
   message: Send['node'][]
 ) {
+  logger.DEBUG(`发送合并消息:`)
+  logger.DIR(message)
+
   const { message_type } = context
 
   let response
@@ -74,17 +81,18 @@ export async function sendForwardMsg(
         break
     }
   } catch (error) {
-    logger.DEBUG(`发送合并消息:\n`, message)
-    const stack = new Error().stack!.split('\n')
-    logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
+    logger.ERROR('发送消息失败!!!')
+    logger.ERROR('error信息:')
+    logger.ERROR(error)
+    logger.ERROR(`stack信息:\n${new Error().stack}`)
 
-    throw error
+    return
   }
 
-  logger.DEBUG(`发送合并消息:\n`, message)
-  logger.DEBUG(`响应:`, response)
-  const stack = new Error().stack!.split('\n')
-  logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
+  logger.DEBUG('发送成功!!!')
+  logger.DEBUG(`响应:`)
+  logger.DIR(response)
+  logger.DEBUG(`stack信息:\n${new Error().stack}`)
 
   return response
 }

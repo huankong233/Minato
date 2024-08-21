@@ -2,5 +2,5 @@
   "watch": ["."],
   "ext": ".ts",
   "ignore": ["manifest.jsonc"],
-  "exec": "tsx src/index.ts --dev"
+  "exec": "tsx src/index.ts --debug"
 }

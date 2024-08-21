@@ -12,7 +12,7 @@ export const purgeLink = (link: string) => {
     }
     url.searchParams.delete('spm_id_from')
     return url.href
-  } catch (e) {}
+  } catch (_error) {}
   return link
 }
 
@@ -21,4 +21,4 @@ export const purgeLink = (link: string) => {
  * @param text b站链接
  */
 export const purgeLinkInText = (text: string) =>
-  text.replace(/https?:\/\/[-\w~!@#$%&*()+=;':,.?/]+/g, url => purgeLink(url))
+  text.replace(/https?:\/\/[-\w~!@#$%&*()+=;':,.?/]+/g, (url) => purgeLink(url))

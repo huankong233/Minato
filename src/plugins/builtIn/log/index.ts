@@ -19,11 +19,11 @@ export default class Log {
   }
 
   rewriteConsole() {
-    if (isDev) {
+    if (debug) {
       if (config.force) {
-        this.#logger.DEBUG(`处于DEV模式中,强制开启日志保存功能`)
+        this.#logger.DEBUG(`处于DEBUG模式中,强制开启日志保存功能`)
       } else {
-        return this.#logger.DEBUG(`处于DEV模式中,禁用日志保存功能`)
+        return this.#logger.DEBUG(`处于DEBUG模式中,禁用日志保存功能`)
       }
     }
 

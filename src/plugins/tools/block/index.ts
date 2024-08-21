@@ -1,9 +1,9 @@
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger, type Logger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import Bot from '@/plugins/builtIn/bot/index.ts'
-import { MessageHandler, NoticeHandler, RequestHandler } from 'node-napcat-ts'
+import { MessageHandler, NoticeHandler, RequestHandler, Structs } from 'node-napcat-ts'
 import { BlockConfig, config } from './config.ts'
+import { type Command } from '@/global.js'
 
 export default class Block {
   #logger: Logger
@@ -15,8 +15,11 @@ export default class Block {
   async init() {
     eventReg({
       pluginName: 'block',
-      type: 'message',
-      callback: (context) => this.checkBan(context),
+      type: 'command',
+      commandName: '*',
+      description: '检查封禁状态',
+      hide: true,
+      callback: (context, command) => this.checkBan(context, command),
       priority: 102
     })
 
@@ -36,32 +39,28 @@ export default class Block {
   }
 
   async checkBan(
-    context: MessageHandler['message'] | NoticeHandler['notice'] | RequestHandler['request']
+    context: MessageHandler['message'] | NoticeHandler['notice'] | RequestHandler['request'],
+    command?: Command
   ) {
     if ((await this._check(config, context)) === 'quit') return 'quit'
 
+    if (!config.commands) return
     if (context.post_type !== 'message') return
-
-    const command = Bot.parseMessage(context.message)
-
     if (!command) return
+    const commandName = command.name
 
-    if (config.commands && context.post_type === 'message') {
-      for (let i = 0; i < config.commands.length; i++) {
-        const nowCommand = config.commands[i]
-
-        if (
-          (nowCommand.name instanceof RegExp && nowCommand.name.test(context.message)) ||
-          command.name === nowCommand.name
-        ) {
-          if ((await this._check(nowCommand, context)) === 'quit') return 'quit'
-        }
+    for (const item of config.commands) {
+      if (
+        (item.name instanceof RegExp && item.name.test(commandName)) ||
+        commandName === item.name
+      ) {
+        if ((await this._check(item as BlockConfig, context)) === 'quit') return 'quit'
       }
     }
   }
 
   async _check(
-    rules: BlockConfig | NonNullable<BlockConfig['commands']>[number],
+    rules: BlockConfig,
     context: MessageHandler['message'] | NoticeHandler['notice'] | RequestHandler['request']
   ) {
     if (rules.allowUsers && 'user_id' in context) {
@@ -87,8 +86,10 @@ export default class Block {
         this.#logger.DEBUG(`用户 ${context.user_id} 处于黑名单中`)
         if (context.post_type === 'message') {
           const message =
-            (typeof found !== 'number' ? found.reply : undefined) ?? config.defaultReply
-          if (message !== '') await sendMsg(context, message)
+            (typeof found !== 'number' ? found.reply : undefined) ??
+            rules.defaultReply ??
+            config.defaultReply
+          if (message !== '') await sendMsg(context, [Structs.text({ text: message })])
         }
         return 'quit'
       }
@@ -103,8 +104,10 @@ export default class Block {
         this.#logger.DEBUG(`群组 ${context.group_id} 处于黑名单中`)
         if (context.post_type === 'message') {
           const message =
-            (typeof found !== 'number' ? found.reply : undefined) ?? config.defaultReply
-          if (message !== '') await sendMsg(context, message)
+            (typeof found !== 'number' ? found.reply : undefined) ??
+            rules.defaultReply ??
+            config.defaultReply
+          if (message !== '') await sendMsg(context, [Structs.text({ text: message })])
         }
         return 'quit'
       }
