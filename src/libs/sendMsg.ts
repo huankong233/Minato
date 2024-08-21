@@ -9,15 +9,9 @@ export async function sendMsg(
     | { message_type: 'group'; group_id: number },
   message: Send[keyof Send][]
 ) {
-  logger.DEBUG(`发送消息:`)
-  logger.DIR(message)
-
-  const { message_type } = context
-
   let response
-
   try {
-    switch (message_type) {
+    switch (context.message_type) {
       case 'private':
         //回复私聊
         const { user_id } = context
@@ -29,20 +23,14 @@ export async function sendMsg(
         response = await bot.send_group_msg({ group_id, message })
         break
     }
-  } catch (error) {
+  } catch (_error) {
     logger.ERROR('发送消息失败!!!')
-    logger.ERROR('error信息:')
-    logger.ERROR(error)
     logger.ERROR(`stack信息:\n${new Error().stack}`)
-
     return
   }
 
   logger.DEBUG('发送消息成功!!!')
-  logger.DEBUG(`响应:`)
-  logger.DIR(response)
   logger.DEBUG(`stack信息:\n${new Error().stack}`)
-
   return response
 }
 
@@ -58,15 +46,9 @@ export async function sendForwardMsg(
     | { message_type: 'private'; user_id: number },
   message: Send['node'][]
 ) {
-  logger.DEBUG(`发送合并消息:`)
-  logger.DIR(message)
-
-  const { message_type } = context
-
   let response
-
   try {
-    switch (message_type) {
+    switch (context.message_type) {
       case 'private':
         response = await bot.send_private_forward_msg({
           user_id: context.user_id,
@@ -80,19 +62,13 @@ export async function sendForwardMsg(
         })
         break
     }
-  } catch (error) {
+  } catch (_error) {
     logger.ERROR('发送消息失败!!!')
-    logger.ERROR('error信息:')
-    logger.ERROR(error)
     logger.ERROR(`stack信息:\n${new Error().stack}`)
-
     return
   }
 
   logger.DEBUG('发送成功!!!')
-  logger.DEBUG(`响应:`)
-  logger.DIR(response)
   logger.DEBUG(`stack信息:\n${new Error().stack}`)
-
   return response
 }

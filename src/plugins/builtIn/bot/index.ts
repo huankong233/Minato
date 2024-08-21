@@ -16,6 +16,17 @@ export default class Bot {
     return new Promise((resolve, reject) => {
       const bot = new NCWebsocket(config.connect)
 
+      if (debug) {
+        bot.on('api.preSend', (context) => {
+          this.#logger.DEBUG('发送API请求')
+          this.#logger.DIR(context)
+        })
+        bot.on('api.response', (context) => {
+          this.#logger.DEBUG('收到API响应')
+          this.#logger.DIR(context)
+        })
+      }
+
       bot.on('socket.connecting', (context) => {
         this.#logger.INFO(
           `连接中#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`
@@ -83,7 +94,11 @@ export default class Bot {
     const { commandName, params, pluginName } = event
 
     // 检查命令名
-    if (commandName !== '*' && commandName !== command.name) {
+    if (
+      commandName !== '*' &&
+      ((typeof commandName === 'string' && commandName !== command.name) ||
+        (commandName instanceof RegExp && command.name.match(commandName) === null))
+    ) {
       this.#logger.DEBUG(`命令不满足插件 ${pluginName} 需求的 ${commandName} 触发条件`)
       return false
     }

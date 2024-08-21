@@ -9,6 +9,7 @@
 - [+] 恢复 `command` 事件类型
 - [+] 使用 `eslint` 提高代码质量
 - [*] 修复 `array` 库错误的排序
+- [*] 迁移插件 `gugu` `mute` `pigeonTool` `query`
 
 ### 08-19 v0.3.0
 

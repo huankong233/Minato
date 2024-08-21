@@ -10,4 +10,8 @@ export const isFriend = async (user_id: number) =>
  * @param user_id 用户id
  */
 export const getUserName = async (user_id: number) =>
-  bot.get_stranger_info({ user_id }).then((res) => res.nickname)
+  bot
+    .get_stranger_info({ user_id })
+    .then((res) =>
+      res.remark !== '' ? res.remark : res.nickname !== '' ? res.nickname : '获取失败'
+    )

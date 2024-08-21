@@ -1,16 +1,11 @@
 import { config as botConfig } from '@/plugins/builtIn/bot/config.ts'
 import { Command } from '@/global.js'
 import { eventReg } from '@/libs/eventReg.ts'
-// import { makeLogger, type Logger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { MessageHandler, Structs } from 'node-napcat-ts'
 
 export default class Help {
-  // #logger: Logger
-
-  constructor() {
-    // this.#logger = makeLogger({ pluginName: 'help' })
-  }
+  constructor() {}
 
   async init() {
     eventReg({

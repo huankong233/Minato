@@ -1,35 +1,26 @@
 import { type Pigeon } from '@/global.ts'
-import { makeLogger, type Logger } from '@/libs/logger.ts'
 import Gugu from '@/plugins/pigeons/gugu/index.ts'
 import { MessageHandler } from 'node-napcat-ts'
 
-export default class pigeonTool {
-  #logger: Logger
-
-  constructor() {
-    this.#logger = makeLogger({ pluginName: 'pigeonTool' })
-  }
-
-  async init() {}
-
+export default class PigeonTool {
   static async getUserData(context: MessageHandler['message']): Promise<Pigeon> {
     const { user_id } = context
     const user = await Pigeon().where({ user_id }).first()
     if (user) return user
-    Gugu.gugu(context)
+    await Gugu.gugu(context)
     return await Pigeon().where({ user_id }).first()
   }
 
   static async add(context: MessageHandler['message'], operation: number, reason: string) {
     //不允许增加负数的鸽子
     if (operation <= 0) return false
-    this.operatePigeon(context, +operation, reason)
+    return await this.operatePigeon(context, +operation, reason)
   }
 
   static async reduce(context: MessageHandler['message'], operation: number, reason: string) {
     //不允许减少负数的鸽子
     if (operation <= 0) return false
-    this.operatePigeon(context, -operation, reason)
+    return await this.operatePigeon(context, -operation, reason)
   }
 
   static async operatePigeon(
@@ -50,5 +41,6 @@ export default class pigeonTool {
       new_pigeon,
       reason
     })
+    return true
   }
 }

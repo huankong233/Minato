@@ -12,7 +12,7 @@ declare global {
     notice: noticeEvent[]
     request: requestEvent[]
   }
-  var knex: Knex<unknown, unknown[]>
+  var knex: Knex<any, unknown[]>
   var Pigeon: () => Knex.QueryBuilder<Pigeon, unknown>
   var PigeonHistory: () => Knex.QueryBuilder<PigeonHistory, unknown>
 }
