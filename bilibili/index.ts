@@ -4,21 +4,26 @@
 
 import { eventReg } from '@/libs/eventReg.ts'
 import { makeLogger, type Logger } from '@/libs/logger.ts'
-import { MessageHandler, convertCQCodeToJSON } from 'node-napcat-ts'
+import type { AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
-
-// import { eventReg } from '@/libs/eventReg.ts'
-// import { makeLogger } from '@/libs/logger.ts'
 // import { getArticleInfo } from './libs/article.ts'
 // import { getDynamicInfo } from './libs/dynamic.ts'
 // import { getLiveRoomInfo } from './libs/live.ts'
 // import { getVideoInfo } from './libs/video.ts'
 
-export default class Gugu {
-  #logger: Logger
+export const enable =
+  config.despise ||
+  config.recallMiniProgram ||
+  config.getInfo.getVideoInfo ||
+  config.getInfo.getDynamicInfo ||
+  config.getInfo.getArticleInfo ||
+  config.getInfo.getLiveRoomInfo
+
+export default class Bilibili {
+  logger: Logger
 
   constructor() {
-    this.#logger = makeLogger({ pluginName: 'bilibili' })
+    this.logger = makeLogger({ pluginName: 'bilibili' })
   }
 
   async init() {
@@ -29,22 +34,8 @@ export default class Gugu {
     })
   }
 
-  async message(context: MessageHandler['message']) {
-    const { getInfo } = config
-    if (
-      !(
-        config.despise ||
-        getInfo.getVideoInfo ||
-        getInfo.getDynamicInfo ||
-        getInfo.getArticleInfo ||
-        getInfo.getLiveRoomInfo
-      )
-    ) {
-      return
-    }
-
-    const messageJson = convertCQCodeToJSON(context.message)
-    const firstMessage = messageJson[0]
+  async message(context: AllHandlers['message']) {
+    const firstMessage = context.message[0]
     let url = ''
     let isMiniProgram = false
 

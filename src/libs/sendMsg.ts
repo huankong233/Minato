@@ -1,13 +1,14 @@
-import { type Send } from 'node-napcat-ts'
+import { Structs, type Send } from 'node-napcat-ts'
 import { makeSystemLogger } from './logger.ts'
 
 const logger = makeSystemLogger({ pluginName: 'sendMsg' })
 
 export async function sendMsg(
   context:
-    | { message_type: 'private'; user_id: number }
-    | { message_type: 'group'; group_id: number },
-  message: Send[keyof Send][]
+    | { message_type: 'private'; user_id: number; message_id?: number }
+    | { message_type: 'group'; group_id: number; user_id?: number; message_id?: number },
+  message: Send[keyof Send][],
+  { reply = true, at = false } = {}
 ) {
   let response
   try {
@@ -20,6 +21,8 @@ export async function sendMsg(
       case 'group':
         //回复群
         const { group_id } = context
+        if (reply && context.message_id) message.unshift(Structs.reply({ id: context.message_id }))
+        if (at && context.user_id) message.unshift(Structs.at({ qq: context.user_id }))
         response = await bot.send_group_msg({ group_id, message })
         break
     }

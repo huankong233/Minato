@@ -1,45 +1,33 @@
-import { eventReg } from '@/libs/eventReg.ts'
-import { makeLogger, type Logger } from '@/libs/logger.ts'
+import { type allEvents, type Command } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { MessageHandler, NoticeHandler, RequestHandler, Structs } from 'node-napcat-ts'
-import { BlockConfig, config } from './config.ts'
-import { type Command } from '@/global.js'
+import { BasePlugin } from '@/plugins/base.ts'
+import { type AllHandlers, Structs } from 'node-napcat-ts'
+import { type BlockConfig, config } from './config.ts'
 
-export default class Block {
-  #logger: Logger
-
-  constructor() {
-    this.#logger = makeLogger({ pluginName: 'block' })
-  }
-
-  async init() {
-    eventReg({
-      pluginName: 'block',
+export default class Block extends BasePlugin {
+  events: allEvents[] = [
+    {
       type: 'command',
       commandName: '*',
       description: '检查封禁状态',
       hide: true,
-      callback: (context, command) => this.checkBan(context, command),
+      callback: this.checkBan.bind(this),
       priority: 102
-    })
-
-    eventReg({
-      pluginName: 'block',
+    },
+    {
       type: 'notice',
-      callback: (context) => this.checkBan(context),
+      callback: this.checkBan.bind(this),
       priority: 102
-    })
-
-    eventReg({
-      pluginName: 'block',
+    },
+    {
       type: 'request',
-      callback: (context) => this.checkBan(context),
+      callback: this.checkBan.bind(this),
       priority: 102
-    })
-  }
+    }
+  ]
 
   async checkBan(
-    context: MessageHandler['message'] | NoticeHandler['notice'] | RequestHandler['request'],
+    context: AllHandlers['message'] | AllHandlers['notice'] | AllHandlers['request'],
     command?: Command
   ) {
     if ((await this._check(config, context)) === 'quit') return 'quit'
@@ -61,18 +49,18 @@ export default class Block {
 
   async _check(
     rules: BlockConfig,
-    context: MessageHandler['message'] | NoticeHandler['notice'] | RequestHandler['request']
+    context: AllHandlers['message'] | AllHandlers['notice'] | AllHandlers['request']
   ) {
     if (rules.allowUsers && 'user_id' in context) {
       if (!rules.allowUsers.includes(context.user_id)) {
-        this.#logger.DEBUG(`用户 ${context.user_id} 不处于白名单中`)
+        this.logger.DEBUG(`用户 ${context.user_id} 不处于白名单中`)
         return 'quit'
       }
     }
 
     if (rules.allowGroups && 'group_id' in context) {
       if (!rules.allowGroups.includes(context.group_id)) {
-        this.#logger.DEBUG(`群组 ${context.group_id} 不处于白名单中`)
+        this.logger.DEBUG(`群组 ${context.group_id} 不处于白名单中`)
         return 'quit'
       }
     }
@@ -83,7 +71,7 @@ export default class Block {
       )
 
       if (found) {
-        this.#logger.DEBUG(`用户 ${context.user_id} 处于黑名单中`)
+        this.logger.DEBUG(`用户 ${context.user_id} 处于黑名单中`)
         if (context.post_type === 'message') {
           const message =
             (typeof found !== 'number' ? found.reply : undefined) ??
@@ -101,7 +89,7 @@ export default class Block {
       )
 
       if (found) {
-        this.#logger.DEBUG(`群组 ${context.group_id} 处于黑名单中`)
+        this.logger.DEBUG(`群组 ${context.group_id} 处于黑名单中`)
         if (context.post_type === 'message') {
           const message =
             (typeof found !== 'number' ? found.reply : undefined) ??

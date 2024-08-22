@@ -37,6 +37,7 @@
     "noImplicitReturns": false,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "experimentalDecorators": true
   }
 }

@@ -1,10 +1,10 @@
+import { version } from '@/../package.json'
 import { getDirname } from '@/libs/getDirname.ts'
 import { loadPlugin } from '@/libs/loadPlugin.ts'
 import { makeSystemLogger } from '@/libs/logger.ts'
+import { Command } from 'commander'
 import fs from 'fs-extra'
 import path from 'path'
-import { Command } from 'commander'
-import { version } from '@/../package.json'
 
 const logger = makeSystemLogger({ pluginName: 'bootstrap' })
 
@@ -41,9 +41,13 @@ if (!installBotSuccess) {
 const plugins = ['builtIn', 'tools', 'pigeons'].flatMap((pluginDir) =>
   fs
     .readdirSync(path.join(baseDir, `/plugins/${pluginDir}`))
+    .filter((pluginName) => !pluginName.includes('help'))
     .flatMap((pluginName) => `/${pluginDir}/${pluginName}`)
 )
 
 for (const plugin of plugins) await loadPlugin(plugin)
+
+// 最后加载帮助插件
+await loadPlugin(`/tools/help`)
 
 logger.SUCCESS('所有插件已加载完成!')

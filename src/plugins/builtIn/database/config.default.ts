@@ -11,6 +11,5 @@ export const config: DatabaseConfig = {
     password: '',
     database: 'kkbot',
     timezone: '+08:00'
-  },
-  debug: false
+  }
 }

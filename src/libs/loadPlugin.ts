@@ -43,6 +43,7 @@ export async function loadPlugin(pluginName: string) {
 
   try {
     const plugin = new program.default()
+    if (plugin.regEvents) await plugin.regEvents()
     if (plugin.init) await plugin.init()
     logger.SUCCESS(`加载插件 ${pluginName} 成功`)
   } catch (error) {

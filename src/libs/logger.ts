@@ -55,9 +55,13 @@ export class Logger {
     this.print(clc.magenta(`[DEBUG]`), ...messages)
   }
 
-  DIR(obj: any) {
-    if (!debug) return
-    console.dir(obj, { depth: null })
+  DIR(obj: any, needDebug = true, needLogDir = true) {
+    if (needDebug && !debug) return
+    if (needLogDir) {
+      console.dir(obj, { depth: null })
+    } else {
+      console.log(obj)
+    }
   }
 
   private formatMessages = (messages: any[]): string[] => {

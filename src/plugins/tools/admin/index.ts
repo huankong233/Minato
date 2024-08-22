@@ -1,23 +1,15 @@
+import { type allEvents, type Command } from '@/global.js'
 import { getUserName } from '@/libs/api.ts'
-import { eventReg } from '@/libs/eventReg.ts'
-import { makeLogger, type Logger } from '@/libs/logger.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
+import { BasePlugin } from '@/plugins/base.ts'
 import { config as botConfig } from '@/plugins/builtIn/bot/config.ts'
-import { MessageHandler, NoticeHandler, RequestHandler, Structs } from 'node-napcat-ts'
+import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
-import { Command } from '@/global.js'
 
-export default class Admin {
-  #logger: Logger
-
-  constructor() {
-    this.#logger = makeLogger({ pluginName: 'admin' })
-  }
-
-  async init() {
-    eventReg({
+export default class Admin extends BasePlugin {
+  events: allEvents[] = [
+    {
       type: 'command',
-      pluginName: 'admin',
       description: 'admin (accept/reject) (invite/add/friend) (flag)',
       commandName: 'admin',
       params: [
@@ -25,30 +17,23 @@ export default class Admin {
         { type: 'enum', enum: ['accept', 'reject'] },
         { type: 'string' }
       ],
-      callback: (context, command) => this.handler(context, command),
-      priority: 102
-    })
-
-    eventReg({
-      pluginName: 'admin',
+      callback: this.handler.bind(this)
+    },
+    {
       type: 'notice',
-      callback: (context) => this.notice(context),
-      priority: 102
-    })
-
-    eventReg({
-      pluginName: 'admin',
+      callback: this.notice.bind(this)
+    },
+    {
       type: 'request',
-      callback: (context) => this.request(context),
-      priority: 102
-    })
-  }
+      callback: this.request.bind(this)
+    }
+  ]
 
-  async handler(context: MessageHandler['message'], command: Command) {
+  async handler(context: AllHandlers['message'], command: Command) {
     return await this.message(command, context)
   }
 
-  async message(command: Command, context?: MessageHandler['message']) {
+  async message(command: Command, context?: AllHandlers['message']) {
     const name = command.args[0]
     const approve = command.args[1] === 'accept'
     const flag = command.args[2]
@@ -64,14 +49,14 @@ export default class Admin {
 
       if (context) await sendMsg(context, [Structs.text({ text: '操作成功~' })])
     } catch (error) {
-      this.#logger.ERROR('操作失败', error)
+      this.logger.ERROR('操作失败', error)
       await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [
         Structs.text({ text: '操作失败' })
       ])
     }
   }
 
-  async notice(context: NoticeHandler['notice']) {
+  async notice(context: AllHandlers['notice']) {
     const { notice_type } = context
 
     if (notice_type === 'group_increase' || notice_type === 'group_decrease') {
@@ -89,7 +74,7 @@ export default class Admin {
     }
   }
 
-  async request(context: RequestHandler['request']) {
+  async request(context: AllHandlers['request']) {
     const { request_type } = context
 
     if (request_type === 'group') {
@@ -116,7 +101,7 @@ export default class Admin {
     }
   }
 
-  async sendNotice(context: RequestHandler['request'], auto: 'accept' | 'reject' | '') {
+  async sendNotice(context: AllHandlers['request'], auto: 'accept' | 'reject' | '') {
     const { request_type, flag, user_id, comment, time } = context
 
     const text = []

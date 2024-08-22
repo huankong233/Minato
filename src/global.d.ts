@@ -13,9 +13,16 @@ declare global {
     request: requestEvent[]
   }
   var knex: Knex<any, unknown[]>
-  var Pigeon: () => Knex.QueryBuilder<Pigeon, unknown>
-  var PigeonHistory: () => Knex.QueryBuilder<PigeonHistory, unknown>
 }
+
+// 使用映射类型去除 pluginName 属性
+export type RemovePluginName<T> = {
+  [K in keyof T as K extends 'pluginName' ? never : K]: T[K]
+}
+
+export type allEventsWithPluginName = commandEvent | messageEvent | noticeEvent | requestEvent
+
+export type allEvents = RemovePluginName<allEventsWithPluginName>
 
 export interface Command {
   name: string

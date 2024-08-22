@@ -1,21 +1,21 @@
-import { eventReg } from '@/libs/eventReg.ts'
-import { MessageHandler, Structs } from 'node-napcat-ts'
-import { sendMsg } from '@/libs/sendMsg.ts'
-import { config } from './config.ts'
+import type { allEvents } from '@/global.js'
 import { randomInt } from '@/libs/random.ts'
+import { sendMsg } from '@/libs/sendMsg.ts'
+import { BasePlugin } from '@/plugins/base.ts'
+import { Structs, type AllHandlers } from 'node-napcat-ts'
+import { config } from './config.ts'
 
-export default class Mute {
-  async init() {
-    eventReg({
+export default class Mute extends BasePlugin {
+  events: allEvents[] = [
+    {
       type: 'command',
       commandName: '鸽了',
-      description: '咕咕咕~',
-      pluginName: 'mute',
-      callback: (context) => this.mute(context)
-    })
-  }
+      description: '鸽了',
+      callback: this.mute.bind(this)
+    }
+  ]
 
-  async mute(context: MessageHandler['message']) {
+  async mute(context: AllHandlers['message']) {
     if (context.message_type === 'private') {
       await sendMsg(context, [Structs.text({ text: '爬爬爬，私聊来找茬是吧' })])
       return
@@ -23,7 +23,7 @@ export default class Mute {
 
     const { user_id, group_id } = context
 
-    const userInfo = await bot.get_group_member_info({ group_id, user_id })
+    const userInfo = context.sender
     const selfInfo = await bot.get_group_member_info({ group_id, user_id: context.self_id })
 
     if (selfInfo.role !== 'admin' && selfInfo.role !== 'owner') {

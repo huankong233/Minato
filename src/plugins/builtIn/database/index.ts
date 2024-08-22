@@ -1,33 +1,34 @@
-import { Logger, makeLogger } from '@/libs/logger.ts'
+import { BasePlugin } from '@/plugins/base.ts'
 import Knex from 'knex'
 import { config } from './config.ts'
 
-export default class Database {
-  #logger: Logger
-
-  constructor() {
-    this.#logger = makeLogger({ pluginName: 'database' })
-  }
-
+export default class Database extends BasePlugin {
   async init() {
     try {
-      global.knex = Knex({
-        ...config,
-        log: {
-          inspectionDepth: 2,
-          enableColors: true,
-          debug: (msg) => this.#logger.DEBUG(msg)
-        }
-      })
+      global.knex = Knex(config)
 
-      global.Pigeon = () => knex('pigeons')
-      global.PigeonHistory = () => knex('pigeon_histories')
+      if (debug) {
+        knex.on('query', (queryData) => {
+          this.logger.DEBUG('发起数据库请求')
+          this.logger.DIR(queryData)
+        })
+        knex.on('query-response', (responseData) => {
+          this.logger.DEBUG('收到数据库成功响应')
+          this.logger.DIR(responseData)
+        })
+        knex.on('query-error', (err, queryData) => {
+          this.logger.ERROR(`收到数据库失败响应`)
+          this.logger.DIR(err, false, false)
+          this.logger.DIR(queryData, false)
+        })
+      }
 
-      this.#logger.SUCCESS('连接数据库成功')
+      this.logger.SUCCESS('连接数据库成功')
     } catch (error) {
-      this.#logger.ERROR('连接数据库失败')
-      this.#logger.ERROR(error)
-      this.#logger.ERROR('数据库配置:\n', config)
+      this.logger.ERROR('连接数据库失败')
+      this.logger.ERROR(error)
+      this.logger.ERROR('数据库配置:')
+      this.logger.DIR(config)
     }
   }
 }

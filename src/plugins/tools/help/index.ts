@@ -1,44 +1,50 @@
-import { config as botConfig } from '@/plugins/builtIn/bot/config.ts'
-import { Command } from '@/global.js'
-import { eventReg } from '@/libs/eventReg.ts'
+import { type allEvents, type Command, type commandEvent } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { MessageHandler, Structs } from 'node-napcat-ts'
+import { BasePlugin } from '@/plugins/base.ts'
+import { config as botConfig } from '@/plugins/builtIn/bot/config.ts'
+import { type AllHandlers, Structs } from 'node-napcat-ts'
 
-export default class Help {
-  constructor() {}
-
-  async init() {
-    eventReg({
+export default class Help extends BasePlugin {
+  events: allEvents[] = [
+    {
       type: 'command',
-      pluginName: 'help',
       commandName: 'help',
       description: 'help [commandName]',
       params: [{ type: 'string', default: 'all' }],
-      callback: (context, command) => this.message(context, command)
-    })
-  }
+      callback: this.message.bind(this)
+    }
+  ]
 
-  async message(context: MessageHandler['message'], command: Command) {
+  // 加载所有命令到缓存
+  commands: commandEvent[] = events.command
+    .filter((command) => !(command.hide ?? false))
+    .map((command) => {
+      command.commandName = command.commandName.toString()
+      return command
+    })
+
+  async message(context: AllHandlers['message'], command: Command) {
     const commandName = command.args[0]
-    const commands = events.command.filter((command) => !(command.hide ?? false))
 
     if (commandName === 'all') {
       await sendMsg(context, [
         Structs.text({
-          text: '可用命令:' + commands.map((command) => command.commandName).join(',')
+          text: '可用命令: ' + this.commands.map((command) => command.commandName).join(', ')
         })
       ])
       return
     }
-    const found = commands.find((command) => command.commandName === commandName)
+
+    const found = this.commands.find((command) => command.commandName === commandName)
     if (!found) {
-      await sendMsg(context, [Structs.text({ text: '找不到命令:' + commandName })])
+      await sendMsg(context, [Structs.text({ text: '找不到命令: ' + commandName })])
       return
     }
+
     await sendMsg(context, [
       Structs.text({
         text: [
-          `${found.commandName}的命令格式(括号必选 中括号可选):`,
+          `命令参数格式(括号必选 中括号可选):`,
           `${botConfig.command_prefix}${found.description}`
         ].join('\n')
       })

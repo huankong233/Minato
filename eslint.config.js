@@ -35,7 +35,8 @@ export default [
           varsIgnorePattern: '^_',
           ignoreRestSiblings: true
         }
-      ]
+      ],
+      '@typescript-eslint/consistent-type-imports': 'error'
     }
   }
 ]

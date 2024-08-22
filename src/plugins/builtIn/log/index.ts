@@ -1,18 +1,12 @@
-import { makeLogger, type Logger } from '@/libs/logger.ts'
 import { getDate } from '@/libs/time.ts'
+import { BasePlugin } from '@/plugins/base.ts'
 import clc from 'cli-color'
 import fs from 'fs-extra'
 import path from 'path'
 import { config } from './config.ts'
 
-export default class Log {
-  #logger: Logger
-  #logDir: string
-
-  constructor() {
-    this.#logger = makeLogger({ pluginName: 'log' })
-    this.#logDir = path.join(baseDir, 'logs')
-  }
+export default class Log extends BasePlugin {
+  #logDir = path.join(baseDir, 'logs')
 
   async init() {
     this.rewriteConsole()
@@ -21,9 +15,9 @@ export default class Log {
   rewriteConsole() {
     if (debug) {
       if (config.force) {
-        this.#logger.DEBUG(`处于DEBUG模式中,强制开启日志保存功能`)
+        this.logger.DEBUG(`处于DEBUG模式中,强制开启日志保存功能`)
       } else {
-        return this.#logger.DEBUG(`处于DEBUG模式中,禁用日志保存功能`)
+        return this.logger.DEBUG(`处于DEBUG模式中,禁用日志保存功能`)
       }
     }
 

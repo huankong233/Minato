@@ -1,26 +1,26 @@
-import { eventReg } from '@/libs/eventReg.ts'
+import type { allEvents, Pigeon } from '@/global.js'
 import { randomInt } from '@/libs/random.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { isBeforeToday } from '@/libs/time.ts'
+import { BasePlugin } from '@/plugins/base.ts'
 import pigeonTool from '@/plugins/pigeons/pigeonTool/index.ts'
-import { MessageHandler, Structs } from 'node-napcat-ts'
+import { type AllHandlers, Structs } from 'node-napcat-ts'
 import { config } from './config.ts'
 
-export default class Gugu {
-  async init() {
-    eventReg({
+export default class Gugu extends BasePlugin {
+  events: allEvents[] = [
+    {
       type: 'command',
       description: '咕咕咕',
       commandName: /咕咕咕/,
-      pluginName: 'gugu',
-      callback: (context) => Gugu.gugu(context)
-    })
-  }
+      callback: Gugu.gugu.bind(this)
+    }
+  ]
 
-  static async gugu(context: MessageHandler['message']) {
-    const userData = await Pigeon().where({ user_id: context.user_id }).first()
+  static async gugu(context: AllHandlers['message']) {
+    const userData = await knex<Pigeon>('pigeons').where({ user_id: context.user_id }).first()
     if (!userData) {
-      await Pigeon().insert({ user_id: context.user_id })
+      await knex<Pigeon>('pigeons').insert({ user_id: context.user_id })
       await pigeonTool.add(context, config.newUserAdd, '首次咕咕')
       await sendMsg(context, [Structs.text({ text: `首次咕咕~赠送${config.newUserAdd}只鸽子~` })])
       await this._gugu(context)
@@ -35,7 +35,7 @@ export default class Gugu {
     await this._gugu(context)
   }
 
-  private static async _gugu(context: MessageHandler['message']) {
+  private static async _gugu(context: AllHandlers['message']) {
     //获得的鸽子数
     const addon = randomInt(1, config.oldUserAdd)
     await pigeonTool.add(context, addon, '每日咕咕')

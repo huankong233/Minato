@@ -1,51 +1,52 @@
-import { Logger, makeLogger } from '@/libs/logger.ts'
+import type { Command, commandEvent } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { MessageHandler, NCWebsocket, Structs } from 'node-napcat-ts'
-import { config } from './config.ts'
-import { Command, commandEvent } from '@/global.js'
+import { BasePlugin } from '@/plugins/base.ts'
+import { config as BotConfig } from '@/plugins/builtIn/bot/config.ts'
 import clc from 'cli-color'
+import type { AllHandlers } from 'node-napcat-ts'
+import { NCWebsocket, Structs } from 'node-napcat-ts'
+import { config } from './config.ts'
 
-export default class Bot {
-  #logger: Logger
-
-  constructor() {
-    this.#logger = makeLogger({ pluginName: 'bot' })
-  }
-
+export default class Bot extends BasePlugin {
   async init() {
     return new Promise((resolve, reject) => {
       const bot = new NCWebsocket(config.connect)
 
       if (debug) {
         bot.on('api.preSend', (context) => {
-          this.#logger.DEBUG('发送API请求')
-          this.#logger.DIR(context)
+          this.logger.DEBUG('发送API请求')
+          this.logger.DIR(context)
         })
-        bot.on('api.response', (context) => {
-          this.#logger.DEBUG('收到API响应')
-          this.#logger.DIR(context)
+        bot.on('api.response.success', (context) => {
+          this.logger.DEBUG('收到API成功响应')
+          this.logger.DIR(context)
+        })
+        bot.on('api.response.failure', (context) => {
+          this.logger.DEBUG('收到API失败响应')
+          this.logger.DIR(context)
         })
       }
 
       bot.on('socket.connecting', (context) => {
-        this.#logger.INFO(
+        this.logger.INFO(
           `连接中#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`
         )
       })
 
       bot.on('socket.error', (context) => {
-        this.#logger.ERROR(
+        this.logger.ERROR(
           `连接失败#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`
         )
-        this.#logger.ERROR(context)
+        this.logger.ERROR(context)
 
         if (context.reconnection.nowAttempts >= context.reconnection.attempts) {
           reject(`重试次数超过设置的${context.reconnection.attempts}次!`)
+          throw new Error(`重试次数超过设置的${context.reconnection.attempts}次!`)
         }
       })
 
       bot.on('socket.open', async (context) => {
-        this.#logger.SUCCESS(
+        this.logger.SUCCESS(
           `连接成功#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`
         )
         await this.connectSuccess(bot)
@@ -62,15 +63,15 @@ export default class Bot {
     this.initEvents()
 
     if (debug || !config.online) return
-    if (config.online.to <= 0) return this.#logger.INFO('未设置发送账户,请注意~')
+    if (config.online.to <= 0) return this.logger.INFO('未设置发送账户,请注意~')
 
     try {
       await sendMsg({ message_type: 'private', user_id: config.online.to }, [
         Structs.text({ text: config.online.msg })
       ])
     } catch (error) {
-      this.#logger.ERROR('发送上线信息失败!')
-      this.#logger.ERROR(error)
+      this.logger.ERROR('发送上线信息失败!')
+      this.logger.ERROR(error)
     }
   }
 
@@ -90,7 +91,7 @@ export default class Bot {
     }
   }
 
-  async checkCommand(context: MessageHandler['message'], event: commandEvent, command: Command) {
+  async checkCommand(context: AllHandlers['message'], event: commandEvent, command: Command) {
     const { commandName, params, pluginName } = event
 
     // 检查命令名
@@ -99,7 +100,7 @@ export default class Bot {
       ((typeof commandName === 'string' && commandName !== command.name) ||
         (commandName instanceof RegExp && command.name.match(commandName) === null))
     ) {
-      this.#logger.DEBUG(`命令不满足插件 ${pluginName} 需求的 ${commandName} 触发条件`)
+      this.logger.DEBUG(`命令不满足插件 ${pluginName} 需求的 ${commandName} 触发条件`)
       return false
     }
 
@@ -111,8 +112,15 @@ export default class Bot {
       // 如果没给这个参数
       if (!arg) {
         if (!param.default) {
-          this.#logger.DEBUG(`参数长度不符合插件 ${pluginName} 需求的 ${commandName} 触发条件`)
-          await sendMsg(context, [Structs.text({ text: '参数长度不足~' })])
+          this.logger.DEBUG(`参数长度不符合插件 ${pluginName} 需求的 ${commandName} 触发条件`)
+          await sendMsg(context, [
+            Structs.text({
+              text: [
+                `参数长度不足~`,
+                `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
+              ].join('\n')
+            })
+          ])
           return false
         }
 
@@ -121,12 +129,28 @@ export default class Bot {
       }
 
       if (param.type === 'number' && isNaN(Number(arg))) {
-        this.#logger.DEBUG(`参数类型不符合插件 ${pluginName} 需求的 ${name} 触发条件`)
-        await sendMsg(context, [Structs.text({ text: `参数不合法~\n参数需要是数字` })])
+        this.logger.DEBUG(`参数类型不符合插件 ${pluginName} 需求的 ${commandName} 触发条件`)
+        await sendMsg(context, [
+          Structs.text({
+            text: [
+              `参数不合法~`,
+              `参数第 [${index + 1}] 位需要是数字哦`,
+              `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
+            ].join('\n')
+          })
+        ])
         return false
       } else if (param.type === 'enum' && !param.enum.includes(arg)) {
-        this.#logger.DEBUG(`参数值不在插件 ${pluginName} 需求的 ${name} 可用范围内`)
-        await sendMsg(context, [Structs.text({ text: `参数不合法~\n参数可用值:[${param.enum}]` })])
+        this.logger.DEBUG(`参数值不在插件 ${pluginName} 需求的 ${commandName} 可用范围内`)
+        await sendMsg(context, [
+          Structs.text({
+            text: [
+              `参数不合法~`,
+              `参数第 [${index + 1}] 位可用值: [${param.enum}]`,
+              `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
+            ].join('\n')
+          })
+        ])
         return false
       }
     }
@@ -143,8 +167,8 @@ export default class Bot {
     }
 
     bot.on('message', async (context) => {
-      this.#logger.DEBUG('收到消息:')
-      this.#logger.DIR(context)
+      this.logger.DEBUG('收到消息:')
+      this.logger.DIR(context)
 
       const commandEvent = events.command
 
@@ -158,16 +182,16 @@ export default class Bot {
           const canContinue = await this.checkCommand(context, commandEvent[i], command)
           if (!canContinue) continue
 
-          this.#logger.DEBUG(clc.green(`消息符合插件 ${pluginName} 的触发条件`))
+          this.logger.DEBUG(clc.green(`消息符合插件 ${pluginName} 的触发条件`))
 
           const response = await callback(context, command)
           if (response === 'quit') break
         } catch (error) {
-          this.#logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.#logger.ERROR(error)
+          this.logger.ERROR(`插件 ${pluginName} 运行出错`)
+          this.logger.ERROR(error)
 
           const stack = new Error().stack!.split('\n')
-          this.#logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
+          this.logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
         }
       }
 
@@ -180,16 +204,16 @@ export default class Bot {
           const response = await callback(context)
           if (response === 'quit') break
         } catch (error) {
-          this.#logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.#logger.ERROR(error)
-          this.#logger.ERROR(`stack信息:\n`, new Error().stack)
+          this.logger.ERROR(`插件 ${pluginName} 运行出错`)
+          this.logger.ERROR(error)
+          this.logger.ERROR(`stack信息:\n`, new Error().stack)
         }
       }
     })
 
     bot.on('notice', async (context) => {
-      this.#logger.DEBUG('收到通知:')
-      this.#logger.DIR(context)
+      this.logger.DEBUG('收到通知:')
+      this.logger.DIR(context)
 
       const noticeEvents = events.notice
 
@@ -200,16 +224,16 @@ export default class Bot {
           const response = await callback(context)
           if (response === 'quit') break
         } catch (error) {
-          this.#logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.#logger.ERROR(error)
-          this.#logger.ERROR(`stack信息:\n`, new Error().stack)
+          this.logger.ERROR(`插件 ${pluginName} 运行出错`)
+          this.logger.ERROR(error)
+          this.logger.ERROR(`stack信息:\n`, new Error().stack)
         }
       }
     })
 
     bot.on('request', async (context) => {
-      this.#logger.DEBUG('收到请求:')
-      this.#logger.DIR(context)
+      this.logger.DEBUG('收到请求:')
+      this.logger.DIR(context)
 
       const requestEvents = events.request
 
@@ -220,9 +244,9 @@ export default class Bot {
           const response = await callback(context)
           if (response === 'quit') break
         } catch (error) {
-          this.#logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.#logger.ERROR(error)
-          this.#logger.ERROR(`stack信息:\n`, new Error().stack)
+          this.logger.ERROR(`插件 ${pluginName} 运行出错`)
+          this.logger.ERROR(error)
+          this.logger.ERROR(`stack信息:\n`, new Error().stack)
         }
       }
     })
