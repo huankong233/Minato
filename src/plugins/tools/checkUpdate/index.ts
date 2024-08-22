@@ -1,9 +1,9 @@
 import { version as local_version } from '@/../package.json'
 import type { allEvents } from '@/global.js'
+import axios from '@/libs/axios.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { BasePlugin } from '@/plugins/base.ts'
 import { config as botConfig } from '@/plugins/builtIn/bot/config.ts'
-import axios from 'axios'
 import { compare } from 'compare-versions'
 import cron from 'node-cron'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
@@ -15,8 +15,8 @@ export default class CheckUpdate extends BasePlugin {
   events: allEvents[] = [
     {
       type: 'command',
-      commandName: 'checkUpdate',
-      description: '检查并推送kkbot的更新信息',
+      commandName: '检查更新',
+      description: '检查更新',
       callback: this.checkUpdate.bind(this)
     }
   ]
