@@ -18,7 +18,7 @@ export const getLiveRoomInfo = async (id: string, logger: Logger) => {
 
     const { code, message, data } = response.data
 
-    if (code !== 0) return [Structs.text({ text: `Error: (${code})${message}` })]
+    if (code !== 0) return [Structs.text(`Error: (${code})${message}`)]
 
     const {
       room_info: {
@@ -37,9 +37,9 @@ export const getLiveRoomInfo = async (id: string, logger: Logger) => {
     } = data
 
     return [
-      Structs.image({ file: keyframe }),
-      Structs.text({
-        text: [
+      Structs.image(keyframe),
+      Structs.text(
+        [
           title,
           `主播: ${uname}`,
           `房间号: ${room_id}${short_id ? `  短号: ${short_id}` : ''}`,
@@ -47,12 +47,12 @@ export const getLiveRoomInfo = async (id: string, logger: Logger) => {
           live_status ? `直播中  ${humanNum(online)}人气` : '未开播',
           `https://live.bilibili.com/${short_id || room_id}`
         ].join('\n')
-      })
+      )
     ]
   } catch (error) {
     logger.ERROR(`B站直播信息获取失败`)
     logger.DIR({ id }, false, false)
     logger.DIR(error, false, false)
-    return [Structs.text({ text: '直播信息获取失败~' })]
+    return [Structs.text('直播信息获取失败~')]
   }
 }

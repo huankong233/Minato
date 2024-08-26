@@ -92,3 +92,14 @@ export interface PigeonHistory {
   reason: string
   created_at: Date
 }
+
+export interface Corpus {
+  id: number
+  user_id: number
+  keyword: string
+  reply: string
+  mode: '模糊' | '精准'
+  scene: '全部' | '私聊' | '群聊'
+  created_at: Date
+  deleted_at: Date | null
+}

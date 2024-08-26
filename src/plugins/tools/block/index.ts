@@ -12,17 +12,22 @@ export default class Block extends BasePlugin {
       description: '检查封禁状态',
       hide: true,
       callback: this.checkBan.bind(this),
-      priority: 102
+      priority: 999
+    },
+    {
+      type: 'message',
+      callback: this.checkBan.bind(this),
+      priority: 999
     },
     {
       type: 'notice',
       callback: this.checkBan.bind(this),
-      priority: 102
+      priority: 999
     },
     {
       type: 'request',
       callback: this.checkBan.bind(this),
-      priority: 102
+      priority: 999
     }
   ]
 
@@ -77,7 +82,7 @@ export default class Block extends BasePlugin {
             (typeof found !== 'number' ? found.reply : undefined) ??
             rules.defaultReply ??
             config.defaultReply
-          if (message !== '') await sendMsg(context, [Structs.text({ text: message })])
+          if (message !== '') await sendMsg(context, [Structs.text(message)])
         }
         return 'quit'
       }
@@ -95,7 +100,7 @@ export default class Block extends BasePlugin {
             (typeof found !== 'number' ? found.reply : undefined) ??
             rules.defaultReply ??
             config.defaultReply
-          if (message !== '') await sendMsg(context, [Structs.text({ text: message })])
+          if (message !== '') await sendMsg(context, [Structs.text(message)])
         }
         return 'quit'
       }

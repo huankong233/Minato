@@ -22,13 +22,13 @@ export default class Gugu extends BasePlugin {
     if (!userData) {
       await knex<Pigeon>('pigeons').insert({ user_id: context.user_id })
       await pigeonTool.add(context, config.newUserAdd, '首次咕咕')
-      await sendMsg(context, [Structs.text({ text: `首次咕咕~赠送${config.newUserAdd}只鸽子~` })])
+      await sendMsg(context, [Structs.text(`首次咕咕~赠送${config.newUserAdd}只鸽子~`)])
       await this._gugu(context)
       return
     }
 
     if (!isBeforeToday(userData.updated_at.getTime())) {
-      await sendMsg(context, [Structs.text({ text: '咕咕失败~今天已经咕咕过了哦~' })])
+      await sendMsg(context, [Structs.text('咕咕失败~今天已经咕咕过了哦~')])
       return
     }
 
@@ -39,6 +39,6 @@ export default class Gugu extends BasePlugin {
     //获得的鸽子数
     const addon = randomInt(1, config.oldUserAdd)
     await pigeonTool.add(context, addon, '每日咕咕')
-    await sendMsg(context, [Structs.text({ text: `咕咕成功~获得${addon}只鸽子~` })])
+    await sendMsg(context, [Structs.text(`咕咕成功~获得${addon}只鸽子~`)])
   }
 }

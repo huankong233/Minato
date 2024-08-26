@@ -15,7 +15,7 @@ export const getArticleInfo = async (id: string, logger: Logger) => {
 
     const { code, message, data } = response.data
 
-    if (code !== 0) return [Structs.text({ text: `Error: (${code})${message}` })]
+    if (code !== 0) return [Structs.text(`Error: (${code})${message}`)]
 
     const {
       stats: { view, reply },
@@ -25,20 +25,20 @@ export const getArticleInfo = async (id: string, logger: Logger) => {
     } = data
 
     return [
-      Structs.image({ file: img }),
-      Structs.text({
-        text: [
+      Structs.image(img),
+      Structs.text(
+        [
           title,
           `UP: ${author_name}`,
           `${humanNum(view)}阅读 ${humanNum(reply)}评论`,
           `https://www.bilibili.com/read/cv${id}`
         ].join('\n')
-      })
+      )
     ]
   } catch (error) {
     logger.ERROR(`B站文章信息获取失败`)
     logger.DIR({ id }, false, false)
     logger.DIR(error, false, false)
-    return [Structs.text({ text: '文章信息获取失败~' })]
+    return [Structs.text('文章信息获取失败~')]
   }
 }

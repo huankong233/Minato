@@ -47,11 +47,11 @@ export default class Admin extends BasePlugin {
         await bot.set_group_add_request({ approve, flag })
       }
 
-      if (context) await sendMsg(context, [Structs.text({ text: '操作成功~' })])
+      if (context) await sendMsg(context, [Structs.text('操作成功~')])
     } catch (error) {
       this.logger.ERROR('操作失败', error)
       await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [
-        Structs.text({ text: '操作失败' })
+        Structs.text('操作失败')
       ])
     }
   }
@@ -64,12 +64,11 @@ export default class Admin extends BasePlugin {
       if (user_id === self_id) return
 
       await sendMsg({ message_type: 'group', group_id }, [
-        Structs.text({
-          text:
-            notice_type === 'group_increase'
-              ? `${await getUserName(user_id)} 欢迎加群呀~ ヾ(≧▽≦*)o`
-              : `${await getUserName(user_id)} 退群了 (*>.<*)`
-        })
+        Structs.text(
+          notice_type === 'group_increase'
+            ? `${await getUserName(user_id)} 欢迎加群呀~ ヾ(≧▽≦*)o`
+            : `${await getUserName(user_id)} 退群了 (*>.<*)`
+        )
       ])
     }
   }
@@ -128,7 +127,7 @@ export default class Admin extends BasePlugin {
     }
 
     await sendMsg({ message_type: 'private', user_id: botConfig.admin_id }, [
-      Structs.text({ text: text.join('\n') })
+      Structs.text(text.join('\n'))
     ])
   }
 }

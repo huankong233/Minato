@@ -1,5 +1,5 @@
 /**
- * 部分代码借鉴于:https://github.com/Tsuk1ko/cq-picsearcher-bot
+ * 代码借鉴于:https://github.com/Tsuk1ko/cq-picsearcher-bot
  */
 
 import type { allEvents } from '@/global.js'
@@ -58,9 +58,7 @@ export default class Bilibili extends BasePlugin {
         }
       }
       if (config.despise) {
-        await sendMsg(context, [
-          Structs.image({ file: 'https://i.loli.net/2020/04/27/HegAkGhcr6lbPXv.png' })
-        ])
+        await sendMsg(context, [Structs.image('https://i.loli.net/2020/04/27/HegAkGhcr6lbPXv.png')])
       }
     }
 

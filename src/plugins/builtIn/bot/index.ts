@@ -67,7 +67,7 @@ export default class Bot extends BasePlugin {
 
     try {
       await sendMsg({ message_type: 'private', user_id: config.online.to }, [
-        Structs.text({ text: config.online.msg })
+        Structs.text(config.online.msg)
       ])
     } catch (error) {
       this.logger.ERROR('发送上线信息失败!')
@@ -114,12 +114,12 @@ export default class Bot extends BasePlugin {
         if (!param.default) {
           this.logger.DEBUG(`参数长度不符合插件 ${pluginName} 需求的 ${commandName} 触发条件`)
           await sendMsg(context, [
-            Structs.text({
-              text: [
+            Structs.text(
+              [
                 `参数长度不足~`,
                 `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
               ].join('\n')
-            })
+            )
           ])
           return false
         }
@@ -131,25 +131,25 @@ export default class Bot extends BasePlugin {
       if (param.type === 'number' && isNaN(Number(arg))) {
         this.logger.DEBUG(`参数类型不符合插件 ${pluginName} 需求的 ${commandName} 触发条件`)
         await sendMsg(context, [
-          Structs.text({
-            text: [
+          Structs.text(
+            [
               `参数不合法~`,
               `参数第 [${index + 1}] 位需要是数字哦`,
               `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
             ].join('\n')
-          })
+          )
         ])
         return false
       } else if (param.type === 'enum' && !param.enum.includes(arg)) {
         this.logger.DEBUG(`参数值不在插件 ${pluginName} 需求的 ${commandName} 可用范围内`)
         await sendMsg(context, [
-          Structs.text({
-            text: [
+          Structs.text(
+            [
               `参数不合法~`,
               `参数第 [${index + 1}] 位可用值: [${param.enum}]`,
               `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
             ].join('\n')
-          })
+          )
         ])
         return false
       }
@@ -170,43 +170,54 @@ export default class Bot extends BasePlugin {
       this.logger.DEBUG('收到消息:')
       this.logger.DIR(context)
 
-      const commandEvent = events.command
-
-      for (let i = 0; i < commandEvent.length; i++) {
-        const { callback, pluginName } = commandEvent[i]
-
-        try {
-          const command = Bot.parseMessage(context.raw_message)
-          if (!command) continue
-
-          const canContinue = await this.checkCommand(context, commandEvent[i], command)
-          if (!canContinue) continue
-
-          this.logger.DEBUG(clc.green(`消息符合插件 ${pluginName} 的触发条件`))
-
-          const response = await callback(context, command)
-          if (response === 'quit') break
-        } catch (error) {
-          this.logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.logger.ERROR(error)
-
-          const stack = new Error().stack!.split('\n')
-          this.logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
-        }
-      }
-
       const messageEvents = events.message
 
       for (let i = 0; i < messageEvents.length; i++) {
         const { callback, pluginName } = messageEvents[i]
 
         try {
+          this.logger.DEBUG(`插件 ${pluginName} 处理中`)
           const response = await callback(context)
-          if (response === 'quit') break
+          if (response === 'quit') {
+            this.logger.DEBUG(clc.red(`插件${pluginName} 申请终止继续触发其他插件`))
+            return
+          }
         } catch (error) {
           this.logger.ERROR(`插件 ${pluginName} 运行出错`)
           this.logger.ERROR(error)
-          this.logger.ERROR(`stack信息:\n`, new Error().stack)
+          this.logger.DEBUG(`stack信息:\n${new Error().stack}`)
+        }
+      }
+
+      const commandEvent = events.command
+
+      for (let i = 0; i < commandEvent.length; i++) {
+        const { callback, pluginName } = commandEvent[i]
+
+        try {
+          this.logger.DEBUG(`插件 ${pluginName} 处理中`)
+
+          const command = Bot.parseMessage(context.raw_message)
+          if (!command) continue
+
+          const canContinue = await this.checkCommand(context, commandEvent[i], command)
+          if (!canContinue) continue
+
+          this.logger.DEBUG(
+            clc.green(`消息符合插件 ${pluginName} 需求的 ${commandEvent[i].commandName} 的触发条件`)
+          )
+
+          const response = await callback(context, command)
+          if (response === 'quit') {
+            this.logger.DEBUG(clc.red(`插件${pluginName} 申请终止继续触发其他插件`))
+            break
+          }
+        } catch (error) {
+          this.logger.ERROR(`插件 ${pluginName} 运行出错`)
+          this.logger.ERROR(error)
+
+          const stack = new Error().stack!.split('\n')
+          this.logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
         }
       }
     })
@@ -221,8 +232,12 @@ export default class Bot extends BasePlugin {
         const { callback, pluginName } = noticeEvents[i]
 
         try {
+          this.logger.DEBUG(`插件 ${pluginName} 处理中`)
           const response = await callback(context)
-          if (response === 'quit') break
+          if (response === 'quit') {
+            this.logger.DEBUG(clc.red(`插件${pluginName} 申请终止继续触发其他插件`))
+            break
+          }
         } catch (error) {
           this.logger.ERROR(`插件 ${pluginName} 运行出错`)
           this.logger.ERROR(error)
@@ -241,8 +256,12 @@ export default class Bot extends BasePlugin {
         const { callback, pluginName } = requestEvents[i]
 
         try {
+          this.logger.DEBUG(`插件 ${pluginName} 处理中`)
           const response = await callback(context)
-          if (response === 'quit') break
+          if (response === 'quit') {
+            this.logger.DEBUG(clc.red(`插件${pluginName} 申请终止继续触发其他插件`))
+            break
+          }
         } catch (error) {
           this.logger.ERROR(`插件 ${pluginName} 运行出错`)
           this.logger.ERROR(error)

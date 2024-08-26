@@ -21,8 +21,12 @@ export async function sendMsg(
       case 'group':
         //回复群
         const { group_id } = context
-        if (reply && context.message_id) message.unshift(Structs.reply({ id: context.message_id }))
-        if (at && context.user_id) message.unshift(Structs.at({ qq: context.user_id }))
+        if (reply && context.message_id) {
+          message.unshift(Structs.reply(context.message_id.toString()))
+        }
+        if (at && context.user_id) {
+          message.unshift(Structs.at(context.user_id.toString()))
+        }
         response = await bot.send_group_msg({ group_id, message })
         break
     }

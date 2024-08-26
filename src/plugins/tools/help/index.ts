@@ -28,26 +28,24 @@ export default class Help extends BasePlugin {
 
     if (commandName === 'all') {
       await sendMsg(context, [
-        Structs.text({
-          text: '可用命令: ' + this.commands.map((command) => command.commandName).join(', ')
-        })
+        Structs.text('可用命令: ' + this.commands.map((command) => command.commandName).join(', '))
       ])
       return
     }
 
     const found = this.commands.find((command) => command.commandName === commandName)
     if (!found) {
-      await sendMsg(context, [Structs.text({ text: '找不到命令: ' + commandName })])
+      await sendMsg(context, [Structs.text('找不到命令: ' + commandName)])
       return
     }
 
     await sendMsg(context, [
-      Structs.text({
-        text: [
+      Structs.text(
+        [
           `命令参数格式(括号必选 中括号可选):`,
           `${botConfig.command_prefix}${found.description}`
         ].join('\n')
-      })
+      )
     ])
   }
 }

@@ -17,7 +17,7 @@ export default class Mute extends BasePlugin {
 
   async mute(context: AllHandlers['message']) {
     if (context.message_type === 'private') {
-      await sendMsg(context, [Structs.text({ text: '爬爬爬，私聊来找茬是吧' })])
+      await sendMsg(context, [Structs.text('爬爬爬，私聊来找茬是吧')])
       return
     }
 
@@ -27,17 +27,13 @@ export default class Mute extends BasePlugin {
     const selfInfo = await bot.get_group_member_info({ group_id, user_id: context.self_id })
 
     if (selfInfo.role !== 'admin' && selfInfo.role !== 'owner') {
-      await sendMsg(context, [
-        Structs.text({ text: [`(｀д′)管理！快给我上管理！(大声)`].join('\n') })
-      ])
+      await sendMsg(context, [Structs.text([`(｀д′)管理！快给我上管理！(大声)`].join('\n'))])
       return
     }
 
     if (userInfo.role !== 'member') {
       await sendMsg(context, [
-        Structs.text({
-          text: `╭(╯^╰)╮ 快来人给他把${userInfo.role === 'admin' ? '管理员' : '群主'}下了！！`
-        })
+        Structs.text(`╭(╯^╰)╮ 快来人给他把${userInfo.role === 'admin' ? '管理员' : '群主'}下了！！`)
       ])
       return
     }
@@ -51,14 +47,10 @@ export default class Mute extends BasePlugin {
         duration: muteTime
       })
       .then(async () => {
-        await sendMsg(context, [
-          Structs.text({
-            text: '还鸽不鸽了(•ิ_•ิ)'
-          })
-        ])
+        await sendMsg(context, [Structs.text('还鸽不鸽了(•ิ_•ิ)')])
       })
       .catch(async () => {
-        await sendMsg(context, [Structs.text({ text: '禁言失败~(￣^￣)' })])
+        await sendMsg(context, [Structs.text('禁言失败~(￣^￣)')])
       })
   }
 }

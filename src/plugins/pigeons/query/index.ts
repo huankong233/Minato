@@ -37,18 +37,12 @@ export default class Query extends BasePlugin {
     const username = await getUserName(user_id)
     const userData = await knex<Pigeon>('pigeons').where({ user_id }).first()
     if (!userData) {
-      await sendMsg(context, [
-        Structs.text({
-          text: `用户 ${username}(${user_id}) 咱不认识哦~`
-        })
-      ])
+      await sendMsg(context, [Structs.text(`用户 ${username}(${user_id}) 咱不认识哦~`)])
       return
     }
 
     await sendMsg(context, [
-      Structs.text({
-        text: `用户 ${username}(${user_id}) 有 ${userData.pigeon_num} 只鸽子`
-      })
+      Structs.text(`用户 ${username}(${user_id}) 有 ${userData.pigeon_num} 只鸽子`)
     ])
   }
 
@@ -56,7 +50,7 @@ export default class Query extends BasePlugin {
     const order = command.args[0]
     const pigeons = await knex<Pigeon>('pigeons').orderBy('pigeon_num', order).limit(10)
     if (pigeons.length === 0) {
-      await sendMsg(context, [Structs.text({ text: '还没有用户哦~' })])
+      await sendMsg(context, [Structs.text('还没有用户哦~')])
     } else {
       const board = ['排行榜:']
 
@@ -66,7 +60,7 @@ export default class Query extends BasePlugin {
         board.push(`第${pos}名 名字:${username} 拥有 ${item.pigeon_num} 只鸽子`)
       }
 
-      await sendMsg(context, [Structs.text({ text: board.join('\n') })])
+      await sendMsg(context, [Structs.text(board.join('\n'))])
     }
   }
 }
