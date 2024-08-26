@@ -23,7 +23,7 @@ export default class Gugu extends BasePlugin {
       await knex<Pigeon>('pigeons').insert({ user_id: context.user_id })
       await pigeonTool.add(context, config.newUserAdd, '首次咕咕')
       await sendMsg(context, [Structs.text(`首次咕咕~赠送${config.newUserAdd}只鸽子~`)])
-      await this._gugu(context)
+      await Gugu._gugu(context)
       return
     }
 
@@ -32,7 +32,7 @@ export default class Gugu extends BasePlugin {
       return
     }
 
-    await this._gugu(context)
+    await Gugu._gugu(context)
   }
 
   private static async _gugu(context: AllHandlers['message']) {

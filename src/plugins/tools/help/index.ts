@@ -16,24 +16,21 @@ export default class Help extends BasePlugin {
   ]
 
   // 加载所有命令到缓存
-  commands: commandEvent[] = events.command
-    .filter((command) => !(command.hide ?? false))
-    .map((command) => {
-      command.commandName = command.commandName.toString()
-      return command
-    })
+  commands: commandEvent[] = events.command.filter((command) => !(command.hide ?? false))
 
   async message(context: AllHandlers['message'], command: Command) {
     const commandName = command.args[0]
 
     if (commandName === 'all') {
       await sendMsg(context, [
-        Structs.text('可用命令: ' + this.commands.map((command) => command.commandName).join(', '))
+        Structs.text(
+          '可用命令: ' + this.commands.map((command) => command.commandName.toString()).join(', ')
+        )
       ])
       return
     }
 
-    const found = this.commands.find((command) => command.commandName === commandName)
+    const found = this.commands.find((command) => command.commandName.toString() === commandName)
     if (!found) {
       await sendMsg(context, [Structs.text('找不到命令: ' + commandName)])
       return

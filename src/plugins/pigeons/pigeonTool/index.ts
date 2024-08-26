@@ -4,12 +4,16 @@ import Gugu from '@/plugins/pigeons/gugu/index.ts'
 import { type AllHandlers } from 'node-napcat-ts'
 
 export default class PigeonTool extends BasePlugin {
-  static async getUserData(context: AllHandlers['message']) {
+  static async getUserData(context: AllHandlers['message'], makeNew = true) {
     const { user_id } = context
     const user = await knex<Pigeon>('pigeons').where({ user_id }).first()
-    if (user) return user
-    await Gugu.gugu(context)
-    return (await knex<Pigeon>('pigeons').where({ user_id }).first()) as Pigeon
+    if (makeNew) {
+      if (user) return user
+      await Gugu.gugu(context)
+      return (await knex<Pigeon>('pigeons').where({ user_id }).first()) as Pigeon
+    } else {
+      return user
+    }
   }
 
   static async add(context: AllHandlers['message'], operation: number, reason: string) {
@@ -26,7 +30,7 @@ export default class PigeonTool extends BasePlugin {
 
   static async operatePigeon(context: AllHandlers['message'], operation: number, reason: string) {
     const { user_id } = context
-    const userData = await this.getUserData(context)
+    const userData = (await this.getUserData(context)) as Pigeon
     const { pigeon_num: origin_pigeon } = userData
     const new_pigeon = origin_pigeon + operation
     await knex<Pigeon>('pigeons').where({ user_id }).update({ pigeon_num: new_pigeon })
