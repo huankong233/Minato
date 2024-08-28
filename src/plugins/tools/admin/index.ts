@@ -57,6 +57,8 @@ export default class Admin extends BasePlugin {
   }
 
   async notice(context: AllHandlers['notice']) {
+    if (!config.notice) return
+
     const { notice_type } = context
 
     if (notice_type === 'group_increase' || notice_type === 'group_decrease') {

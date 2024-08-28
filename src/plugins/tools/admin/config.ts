@@ -15,6 +15,7 @@ export interface AdminConfig {
     message: boolean
     auto: 'accept' | 'reject' | ''
   }
+  notice: boolean
 }
 
 export const config: AdminConfig = {
@@ -29,5 +30,6 @@ export const config: AdminConfig = {
   friend: {
     message: true,
     auto: 'accept'
-  }
+  },
+  notice: true
 }

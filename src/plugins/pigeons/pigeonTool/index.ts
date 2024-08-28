@@ -33,6 +33,7 @@ export default class PigeonTool extends BasePlugin {
     const userData = (await this.getUserData(context)) as Pigeon
     const { pigeon_num: origin_pigeon } = userData
     const new_pigeon = origin_pigeon + operation
+    if (new_pigeon < 0) return false
     await knex<Pigeon>('pigeons').where({ user_id }).update({ pigeon_num: new_pigeon })
 
     await knex<PigeonHistory>('pigeon_histories').insert({

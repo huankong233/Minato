@@ -16,3 +16,22 @@ export function sortObjectArray<T extends { [key: string]: any }>(
     return 0
   })
 }
+
+/**
+ * 同时循环两个数组
+ * @param iter1
+ * @param iter2
+ */
+export function* zip<T, U>(iter1: Array<T>, iter2: Array<U>): Generator<[number, T, U]> {
+  const iterator1 = iter1.entries()
+  const iterator2 = iter2.entries()
+
+  while (true) {
+    const next1 = iterator1.next()
+    const next2 = iterator2.next()
+
+    if (next1.done || next2.done) break
+
+    yield [next1.value[0], next1.value[1], next2.value[1]]
+  }
+}

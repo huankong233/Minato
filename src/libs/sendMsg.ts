@@ -1,4 +1,4 @@
-import { Structs, type Send } from 'node-napcat-ts'
+import { Structs, type Receive, type Send } from 'node-napcat-ts'
 import { makeSystemLogger } from './logger.ts'
 
 const logger = makeSystemLogger({ pluginName: 'sendMsg' })
@@ -7,9 +7,14 @@ export async function sendMsg(
   context:
     | { message_type: 'private'; user_id: number; message_id?: number }
     | { message_type: 'group'; group_id: number; user_id?: number; message_id?: number },
-  message: Send[keyof Send][],
+  msg: Send[keyof Send][] | Receive[keyof Receive][],
   { reply = true, at = false } = {}
 ) {
+  // 过滤 received message
+  const message = msg.filter(
+    (message) => !['markdown', 'forward'].includes(message.type)
+  ) as Send[keyof Send][]
+
   let response
   try {
     switch (context.message_type) {
@@ -22,10 +27,10 @@ export async function sendMsg(
         //回复群
         const { group_id } = context
         if (reply && context.message_id) {
-          message.unshift(Structs.reply(context.message_id.toString()))
+          message.unshift(Structs.reply(context.message_id))
         }
         if (at && context.user_id) {
-          message.unshift(Structs.at(context.user_id.toString()))
+          message.unshift(Structs.at(context.user_id))
         }
         response = await bot.send_group_msg({ group_id, message })
         break

@@ -2,9 +2,10 @@ import type { allEvents, Command, Corpus } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { BasePlugin } from '@/plugins/base.ts'
 import { config as BotConfig } from '@/plugins/builtIn/bot/config.ts'
+import PigeonTool from '@/plugins/pigeons/pigeonTool/index.ts'
 import { Structs, type AllHandlers, type Receive } from 'node-napcat-ts'
 import { parse } from 'path'
-import type { forget, learn, rule } from './config.ts'
+import { config, type forget, type learn, type rule } from './config.ts'
 
 export default class CorpusPlugin extends BasePlugin {
   events: allEvents[] = [
@@ -225,8 +226,14 @@ export default class CorpusPlugin extends BasePlugin {
   }
 
   async learn(context: AllHandlers['message'], command: Command) {
-    const [mode, scene] = command.args
+    const res = await PigeonTool.reduce(context, config.add, '空空学习')
+    if (!res) {
+      await sendMsg(context, [Structs.text('鸽子不足~')])
+      return
+    }
+
     if (this.learners[context.user_id]) return
+    const [mode, scene] = command.args
     this.learners[context.user_id] = { context, mode, scene, step: 1 } as learn
     await sendMsg(context, [Structs.text('请输入关键词\n回复 退出 来退出学习')])
   }
@@ -241,13 +248,20 @@ export default class CorpusPlugin extends BasePlugin {
       keyword,
       reply,
       scene,
-      mode
+      mode,
+      deleted_at: null
     })
     await sendMsg(context, [Structs.text('插入成功~')])
     await this.loadRules()
   }
 
   async forget(context: AllHandlers['message'], _command: Command) {
+    const res = await PigeonTool.reduce(context, config.add, '空空忘记')
+    if (!res) {
+      await sendMsg(context, [Structs.text('鸽子不足~')])
+      return
+    }
+
     if (this.forgeters[context.user_id]) return
     this.forgeters[context.user_id] = { step: 1 } as forget
     await sendMsg(context, [Structs.text('请输入关键词\n回复 退出 来退出忘记')])
