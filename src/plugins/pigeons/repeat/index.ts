@@ -47,14 +47,12 @@ export default class Repeat extends BasePlugin {
         // 如果有类型不一致退出
         if (contextMessage.type !== repeatMessage.type) {
           isSame = false
-          console.log('type')
           break
         }
 
         // 判断图片名称
         if (contextMessage.type === 'image' && repeatMessage.type === 'image') {
           if (parse(contextMessage.data.file).name !== parse(repeatMessage.data.file).name) {
-            console.log('image', contextMessage, repeatMessage)
             isSame = false
             break
           } else {
