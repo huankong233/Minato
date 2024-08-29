@@ -12,7 +12,7 @@ export default class Gugu extends BasePlugin {
     {
       type: 'command',
       description: '咕咕咕',
-      commandName: /咕咕咕/,
+      commandName: /咕咕/,
       callback: Gugu.gugu.bind(this)
     }
   ]

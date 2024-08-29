@@ -64,7 +64,6 @@ export default class Repeat extends BasePlugin {
 
         // 直接比对
         if (!deepEqual(contextMessage, repeatMessage)) {
-          console.log('equal')
           isSame = false
           break
         }
