@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@huan_kong/node-global-proxy": "1.0.2",
-    "axios": "^1.7.5",
+    "axios": "^1.7.7",
     "cli-color": "^2.0.4",
     "commander": "^12.1.0",
     "compare-versions": "^6.1.1",
@@ -29,14 +29,14 @@
     "mime-types": "^2.1.35",
     "mysql2": "^3.11.0",
     "node-cron": "^3.0.3",
-    "node-napcat-ts": "^0.2.6",
-    "tsx": "^4.18.0"
+    "node-napcat-ts": "^0.2.8",
+    "tsx": "^4.19.0"
   },
   "devDependencies": {
     "@types/cli-color": "^2.0.6",
     "@types/fs-extra": "^11.0.4",
     "@types/mime-types": "^2.1.4",
-    "@types/node": "^22.5.0",
+    "@types/node": "^22.5.1",
     "@types/node-cron": "^3.0.11",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",

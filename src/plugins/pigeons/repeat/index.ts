@@ -75,7 +75,7 @@ export default class Repeat extends BasePlugin {
     }
 
     this.repeat[group_id].user_ids.push(user_id)
-    if (this.repeat[group_id].user_ids.length >= config.count) {
+    if (this.repeat[group_id].user_ids.length === config.count) {
       await sendMsg(context, this.repeat[group_id].message, { reply: false, at: false })
     }
   }
