@@ -134,6 +134,7 @@ export default class CorpusPlugin extends BasePlugin {
     if (isLearn) {
       if (isQuit) {
         delete this.learners[context.user_id]
+        await PigeonTool.add(context, config.add, '退出学习')
         await sendMsg(context, [Structs.text('学习已退出~')])
         return
       }
@@ -168,8 +169,9 @@ export default class CorpusPlugin extends BasePlugin {
         if (oper) {
           await this.addRule(isLearn)
         } else {
-          await sendMsg(context, [Structs.text('已取消插入')])
           delete this.learners[context.user_id]
+          await PigeonTool.add(context, config.add, '退出学习')
+          await sendMsg(context, [Structs.text('已取消插入')])
         }
       }
 
@@ -178,6 +180,7 @@ export default class CorpusPlugin extends BasePlugin {
     } else if (isForget) {
       if (isQuit) {
         delete this.forgeters[context.user_id]
+        await PigeonTool.add(context, config.delete, '退出忘记')
         await sendMsg(context, [Structs.text('忘记已退出~')])
         return
       }
@@ -215,8 +218,9 @@ export default class CorpusPlugin extends BasePlugin {
         if (oper) {
           await this.removeRule(isForget)
         } else {
-          await sendMsg(context, [Structs.text('已取消忘记')])
           delete this.forgeters[context.user_id]
+          await PigeonTool.add(context, config.delete, '取消忘记')
+          await sendMsg(context, [Structs.text('已取消忘记')])
         }
       }
 
