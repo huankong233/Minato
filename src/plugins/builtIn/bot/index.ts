@@ -159,6 +159,9 @@ export default class Bot extends BasePlugin {
   }
 
   initEvents() {
+    // 防止重连重新注册所有事件
+    if (global.events) return
+
     global.events = {
       command: [],
       message: [],
