@@ -20,7 +20,7 @@ const opts = new Command()
   .opts()
 
 // 修改时区
-process.env.TZ = opts.TZ
+process.env.TZ = opts.timezone
 
 // 是否启用DEBUG模式
 global.debug = opts.debug
