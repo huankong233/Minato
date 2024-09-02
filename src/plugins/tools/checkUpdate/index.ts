@@ -1,11 +1,11 @@
 import { version as local_version } from '@/../package.json'
 import type { allEvents } from '@/global.js'
 import axios from '@/libs/axios.ts'
+import { cron } from '@/libs/cron.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { BasePlugin } from '@/plugins/base.ts'
 import { config as botConfig } from '@/plugins/builtIn/bot/config.ts'
 import { compare } from 'compare-versions'
-import cron from 'node-cron'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 
@@ -21,7 +21,7 @@ export default class CheckUpdate extends BasePlugin {
     }
   ]
 
-  init = () => cron.schedule(config.cron, () => this.checkUpdate())
+  init = () => cron(config.cron, () => this.checkUpdate())
 
   async checkUpdate(context?: AllHandlers['message']) {
     let remote_version = ''

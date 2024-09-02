@@ -1,8 +1,8 @@
 import type { allEvents, Command } from '@/global.js'
+import { cron } from '@/libs/cron.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { sleep } from '@/libs/sleep.ts'
 import { BasePlugin } from '@/plugins/base.ts'
-import cron from 'node-cron'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 import { getGoldPrice } from './request.ts'
@@ -29,7 +29,7 @@ export default class Gold extends BasePlugin {
     }
   ]
 
-  init = () => cron.schedule(config.cron, () => this.checkGoldPrice())
+  init = () => cron(config.cron, () => this.checkGoldPrice())
 
   async checkGoldPrice(isCron = true, context?: AllHandlers['message'], command?: Command) {
     let action = '获取价格'
