@@ -1,6 +1,6 @@
 {
   "name": "kkbot-ts",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "repository": "https://github.com/huankong233/kkbot-ts",
   "description": "kkbot in typescript",
   "type": "module",

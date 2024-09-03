@@ -29,7 +29,7 @@ export default class Gold extends BasePlugin {
     }
   ]
 
-  init = () => cron(config.cron, () => this.checkGoldPrice())
+  init = () => cron(config.cron, this.checkGoldPrice)
 
   async checkGoldPrice(isCron = true, context?: AllHandlers['message'], command?: Command) {
     let action = '获取价格'

@@ -21,11 +21,12 @@ export default class Bot extends BasePlugin {
           this.logger.DEBUG('收到API成功响应')
           this.logger.DIR(context)
         })
-        bot.on('api.response.failure', (context) => {
-          this.logger.DEBUG('收到API失败响应')
-          this.logger.DIR(context)
-        })
       }
+
+      bot.on('api.response.failure', (context) => {
+        this.logger.DEBUG('收到API失败响应')
+        this.logger.DIR(context)
+      })
 
       bot.on('socket.connecting', (context) => {
         this.logger.INFO(
