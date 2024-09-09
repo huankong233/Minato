@@ -6,7 +6,7 @@ import type { allEvents } from '@/global.js'
 import axios from '@/libs/axios.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { BasePlugin } from '@/plugins/base.ts'
-import { Structs, type AllHandlers } from 'node-napcat-ts'
+import { type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 import { getArticleInfo } from './libs/article.ts'
 import { getDynamicInfo } from './libs/dynamic.ts'
@@ -14,7 +14,6 @@ import { getLiveRoomInfo } from './libs/live.ts'
 import { getVideoInfo } from './libs/video.ts'
 
 export const enable =
-  config.despise ||
   config.recallMiniProgram ||
   config.getInfo.getVideoInfo ||
   config.getInfo.getDynamicInfo ||
@@ -44,6 +43,11 @@ export default class Bilibili extends BasePlugin {
     }
 
     if (!url) return
+
+    const param = await this.getIdFromMsg(url)
+    const { avid, bvid, dyid, arid, lrid } = param
+    if (!avid && !bvid && !arid && !dyid && !lrid) return
+
     if (isMiniProgram) {
       if (context.message_type === 'group' && config.recallMiniProgram) {
         const userInfo = await bot.get_group_member_info({
@@ -57,14 +61,7 @@ export default class Bilibili extends BasePlugin {
           await bot.delete_msg({ message_id: context.message_id })
         }
       }
-      if (config.despise) {
-        await sendMsg(context, [Structs.image('https://i.loli.net/2020/04/27/HegAkGhcr6lbPXv.png')])
-      }
     }
-
-    const param = await this.getIdFromMsg(url)
-    const { avid, bvid, dyid, arid, lrid } = param
-    if (!avid && !bvid && !arid && !dyid && !lrid) return
 
     if (config.getInfo.getVideoInfo && (avid || bvid)) {
       const res = await getVideoInfo({ aid: avid, bvid }, this.logger)

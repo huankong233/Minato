@@ -68,8 +68,8 @@ export default class Admin extends BasePlugin {
       await sendMsg({ message_type: 'group', group_id }, [
         Structs.text(
           notice_type === 'group_increase'
-            ? `${await getUserName(user_id)} 欢迎加群呀~ ヾ(≧▽≦*)o`
-            : `${await getUserName(user_id)} 退群了 (*>.<*)`
+            ? `${await getUserName(context)} 欢迎加群呀~ ヾ(≧▽≦*)o`
+            : `${await getUserName(context)} 退群了 (*>.<*)`
         )
       ])
     }
@@ -106,7 +106,7 @@ export default class Admin extends BasePlugin {
     const { request_type, flag, user_id, comment, time } = context
 
     const text = []
-    text.push(`用户: ${await getUserName(user_id)}(${user_id})`)
+    text.push(`用户: ${await getUserName(context)}(${user_id})`)
 
     if (request_type === 'group') {
       text.push(`${context.sub_type === 'invite' ? '邀请加群' : '申请加群'}: ${context.group_id}`)

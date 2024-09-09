@@ -1,6 +1,10 @@
-# 🤖 空空 bot
+<img src="飞鸟凑.webp" align="right" height="700">
 
-这只是一个简单的 QQ 框架和简单的实现
+# 🤖 Minato
+
+简单的机器人框架
+
+取名来自 [飞鸟凑(Asuka Minato)](https://mzh.moegirl.org.cn/%E9%A3%9E%E9%B8%9F%E5%87%91) ~~可爱的男孩子~~ 中的一部分
 
 ## 🎉 [更新日志](./CHANGELOG.md)
 

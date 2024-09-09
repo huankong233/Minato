@@ -1,6 +1,4 @@
 export interface BilibiliConfig {
-  // 检测到小程序时是否鄙视
-  despise: boolean
   // 当小程序分享解析成功时是否撤回该小程序，仅在群组内且有管理员权限且发送者是普通成员时有效
   recallMiniProgram: boolean
   getInfo: {
@@ -16,7 +14,6 @@ export interface BilibiliConfig {
 }
 
 export const config: BilibiliConfig = {
-  despise: true,
   recallMiniProgram: true,
   getInfo: {
     getVideoInfo: true,

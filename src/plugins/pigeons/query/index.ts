@@ -34,7 +34,7 @@ export default class Query extends BasePlugin {
     const user_id = query === '-1' ? context.user_id : parseInt(query)
     context.user_id = user_id
 
-    const username = await getUserName(user_id)
+    const username = await getUserName(context)
     const userData = await knex<Pigeon>('pigeons').where({ user_id }).first()
     if (!userData) {
       await sendMsg(context, [Structs.text(`用户 ${username}(${user_id}) 咱不认识哦~`)])
@@ -56,7 +56,7 @@ export default class Query extends BasePlugin {
 
       for (const [index, item] of pigeons.entries()) {
         const pos = (index + 1).toString().padStart(2, '0')
-        const username = await getUserName(item.user_id)
+        const username = await getUserName({ user_id: item.user_id })
         board.push(`第${pos}名 名字:${username} 拥有 ${item.pigeon_num} 只鸽子`)
       }
 

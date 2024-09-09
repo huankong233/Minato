@@ -44,6 +44,11 @@ export default class Bot extends BasePlugin {
           reject(`重试次数超过设置的${context.reconnection.attempts}次!`)
           throw new Error(`重试次数超过设置的${context.reconnection.attempts}次!`)
         }
+
+        if (context.error_type === 'response_error') {
+          reject(`napcat服务端返回错误: ${context.info.message}`)
+          throw new Error(`napcat服务端返回错误: ${context.info.message}`)
+        }
       })
 
       bot.on('socket.open', async (context) => {
