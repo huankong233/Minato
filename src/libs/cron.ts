@@ -1,7 +1,10 @@
-import _cron from 'node-cron'
+import { CronJob } from 'cron'
 
 export const cron = (cron: string, func: () => void) =>
-  _cron.schedule(cron, () => func(), {
-    timezone: process.env.TZ ?? 'Asia/Shanghai',
-    scheduled: true
-  })
+  new CronJob(
+    cron, // cronTime
+    func, // onTick
+    null, // onComplete
+    true, // start
+    process.env.TZ ?? 'Asia/Shanghai' // timeZone
+  )
