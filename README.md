@@ -9,7 +9,3 @@
 ## 🎉 [更新日志](./CHANGELOG.md)
 
 ## 📚 [文档](https://blog.huankong.top/docs/kkbot-ts)
-
-## ⭐ 星星
-
-<img src="https://starchart.cc/huankong233/Minato.svg" width="750">
