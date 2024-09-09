@@ -12,4 +12,4 @@
 
 ## ⭐ 星星
 
-[![Stargazers over time](https://starchart.cc/huankong233/kkbot-ts.svg)](https://starchart.cc/huankong233/kkbot-ts)
+<img src="https://starchart.cc/huankong233/Minato.svg" width="750">
