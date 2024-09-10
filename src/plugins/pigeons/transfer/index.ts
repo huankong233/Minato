@@ -1,7 +1,7 @@
 import { type allEvents, type Command } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { BasePlugin } from '@/plugins/base.ts'
-import PigeonTool from '@/plugins/pigeons/pigeonTool/index.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
+import PigeonTool from '@/plugins/Pigeons/PigeonTool/index.ts'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
 
 export default class Transfer extends BasePlugin {

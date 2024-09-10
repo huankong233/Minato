@@ -1,8 +1,8 @@
 import { type allEvents, type Command } from '@/global.js'
 import { getUserName } from '@/libs/api.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { BasePlugin } from '@/plugins/base.ts'
-import { config as botConfig } from '@/plugins/builtIn/bot/config.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
+import { config as botConfig } from '@/plugins/BuiltIn/Bot/config.ts'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 

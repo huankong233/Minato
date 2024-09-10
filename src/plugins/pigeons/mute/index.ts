@@ -1,7 +1,7 @@
 import type { allEvents } from '@/global.js'
 import { randomInt } from '@/libs/random.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { BasePlugin } from '@/plugins/base.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 

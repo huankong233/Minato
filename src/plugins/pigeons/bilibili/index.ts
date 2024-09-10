@@ -5,7 +5,7 @@
 import type { allEvents } from '@/global.js'
 import axios from '@/libs/axios.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { BasePlugin } from '@/plugins/base.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
 import { type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 import { getArticleInfo } from './libs/article.ts'

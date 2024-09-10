@@ -1,5 +1,5 @@
 export interface GoldConfig {
-  broadcast: {
+  boardcast: {
     groups: number[]
     users: number[]
   }
@@ -8,10 +8,10 @@ export interface GoldConfig {
 }
 
 export const config: GoldConfig = {
-  broadcast: {
+  boardcast: {
     groups: [],
     users: []
   },
   changeGroupName: [],
-  cron: '0 30 14 * * *'
+  cron: '30 14 * * *'
 }

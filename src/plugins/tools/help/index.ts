@@ -1,7 +1,7 @@
 import { type allEvents, type Command, type commandEvent } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { BasePlugin } from '@/plugins/base.ts'
-import { config as botConfig } from '@/plugins/builtIn/bot/config.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
+import { config as botConfig } from '@/plugins/BuiltIn/Bot/config.ts'
 import { type AllHandlers, Structs } from 'node-napcat-ts'
 
 export default class Help extends BasePlugin {

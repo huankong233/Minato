@@ -1,7 +1,7 @@
 import { type allEvents, type Command, type Pigeon } from '@/global.js'
 import { getUserName } from '@/libs/api.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { BasePlugin } from '@/plugins/base.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
 import { type AllHandlers, Structs } from 'node-napcat-ts'
 
 export default class Query extends BasePlugin {

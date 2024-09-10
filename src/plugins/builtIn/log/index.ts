@@ -1,5 +1,5 @@
 import { getDate } from '@/libs/time.ts'
-import { BasePlugin } from '@/plugins/base.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
 import clc from 'cli-color'
 import fs from 'fs-extra'
 import path from 'path'

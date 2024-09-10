@@ -1,7 +1,7 @@
 import type { allEvents, Command } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
-import { BasePlugin } from '@/plugins/base.ts'
-import { config as BotConfig } from '@/plugins/builtIn/bot/config.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
+import { config as BotConfig } from '@/plugins/BuiltIn/Bot/config.ts'
 import { Structs, type AllHandlers, type WSSendParam } from 'node-napcat-ts'
 
 export default class CallApi extends BasePlugin {
@@ -10,7 +10,7 @@ export default class CallApi extends BasePlugin {
       type: 'command',
       commandName: 'call',
       description: 'call [API端点] [参数]',
-      params: [{ type: 'string' }, { type: 'string' }],
+      params: [{ type: 'string' }, { type: 'string', default: '{}' }],
       callback: this.send.bind(this)
     }
   ]

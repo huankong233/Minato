@@ -1,4 +1,4 @@
-import { BasePlugin } from '@/plugins/base.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
 import Knex from 'knex'
 import { config } from './config.ts'
 

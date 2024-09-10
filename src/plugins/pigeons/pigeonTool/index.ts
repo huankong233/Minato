@@ -1,6 +1,6 @@
 import { type Pigeon, type PigeonHistory } from '@/global.ts'
-import { BasePlugin } from '@/plugins/base.ts'
-import Gugu from '@/plugins/pigeons/gugu/index.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
+import Gugu from '@/plugins/Pigeons/GuGu/index.ts'
 import { type AllHandlers } from 'node-napcat-ts'
 
 export default class PigeonTool extends BasePlugin {

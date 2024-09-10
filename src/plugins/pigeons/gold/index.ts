@@ -2,14 +2,14 @@ import type { allEvents, Command } from '@/global.js'
 import { cron } from '@/libs/cron.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { sleep } from '@/libs/sleep.ts'
-import { BasePlugin } from '@/plugins/base.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 import { getGoldPrice } from './request.ts'
 
 export const enable =
-  config.broadcast.groups.length !== 0 ||
-  config.broadcast.users.length !== 0 ||
+  config.boardcast.groups.length !== 0 ||
+  config.boardcast.users.length !== 0 ||
   config.changeGroupName.length !== 0
 
 export default class Gold extends BasePlugin {
@@ -55,13 +55,13 @@ export default class Gold extends BasePlugin {
       }
 
       if (isCron) {
-        const { broadcast } = config
-        for (const group_id of broadcast.groups) {
+        const { boardcast } = config
+        for (const group_id of boardcast.groups) {
           await sendMsg({ message_type: 'group', group_id }, message)
           await sleep(1000)
         }
 
-        for (const user_id of broadcast.users) {
+        for (const user_id of boardcast.users) {
           await sendMsg({ message_type: 'private', user_id }, message)
           await sleep(1000)
         }
@@ -101,14 +101,14 @@ export default class Gold extends BasePlugin {
     }
 
     if (isCron) {
-      const { broadcast } = config
+      const { boardcast } = config
 
-      for (const group_id of broadcast.groups) {
+      for (const group_id of boardcast.groups) {
         await sendMsg({ message_type: 'group', group_id }, message)
         await sleep(1000)
       }
 
-      for (const user_id of broadcast.users) {
+      for (const user_id of boardcast.users) {
         await sendMsg({ message_type: 'private', user_id }, message)
         await sleep(1000)
       }

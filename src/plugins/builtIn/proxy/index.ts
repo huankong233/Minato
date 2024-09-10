@@ -1,4 +1,4 @@
-import { BasePlugin } from '@/plugins/base.ts'
+import { BasePlugin } from '@/plugins/Base.ts'
 import proxy from '@huan_kong/node-global-proxy'
 import { config } from './config.ts'
 
