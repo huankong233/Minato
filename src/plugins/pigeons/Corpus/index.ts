@@ -60,12 +60,6 @@ export default class CorpusPlugin extends BasePlugin {
     face: (keyword: Receive['face'], message: Receive['face']) => {
       return message.data.id === keyword.data.id
     },
-    mface: (keyword: Receive['mface'], message: Receive['mface']) => {
-      return (
-        keyword.data.emoji_id === message.data.emoji_id &&
-        keyword.data.emoji_package_id === message.data.emoji_package_id
-      )
-    },
     image: (keyword: Receive['image'], message: Receive['image']) => {
       return parse(keyword.data.file).name === parse(message.data.file).name
     }
@@ -98,11 +92,7 @@ export default class CorpusPlugin extends BasePlugin {
 
   async checkNodeAvaliable(context: AllHandlers['message']) {
     const allowNodes = context.message.filter(
-      (message) =>
-        message.type === 'image' ||
-        message.type === 'text' ||
-        message.type === 'mface' ||
-        message.type === 'face'
+      (message) => message.type === 'image' || message.type === 'text' || message.type === 'face'
     )
 
     if (context.message.length !== allowNodes.length) {

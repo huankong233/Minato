@@ -1,7 +1,7 @@
 import type { AllHandlers, Receive } from 'node-napcat-ts'
 
 export interface rule {
-  keyword: (Receive['text'] | Receive['face'] | Receive['mface'] | Receive['image'])[]
+  keyword: (Receive['text'] | Receive['face'] | Receive['image'])[]
   reply: Receive[keyof Receive][]
   mode: '模糊' | '精准'
   scene: '全部' | '私聊' | '群聊'
