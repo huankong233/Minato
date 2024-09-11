@@ -85,7 +85,7 @@ export default class CorpusPlugin extends BasePlugin {
           for (const [index, item] of rule.reply.entries()) {
             if (item.type === 'image') {
               const res = await bot.get_image({ file: item.data.file })
-              ;(rule.reply[index] as Send['image']).data.file = res.url
+              ;(rule.reply[index] as Send['image']) = { type: 'image', data: { file: res.url } }
             }
           }
           await sendMsg(context, rule.reply, { reply: false, at: false })
