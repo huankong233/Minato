@@ -85,8 +85,6 @@ export default class Bilibili extends BasePlugin {
       return
     }
 
-    console.log(messages)
-
     await sendForwardMsg(context, messages).catch(async () => {
       await sendMsg(context, [Structs.text('发送合并消息失败，可以尝试私聊我哦~')])
     })

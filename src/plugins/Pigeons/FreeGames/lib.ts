@@ -27,7 +27,6 @@ export const epicApi = async () => {
       return true
     })
     .map(async (item: any) => {
-      console.log(item)
       let link = `${rootUrl}/${locale}/p/`
       let contentUrl = `${contentBaseUrl}/products/`
       let isBundles = false
