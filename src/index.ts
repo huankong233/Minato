@@ -48,6 +48,6 @@ const plugins = ['BuiltIn', 'Tools', 'Pigeons'].flatMap((pluginDir) =>
 for (const plugin of plugins) await loadPlugin(plugin)
 
 // 最后加载帮助插件
-await loadPlugin(`/tools/help`)
+await loadPlugin(`/Tools/Help`)
 
 logger.SUCCESS('所有插件已加载完成!')
