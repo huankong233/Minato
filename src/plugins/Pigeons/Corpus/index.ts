@@ -3,7 +3,7 @@ import { sendMsg } from '@/libs/sendMsg.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
 import { config as BotConfig } from '@/plugins/BuiltIn/Bot/config.ts'
 import PigeonTool from '@/plugins/Pigeons/PigeonTool/index.ts'
-import { Structs, type AllHandlers, type Receive, type Send } from 'node-napcat-ts'
+import { Structs, type AllHandlers, type Receive } from 'node-napcat-ts'
 import { parse } from 'path'
 import { config, type forget, type learn, type rule } from './config.ts'
 
@@ -85,7 +85,7 @@ export default class CorpusPlugin extends BasePlugin {
           for (const [index, item] of rule.reply.entries()) {
             if (item.type === 'image') {
               const res = await bot.get_image({ file: item.data.file })
-              ;(rule.reply[index] as Send['image']) = { type: 'image', data: { file: res.url } }
+              rule.reply[index].data = { ...rule.reply[index].data, url: res.url }
             }
           }
           await sendMsg(context, rule.reply, { reply: false, at: false })
