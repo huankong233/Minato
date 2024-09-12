@@ -1,4 +1,4 @@
-import type { allEvents, Pigeon } from '@/global.js'
+import type { allEvents, Pigeon, PigeonHistory } from '@/global.js'
 import { randomInt } from '@/libs/random.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { isBeforeToday } from '@/libs/time.ts'
@@ -18,7 +18,14 @@ export default class Gugu extends BasePlugin {
   ]
 
   static async gugu(context: AllHandlers['message']) {
-    const userData = await knex<Pigeon>('pigeons').where({ user_id: context.user_id }).first()
+    const userData = await knex<PigeonHistory>('pigeon_histories')
+      .where({
+        user_id: context.user_id,
+        reason: '每日咕咕'
+      })
+      .orderBy('created_at', 'desc')
+      .first()
+
     if (!userData) {
       await knex<Pigeon>('pigeons').insert({ user_id: context.user_id })
       await pigeonTool.add(context, config.newUserAdd, '首次咕咕')
@@ -27,7 +34,7 @@ export default class Gugu extends BasePlugin {
       return
     }
 
-    if (!isBeforeToday(userData.updated_at.getTime())) {
+    if (!isBeforeToday(userData.created_at.getTime())) {
       await sendMsg(context, [Structs.text('咕咕失败~今天已经咕咕过了哦~')])
       return
     }
