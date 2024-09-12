@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2024-08-29 19:36:43
+-- 生成日期： 2024-09-11 13:43:35
 -- 服务器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -46,7 +46,7 @@ CREATE TABLE `corpus` (
 
 CREATE TABLE `pigeons` (
   `user_id` double NOT NULL,
-  `pigeon_num` double NOT NULL DEFAULT 0,
+  `pigeon_num` double NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -70,12 +70,52 @@ DELIMITER ;
 CREATE TABLE `pigeon_histories` (
   `id` int(11) NOT NULL,
   `user_id` double NOT NULL,
-  `operation` double NOT NULL DEFAULT 0,
-  `origin_pigeon` double NOT NULL DEFAULT 0,
-  `new_pigeon` double NOT NULL DEFAULT 0,
-  `reason` text NOT NULL DEFAULT '',
+  `operation` double NOT NULL,
+  `origin_pigeon` double NOT NULL,
+  `new_pigeon` double NOT NULL,
+  `reason` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `red_packet`
+--
+
+CREATE TABLE `red_packet` (
+  `id` int(11) NOT NULL,
+  `user_id` double NOT NULL,
+  `packet_num` int(11) NOT NULL,
+  `pigeon_num` int(11) NOT NULL,
+  `code` longtext NOT NULL,
+  `picked_user` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`picked_user`)),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `se_tu`
+--
+
+CREATE TABLE `se_tu` (
+  `user_id` double NOT NULL,
+  `today_count` int(11) NOT NULL DEFAULT 0,
+  `total_count` int(11) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 触发器 `se_tu`
+--
+DELIMITER $$
+CREATE TRIGGER `before_update_se_tu` BEFORE UPDATE ON `se_tu` FOR EACH ROW BEGIN
+  SET NEW.updated_at = NOW();
+END
+$$
+DELIMITER ;
 
 --
 -- 转储表的索引
@@ -100,6 +140,12 @@ ALTER TABLE `pigeon_histories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 表的索引 `red_packet`
+--
+ALTER TABLE `red_packet`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 在导出的表使用AUTO_INCREMENT
 --
 
@@ -113,6 +159,12 @@ ALTER TABLE `corpus`
 -- 使用表AUTO_INCREMENT `pigeon_histories`
 --
 ALTER TABLE `pigeon_histories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- 使用表AUTO_INCREMENT `red_packet`
+--
+ALTER TABLE `red_packet`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

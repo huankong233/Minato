@@ -103,3 +103,21 @@ export interface Corpus {
   created_at: Date
   deleted_at: Date | null
 }
+
+export interface RedPacket {
+  id: number
+  user_id: number
+  packet_num: number
+  pigeon_num: number
+  code: string
+  picked_user: string
+  created_at: Date
+}
+
+export interface SeTu {
+  user_id: number
+  today_count: number
+  total_count: number
+  created_at: Date
+  updated_at: Date
+}
