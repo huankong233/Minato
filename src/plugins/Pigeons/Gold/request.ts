@@ -3,7 +3,7 @@ import type { Logger } from '@/libs/logger.ts'
 
 export const getGoldPrice = async (logger: Logger) => {
   // https://api.jijinhao.com/sQuoteCenter/realTime.htm?code=JO_9753&_=1725002244237
-  const res = await axios(
+  const res = await axios.get(
     `https://api.jijinhao.com/sQuoteCenter/realTime.htm?code=JO_9753&_=${Date.now()}`,
     {
       headers: {

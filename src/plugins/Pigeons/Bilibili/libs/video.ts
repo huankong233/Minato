@@ -6,7 +6,7 @@ import { USER_AGENT } from './const.ts'
 
 export const getVideoInfo = async (params: { aid?: string; bvid?: string }, logger: Logger) => {
   try {
-    const response = await axios(`https://api.bilibili.com/x/web-interface/view`, {
+    const response = await axios.get(`https://api.bilibili.com/x/web-interface/view`, {
       params,
       timeout: 10000,
       headers: {

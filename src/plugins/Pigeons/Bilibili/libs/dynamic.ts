@@ -9,7 +9,7 @@ import { purgeLinkInText } from './utils.ts'
 
 export const getDynamicInfo = async (id: string, logger: Logger) => {
   try {
-    const response = await axios('https://api.bilibili.com/x/polymer/web-dynamic/v1/detail', {
+    const response = await axios.get('https://api.bilibili.com/x/polymer/web-dynamic/v1/detail', {
       timeout: 10000,
       params: {
         timezone_offset: new Date().getTimezoneOffset(),

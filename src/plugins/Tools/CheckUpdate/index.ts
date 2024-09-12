@@ -26,7 +26,7 @@ export default class CheckUpdate extends BasePlugin {
   async checkUpdate(context?: AllHandlers['message']) {
     let remote_version = ''
     try {
-      remote_version = await axios(config.packageJsonUrl).then((res) => res.data.version)
+      remote_version = await axios.get(config.packageJsonUrl).then((res) => res.data.version)
     } catch (error) {
       this.logger.ERROR('获取最新版本号失败', error)
       await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [

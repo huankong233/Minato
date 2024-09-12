@@ -6,7 +6,7 @@ import { USER_AGENT } from './const.ts'
 
 export const getArticleInfo = async (id: string, logger: Logger) => {
   try {
-    const response = await axios(`https://api.bilibili.com/x/article/viewinfo?id=${id}`, {
+    const response = await axios.get(`https://api.bilibili.com/x/article/viewinfo?id=${id}`, {
       timeout: 10000,
       headers: {
         'User-Agent': USER_AGENT

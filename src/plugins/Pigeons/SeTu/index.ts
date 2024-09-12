@@ -71,7 +71,7 @@ export default class SeTu extends BasePlugin {
 
     try {
       responseData = await axios
-        .post('https://api.lolicon.app/setu/v2', { data: requestData })
+        .post('https://api.lolicon.app/setu/v2', requestData)
         .then((res) => res.data)
     } catch (error) {
       this.logger.ERROR('请求色图接口失败~')

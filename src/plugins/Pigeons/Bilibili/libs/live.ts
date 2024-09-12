@@ -6,7 +6,7 @@ import { USER_AGENT } from './const.ts'
 
 export const getLiveRoomInfo = async (id: string, logger: Logger) => {
   try {
-    const response = await axios(
+    const response = await axios.get(
       `https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom?room_id=${id}`,
       {
         timeout: 10000,
