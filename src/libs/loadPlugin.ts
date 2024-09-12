@@ -26,9 +26,15 @@ export async function loadPlugin(pluginName: string) {
     return
   }
 
+  const pluginIndexFile = path.join(pluginDir, 'index.ts')
+  if (!fs.existsSync(pluginIndexFile)) {
+    logger.ERROR(`插件 ${pluginName} 缺少入口文件`)
+    return
+  }
+
   let program
   try {
-    program = await import(url.pathToFileURL(pluginDir).toString())
+    program = await import(url.pathToFileURL(pluginIndexFile).toString())
     if (!program.default) return logger.ERROR(`加载插件 ${pluginName} 失败，插件不存在默认导出类`)
   } catch (error) {
     logger.ERROR(`插件 ${pluginName} 导入失败`)
