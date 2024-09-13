@@ -24,8 +24,8 @@ export default class Bot extends BasePlugin {
       }
 
       bot.on('api.response.failure', (context) => {
-        this.logger.DEBUG('收到API失败响应')
-        this.logger.DIR(context)
+        this.logger.ERROR('收到API失败响应')
+        this.logger.DIR(context, false)
       })
 
       bot.on('socket.connecting', (context) => {
@@ -71,14 +71,9 @@ export default class Bot extends BasePlugin {
     if (debug || !config.online) return
     if (config.online.to <= 0) return this.logger.INFO('未设置发送账户,请注意~')
 
-    try {
-      await sendMsg({ message_type: 'private', user_id: config.online.to }, [
-        Structs.text(config.online.msg)
-      ])
-    } catch (error) {
-      this.logger.ERROR('发送上线信息失败!')
-      this.logger.ERROR(error)
-    }
+    await sendMsg({ message_type: 'private', user_id: config.online.to }, [
+      Structs.text(config.online.msg)
+    ])
   }
 
   static parseMessage(message: string): Command | false {
@@ -193,8 +188,8 @@ export default class Bot extends BasePlugin {
           }
         } catch (error) {
           this.logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.logger.ERROR(error)
-          this.logger.DEBUG(`stack信息:\n${new Error().stack}`)
+          this.logger.ERROR(`stack信息:\n${new Error().stack}`)
+          this.logger.DIR(error, false)
         }
       }
 
@@ -223,10 +218,8 @@ export default class Bot extends BasePlugin {
           }
         } catch (error) {
           this.logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.logger.ERROR(error)
-
-          const stack = new Error().stack!.split('\n')
-          this.logger.DEBUG(`stack信息:\n`, stack.slice(1, stack.length).join('\n'))
+          this.logger.ERROR(`stack信息:\n${new Error().stack}`)
+          this.logger.DIR(error, false)
         }
       }
     })
@@ -249,8 +242,8 @@ export default class Bot extends BasePlugin {
           }
         } catch (error) {
           this.logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.logger.ERROR(error)
-          this.logger.ERROR(`stack信息:\n`, new Error().stack)
+          this.logger.ERROR(`stack信息:\n${new Error().stack}`)
+          this.logger.DIR(error, false)
         }
       }
     })
@@ -273,8 +266,8 @@ export default class Bot extends BasePlugin {
           }
         } catch (error) {
           this.logger.ERROR(`插件 ${pluginName} 运行出错`)
-          this.logger.ERROR(error)
-          this.logger.ERROR(`stack信息:\n`, new Error().stack)
+          this.logger.ERROR(`stack信息:\n${new Error().stack}`)
+          this.logger.DIR(error, false)
         }
       }
     })

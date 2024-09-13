@@ -37,8 +37,8 @@ export const getArticleInfo = async (id: string, logger: Logger) => {
     ]
   } catch (error) {
     logger.ERROR(`B站文章信息获取失败`)
-    logger.DIR({ id }, false, false)
-    logger.DIR(error, false, false)
+    logger.DIR({ id }, false)
+    logger.DIR(error, false)
     return [Structs.text('文章信息获取失败~')]
   }
 }

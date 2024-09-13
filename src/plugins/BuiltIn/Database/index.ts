@@ -16,17 +16,18 @@ export default class Database extends BasePlugin {
           this.logger.DEBUG('收到数据库成功响应')
           this.logger.DIR(responseData)
         })
-        knex.on('query-error', (err, queryData) => {
-          this.logger.ERROR(`收到数据库失败响应`)
-          this.logger.DIR(err, false, false)
-          this.logger.DIR(queryData, false)
-        })
       }
+
+      knex.on('query-error', (err, queryData) => {
+        this.logger.ERROR(`收到数据库失败响应`)
+        this.logger.DIR(err, false)
+        this.logger.DIR(queryData, false)
+      })
 
       this.logger.SUCCESS('连接数据库成功')
     } catch (error) {
       this.logger.ERROR('连接数据库失败')
-      this.logger.ERROR(error)
+      this.logger.DIR(error)
       this.logger.ERROR('数据库配置:')
       this.logger.DIR(config)
     }

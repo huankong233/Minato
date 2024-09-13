@@ -28,7 +28,8 @@ export default class CheckUpdate extends BasePlugin {
     try {
       remote_version = await axios.get(config.packageJsonUrl).then((res) => res.data.version)
     } catch (error) {
-      this.logger.ERROR('获取最新版本号失败', error)
+      this.logger.ERROR('获取最新版本号失败')
+      this.logger.DIR(error, false)
       await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [
         Structs.text(
           ['检查更新失败', `当前版本: ${local_version}`, `请检查您的网络状况！`].join('\n')

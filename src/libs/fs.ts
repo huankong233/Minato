@@ -13,7 +13,14 @@ import path from 'path'
 async function _download(url: string, fullPath: string): Promise<string> {
   return new Promise((resolve, reject) => {
     axios
-      .get(url, { responseType: 'arraybuffer' })
+      .get(url, {
+        responseType: 'arraybuffer',
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+          Refer: url
+        }
+      })
       .then((res) => {
         const buffer = Buffer.from(res.data, 'binary')
         fs.writeFileSync(fullPath, buffer)
@@ -55,7 +62,14 @@ export async function downloadFile(url: string, ext = '.png') {
  */
 export async function getFileBase64(url: string) {
   return await axios
-    .get(url, { responseType: 'arraybuffer' })
+    .get(url, {
+      responseType: 'arraybuffer',
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+        Refer: url
+      }
+    })
     .then((res) => res.data)
     .then((buffer) => Buffer.from(buffer).toString('base64'))
 }

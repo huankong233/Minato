@@ -46,7 +46,7 @@ export default class Bilibili extends BasePlugin {
       messages = await this.prepareMessage(type)
     } catch (error) {
       this.logger.ERROR(`请求接口失败`)
-      this.logger.DIR(error)
+      this.logger.DIR(error, false)
       await sendMsg(context, [Structs.text('接口请求失败')])
       return
     }

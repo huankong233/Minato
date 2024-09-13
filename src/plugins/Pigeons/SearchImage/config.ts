@@ -35,3 +35,43 @@ export const config: SearchImageConfig = {
     receive: '收到咯~处理中~(自动退出不影响处理)'
   }
 }
+
+import type {
+  AnimeTraceReq,
+  AnimeTraceRes,
+  ascii2dReq,
+  ascii2dRes,
+  IqDBReq,
+  IqDBRes,
+  SauceNAOReq,
+  SauceNAORes,
+  TraceMoeReq,
+  TraceMoeRes
+} from 'image_searcher'
+
+export type searchImageParams =
+  | {
+      name: 'ascii2d'
+      callback: (req: ascii2dReq) => Promise<ascii2dRes>
+      params: ascii2dReq
+    }
+  | {
+      name: 'SauceNAO'
+      callback: (req: SauceNAOReq) => Promise<SauceNAORes>
+      params: SauceNAOReq
+    }
+  | {
+      name: 'IqDB'
+      callback: (req: IqDBReq) => Promise<IqDBRes>
+      params: IqDBReq
+    }
+  | {
+      name: 'TraceMoe'
+      callback: (req: TraceMoeReq) => Promise<TraceMoeRes[]>
+      params: TraceMoeReq
+    }
+  | {
+      name: 'AnimeTraceAll' | 'AnimeTraceAnime' | 'AnimeTraceGame'
+      callback: (req: AnimeTraceReq) => Promise<AnimeTraceRes>
+      params: AnimeTraceReq
+    }

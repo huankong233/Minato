@@ -42,8 +42,8 @@ export const getVideoInfo = async (params: { aid?: string; bvid?: string }, logg
     ]
   } catch (error) {
     logger.ERROR(`B站视频信息获取失败`)
-    logger.DIR(params, false, false)
-    logger.DIR(error, false, false)
+    logger.DIR(params, false)
+    logger.DIR(error, false)
     return [Structs.text('视频信息获取失败~')]
   }
 }

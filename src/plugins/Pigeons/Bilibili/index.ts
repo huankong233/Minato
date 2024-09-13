@@ -118,9 +118,9 @@ export default class Bilibili extends BasePlugin {
         validateStatus: (status) => status >= 200 && status < 400
       })
       .then((ret) => this.getIdFromNormalLink(ret.headers.location))
-      .catch((e) => {
+      .catch((error) => {
         this.logger.ERROR(`B站短链转换失败 ${shortLink}`)
-        this.logger.DIR(e, false, false)
+        this.logger.DIR(error, false)
         return {
           avid: undefined,
           bvid: undefined,

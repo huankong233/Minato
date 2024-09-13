@@ -51,8 +51,8 @@ export const getLiveRoomInfo = async (id: string, logger: Logger) => {
     ]
   } catch (error) {
     logger.ERROR(`B站直播信息获取失败`)
-    logger.DIR({ id }, false, false)
-    logger.DIR(error, false, false)
+    logger.DIR({ id }, false)
+    logger.DIR(error, false)
     return [Structs.text('直播信息获取失败~')]
   }
 }

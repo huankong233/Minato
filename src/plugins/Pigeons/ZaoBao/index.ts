@@ -2,9 +2,10 @@ import type { allEvents, Command } from '@/global.js'
 import axios from '@/libs/axios.ts'
 import { cron } from '@/libs/cron.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
+import { sleep } from '@/libs/sleep.ts'
 import { getDate } from '@/libs/time.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
-import { Structs } from 'node-napcat-ts'
+import { Structs, type Send } from 'node-napcat-ts'
 import { config, type ZaoBaoConfig } from './config.ts'
 
 export default class ZaoBao extends BasePlugin {
@@ -53,18 +54,22 @@ export default class ZaoBao extends BasePlugin {
     }
   }
 
-  async getData(type: ZaoBaoConfig['type']) {
+  async getData(type: ZaoBaoConfig['type'], autoRefresh = false): Promise<Send[keyof Send][]> {
     const url = this.urls[type]
     const response = await axios.get(url.api)
     if (!url.checkSuccess(response.data)) return [Structs.text('获取失败了喵~')]
-    if (!url.checkDate(response.data)) return [Structs.text('数据过期了喵~')]
+    if (!url.checkDate(response.data) && autoRefresh) {
+      // 睡30分钟
+      await sleep(30 * 60 * 1000)
+      return await this.getData(type, autoRefresh)
+    }
     return [Structs.image(url.getImage(response.data))]
   }
 
   init = () => {
     config.boardcast.forEach((item) => {
       cron(item.crontab ?? config.crontab, async () => {
-        const response = await this.getData(item.type ?? config.type)
+        const response = await this.getData(item.type ?? config.type, true)
         if ('group_id' in item) {
           await sendMsg({ message_type: 'group', group_id: item.group_id }, response)
         } else {

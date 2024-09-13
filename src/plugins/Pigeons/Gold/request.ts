@@ -23,7 +23,7 @@ export const getGoldPrice = async (logger: Logger) => {
       .split(',')
   } catch (error) {
     logger.ERROR('处理数据失败')
-    logger.DIR(error, false, false)
+    logger.DIR(error, false)
     return null
   }
 
