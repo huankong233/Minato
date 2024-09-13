@@ -4,10 +4,21 @@ import { confuseURL, getUniversalImgURL } from '@/libs/handleUrl.ts'
 import { sendForwardMsg, sendMsg } from '@/libs/sendMsg.ts'
 import { formatTime } from '@/libs/time.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
-import { AnimeTrace, ascii2d, IqDB, SauceNAO, TraceMoe } from 'image_searcher'
+import PigeonTool from '@/plugins/Pigeons/PigeonTool/index.ts'
+import {
+  AnimeTrace,
+  ascii2d,
+  IqDB,
+  SauceNAO,
+  TraceMoe,
+  type AnimeTraceReq,
+  type ascii2dReq,
+  type IqDBReq,
+  type SauceNAOReq,
+  type TraceMoeReq
+} from 'image_searcher'
 import { Structs, type AllHandlers, type Send } from 'node-napcat-ts'
-import PigeonTool from '../PigeonTool/index.ts'
-import { config, type searchImageParams } from './config.ts'
+import { config } from './config.ts'
 
 export default class SearchImage extends BasePlugin {
   events: allEvents[] = [
@@ -105,7 +116,7 @@ export default class SearchImage extends BasePlugin {
   }
 
   async getData(imagePath: string) {
-    const requestParams: searchImageParams[] = [
+    const requestParams = [
       {
         name: 'ascii2d',
         callback: ascii2d,
@@ -113,7 +124,7 @@ export default class SearchImage extends BasePlugin {
           type: 'color',
           proxy: config.ascii2dProxy,
           imagePath
-        }
+        } as ascii2dReq
       },
       {
         name: 'SauceNAO',
@@ -121,7 +132,7 @@ export default class SearchImage extends BasePlugin {
         params: {
           hide: false,
           imagePath
-        }
+        } as SauceNAOReq
       },
       {
         name: 'IqDB',
@@ -139,7 +150,7 @@ export default class SearchImage extends BasePlugin {
             'anime_pictures'
           ],
           imagePath
-        }
+        } as IqDBReq
       },
       {
         name: 'TraceMoe',
@@ -147,7 +158,7 @@ export default class SearchImage extends BasePlugin {
         params: {
           cutBorders: true,
           imagePath
-        }
+        } as TraceMoeReq
       },
       {
         name: 'AnimeTraceAnime',
@@ -157,7 +168,7 @@ export default class SearchImage extends BasePlugin {
           force_one: 1,
           preview: true,
           imagePath
-        }
+        } as AnimeTraceReq
       },
       {
         name: 'AnimeTraceGame',
@@ -167,7 +178,7 @@ export default class SearchImage extends BasePlugin {
           force_one: 1,
           preview: true,
           imagePath
-        }
+        } as AnimeTraceReq
       }
     ]
 

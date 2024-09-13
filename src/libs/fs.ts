@@ -22,8 +22,7 @@ async function _download(url: string, fullPath: string): Promise<string> {
         }
       })
       .then((res) => {
-        const buffer = Buffer.from(res.data, 'binary')
-        fs.writeFileSync(fullPath, buffer)
+        fs.writeFileSync(fullPath, res.data)
         resolve(fullPath)
       })
       .catch((error) => reject(error))

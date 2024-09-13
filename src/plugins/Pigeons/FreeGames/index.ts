@@ -7,7 +7,7 @@ import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 import { epicApi, steamApi } from './lib.ts'
 
-export default class Bilibili extends BasePlugin {
+export default class FreeGames extends BasePlugin {
   events: allEvents[] = [
     {
       type: 'command',
