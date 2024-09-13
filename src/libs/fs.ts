@@ -18,7 +18,7 @@ async function _download(url: string, fullPath: string): Promise<string> {
         headers: {
           'User-Agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
-          Refer: url
+          Refer: encodeURIComponent(url)
         }
       })
       .then((res) => {
@@ -67,7 +67,7 @@ export async function getFileBase64(url: string) {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
-        Refer: url
+        Refer: encodeURIComponent(url)
       }
     })
     .then((res) => res.data)

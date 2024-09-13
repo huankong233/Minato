@@ -150,21 +150,11 @@ export default class SearchImage extends BasePlugin {
         }
       },
       {
-        name: 'AnimeTraceAll',
-        callback: AnimeTrace,
-        params: {
-          model: 'large_model_preview',
-          force_one: 0,
-          preview: true,
-          imagePath
-        }
-      },
-      {
         name: 'AnimeTraceAnime',
         callback: AnimeTrace,
         params: {
           model: 'anime_model_lovelive',
-          force_one: 0,
+          force_one: 1,
           preview: true,
           imagePath
         }
@@ -174,7 +164,7 @@ export default class SearchImage extends BasePlugin {
         callback: AnimeTrace,
         params: {
           model: 'game_model_kirakira',
-          force_one: 0,
+          force_one: 1,
           preview: true,
           imagePath
         }
@@ -300,8 +290,6 @@ export default class SearchImage extends BasePlugin {
                 `预览视频: ${item.video ?? '无'}`,
                 `相似度: ${parseInt(item.similarity)}`,
                 `文件名: ${item.filename}`,
-                `动漫名: ${item.anilist.title.native}`,
-                `NSFW: ${item.anilist.isAdult}`,
                 `集数: ${item.episode}`,
                 `大概位置: ${formatTime(item.from)}——${formatTime(item.to)}`,
                 ``,
@@ -315,7 +303,7 @@ export default class SearchImage extends BasePlugin {
           apiResponse.name === 'AnimeTraceGame'
         ) {
           message.push(
-            item.preview !== 'fail unsupport image type'
+            item.preview !== 'failed unsupported image type' && item.preview
               ? Structs.image(`base64://${item.preview}`)
               : Structs.text('不支持处理的图片格式'),
             Structs.text(
