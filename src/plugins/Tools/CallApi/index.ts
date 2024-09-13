@@ -41,7 +41,8 @@ export default class CallApi extends BasePlugin {
           await sendMsg(context, [Structs.text('API 调用成功,不过返回信息过长')])
         }
       } catch (error) {
-        this.logger.ERROR('API 调用出错', error)
+        this.logger.ERROR('API 调用出错')
+        this.logger.DIR(error, false)
         await sendMsg(context, [
           Structs.text('API 调用出错,错误日志:\n' + JSON.stringify(error, null, '\t'))
         ])

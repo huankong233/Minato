@@ -12,12 +12,12 @@ export default class CorpusPlugin extends BasePlugin {
     {
       type: 'message',
       callback: this.message.bind(this),
-      priority: 998
+      priority: 999
     },
     {
       type: 'message',
       callback: this.checkRules.bind(this),
-      priority: 997
+      priority: 998
     },
     {
       type: 'command',
@@ -84,7 +84,7 @@ export default class CorpusPlugin extends BasePlugin {
           // 修正reply
           for (const [index, item] of rule.reply.entries()) {
             if (item.type === 'image') {
-              const res = await bot.get_image({ file: item.data.file })
+              const res = await bot.get_image({ file: item.data.file_id })
               rule.reply[index].data = { ...rule.reply[index].data, url: res.url }
             }
           }

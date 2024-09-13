@@ -37,7 +37,8 @@ export async function sendMsg(
     }
   } catch (_error) {
     logger.ERROR('发送消息失败!!!')
-    logger.ERROR(`stack信息:\n${new Error().stack}`)
+    logger.ERROR(`stack信息:\n${new Error().stack}\n消息:`)
+    if (!debug) logger.DIR(message, false)
     return
   }
 
@@ -76,7 +77,8 @@ export async function sendForwardMsg(
     }
   } catch (_error) {
     logger.ERROR('发送消息失败!!!')
-    logger.ERROR(`stack信息:\n${new Error().stack}`)
+    logger.ERROR(`stack信息:\n${new Error().stack}\n消息:`)
+    if (!debug) logger.DIR(message, false)
     return
   }
 

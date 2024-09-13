@@ -9,7 +9,7 @@ import { purgeLinkInText } from './utils.ts'
 
 export const getDynamicInfo = async (id: string, logger: Logger) => {
   try {
-    const response = await axios('https://api.bilibili.com/x/polymer/web-dynamic/v1/detail', {
+    const response = await axios.get('https://api.bilibili.com/x/polymer/web-dynamic/v1/detail', {
       timeout: 10000,
       params: {
         timezone_offset: new Date().getTimezoneOffset(),
@@ -32,8 +32,8 @@ export const getDynamicInfo = async (id: string, logger: Logger) => {
     return await formatDynamic(data.item)
   } catch (error) {
     logger.ERROR(`B站动态信息获取失败`)
-    logger.DIR({ id }, false, false)
-    logger.DIR(error, false, false)
+    logger.DIR({ id }, false)
+    logger.DIR(error, false)
     return [Structs.text('动态信息获取失败~')]
   }
 }

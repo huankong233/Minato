@@ -41,7 +41,7 @@ if (!installBotSuccess) {
 const plugins = ['BuiltIn', 'Tools', 'Pigeons'].flatMap((pluginDir) =>
   fs
     .readdirSync(path.join(baseDir, `/plugins/${pluginDir}`))
-    .filter((pluginName) => !pluginName.includes('help'))
+    .filter((pluginName) => !pluginName.includes('Help'))
     .flatMap((pluginName) => `/${pluginDir}/${pluginName}`)
 )
 

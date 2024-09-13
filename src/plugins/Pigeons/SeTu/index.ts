@@ -71,11 +71,11 @@ export default class SeTu extends BasePlugin {
 
     try {
       responseData = await axios
-        .post('https://api.lolicon.app/setu/v2', { data: requestData })
+        .post('https://api.lolicon.app/setu/v2', requestData)
         .then((res) => res.data)
     } catch (error) {
       this.logger.ERROR('请求色图接口失败~')
-      this.logger.DIR(error, false, false)
+      this.logger.DIR(error, false)
       await PigeonTool.add(context, config.pigeon, '请求色图接口失败~')
       await sendMsg(context, [Structs.text('请求色图接口失败~')])
       return
@@ -107,7 +107,7 @@ export default class SeTu extends BasePlugin {
           .then((res) => res.data)
       } catch (error) {
         this.logger.ERROR('短链服务器爆炸惹~')
-        this.logger.DIR(error, false, false)
+        this.logger.DIR(error, false)
         await PigeonTool.add(context, config.pigeon, '换个标签试试吧~')
         await sendMsg(context, [Structs.text('短链服务器爆炸惹~')])
         return
@@ -137,7 +137,7 @@ export default class SeTu extends BasePlugin {
         .then((res) => res.data)
     } catch (error) {
       this.logger.ERROR('请求P站图片失败~')
-      this.logger.DIR(error)
+      this.logger.DIR(error, false)
       if (error instanceof AxiosError && error.response && error.response.status === 404) {
         await PigeonTool.add(context, config.pigeon, '这张色图被删了,真可惜~')
         await sendMsg(context, [Structs.text('这张色图被删了,真可惜~')])
@@ -155,7 +155,7 @@ export default class SeTu extends BasePlugin {
       base64 = await imgAntiShielding(image, config.antiShieldingMode)
     } catch (error) {
       this.logger.ERROR('反和谐失败')
-      this.logger.DIR(error, false, false)
+      this.logger.DIR(error, false)
       await PigeonTool.add(context, config.pigeon, '反和谐失败')
       await sendMsg(context, [Structs.text('反和谐失败')])
       return

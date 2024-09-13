@@ -55,7 +55,13 @@ export default class RedPacket extends BasePlugin {
   }
 
   sender: {
-    [key: number]: { context: AllHandlers['message']; packet_num: number; pigeon_num: number }
+    [key: number]: {
+      context: AllHandlers['message']
+      context2?: AllHandlers['message']
+      packet_num: number
+      pigeon_num: number
+      level: 1 | 2
+    }
   } = {}
 
   async send(context: AllHandlers['message'], command: Command) {
@@ -83,7 +89,8 @@ export default class RedPacket extends BasePlugin {
     this.sender[context.user_id] = {
       context,
       pigeon_num,
-      packet_num
+      packet_num,
+      level: 1
     }
 
     await sendMsg(context, [
@@ -93,7 +100,8 @@ export default class RedPacket extends BasePlugin {
 
   async message(context: AllHandlers['message']) {
     const isAdd = this.sender[context.user_id]
-    const isQuit = context.message[0].type === 'text' && context.message[0].data.text === '退出'
+    const firstMessage = context.message[0]
+    const isQuit = firstMessage.type === 'text' && firstMessage.data.text === '退出'
 
     if (!isAdd) return
     if (isQuit) {
@@ -102,44 +110,60 @@ export default class RedPacket extends BasePlugin {
       return 'quit'
     }
 
-    const avaliableNodes = context.message.filter(
-      (item) => item.type === 'text' || item.type === 'face' || item.type === 'image'
-    )
+    if (isAdd.level === 1) {
+      const avaliableNodes = context.message.filter(
+        (item) => item.type === 'text' || item.type === 'face' || item.type === 'image'
+      )
 
-    if (avaliableNodes.length !== context.message.length) {
-      await sendMsg(context, [Structs.text('红包发送失败,只支持文本、图片节点')])
-      return 'quit'
-    }
+      if (avaliableNodes.length !== context.message.length) {
+        await sendMsg(context, [Structs.text('红包发送失败,只支持文本、图片节点')])
+        return 'quit'
+      }
 
-    const code = JSON.stringify(context.message)
-    const { pigeon_num, packet_num } = isAdd
+      const code = JSON.stringify(context.message)
 
-    const item = await knex<RedPacketModel>('red_packet').where({ code }).first()
-    if (item) {
-      await sendMsg(context, [Structs.text('红包发送失败,该口令已存在')])
-      return 'quit'
-    }
+      const item = await knex<RedPacketModel>('red_packet').where({ code }).first()
+      if (item) {
+        await sendMsg(context, [Structs.text('红包发送失败,该口令已存在')])
+        return 'quit'
+      }
 
-    const enough = await PigeonTool.reduce(context, pigeon_num, `发送鸽子红包_${code}`)
-    if (!enough) {
-      await sendMsg(context, [Structs.text('红包发送失败,账户鸽子不足')])
+      isAdd.context2 = context
+      isAdd.level = 2
+
+      await sendMsg(context, [Structs.text('确定要发送红包吗?[Y/N]')])
+    } else if (isAdd.level === 2) {
+      const oper = firstMessage.type === 'text' && firstMessage.data.text.toUpperCase() === 'Y'
+      if (!oper) {
+        delete this.sender[context.user_id]
+        await sendMsg(context, [Structs.text('已取消发送红包')])
+        return 'quit'
+      }
+
+      const { pigeon_num, packet_num } = isAdd
+      const code = JSON.stringify(isAdd.context2!.message)
+
+      const enough = await PigeonTool.reduce(context, pigeon_num, `发送鸽子红包_${code}`)
+      if (!enough) {
+        await sendMsg(context, [Structs.text('红包发送失败,账户鸽子不足')])
+        delete this.sender[context.user_id]
+        return 'quit'
+      }
+
+      await knex<RedPacketModel>('red_packet').insert({
+        user_id: context.user_id,
+        packet_num,
+        pigeon_num,
+        code,
+        picked_user: '[]'
+      })
+
+      //更新红包列表
+      await this.freshRedPacketList()
+      await sendMsg(context, [Structs.text(`红包发送成功!口令:${code}`)])
       delete this.sender[context.user_id]
       return 'quit'
     }
-
-    await knex<RedPacketModel>('red_packet').insert({
-      user_id: context.user_id,
-      packet_num,
-      pigeon_num,
-      code,
-      picked_user: '[]'
-    })
-
-    //更新红包列表
-    await this.freshRedPacketList()
-    await sendMsg(context, [Structs.text(`红包发送成功!口令:${code}`)])
-    delete this.sender[context.user_id]
-    return 'quit'
   }
 
   async get(context: AllHandlers['message']) {
