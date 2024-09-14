@@ -118,6 +118,11 @@ export default class CorpusPlugin extends BasePlugin {
       return false
     }
 
+    if (imageNodes.length > 1) {
+      await sendMsg(context, [Structs.text('关键词只能包含一张图片,请重新输入关键词')])
+      return false
+    }
+
     return imageNodes
   }
 
@@ -187,7 +192,7 @@ export default class CorpusPlugin extends BasePlugin {
         if (!imageNodes) return 'quit'
 
         // 检查是否重复
-        const sql = knex<Corpus>('corpus')
+        const rule = await knex<Corpus>('corpus')
           .where(
             'keyword',
             'like',
@@ -196,15 +201,15 @@ export default class CorpusPlugin extends BasePlugin {
               : JSON.stringify(context.message)
           )
           .where('deleted_at', null)
+          .first()
 
-        if (context.user_id !== BotConfig.admin_id) {
-          sql.where('user_id', context.user_id)
+        if (!rule) {
+          await sendMsg(context, [Structs.text('关键词不存在,请重新输入关键词')])
+          return 'quit'
         }
 
-        const rule = await sql
-
-        if (rule.length === 0) {
-          await sendMsg(context, [Structs.text('关键词不存在,请重新输入关键词')])
+        if (rule.user_id !== context.user_id && context.user_id !== BotConfig.admin_id) {
+          await sendMsg(context, [Structs.text('无权删除他人的关键词')])
           return 'quit'
         }
 
