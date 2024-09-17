@@ -18,6 +18,20 @@ export default class Gugu extends BasePlugin {
   ]
 
   static async gugu(context: AllHandlers['message']) {
+    const user = await knex<Pigeon>('pigeons')
+      .where({
+        user_id: context.user_id
+      })
+      .first()
+
+    if (!user) {
+      await knex<Pigeon>('pigeons').insert({ user_id: context.user_id })
+      await pigeonTool.add(context, config.newUserAdd, '首次咕咕')
+      await sendMsg(context, [Structs.text(`首次咕咕~赠送${config.newUserAdd}只鸽子~`)])
+      await Gugu._gugu(context)
+      return
+    }
+
     const userData = await knex<PigeonHistory>('pigeon_histories')
       .where({
         user_id: context.user_id,
@@ -26,15 +40,7 @@ export default class Gugu extends BasePlugin {
       .orderBy('created_at', 'desc')
       .first()
 
-    if (!userData) {
-      await knex<Pigeon>('pigeons').insert({ user_id: context.user_id })
-      await pigeonTool.add(context, config.newUserAdd, '首次咕咕')
-      await sendMsg(context, [Structs.text(`首次咕咕~赠送${config.newUserAdd}只鸽子~`)])
-      await Gugu._gugu(context)
-      return
-    }
-
-    if (!isBeforeToday(userData.created_at.getTime())) {
+    if (userData && !isBeforeToday(userData.created_at.getTime())) {
       await sendMsg(context, [Structs.text('咕咕失败~今天已经咕咕过了哦~')])
       return
     }
