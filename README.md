@@ -7,5 +7,3 @@
 取名来自 [飞鸟凑(Asuka Minato)](https://mzh.moegirl.org.cn/%E9%A3%9E%E9%B8%9F%E5%87%91) ~~可爱的男孩子~~ 中的一部分
 
 ## 🎉 [更新日志](./CHANGELOG.md)
-
-## 📚 [文档](https://blog.huankong.top/docs/kkbot-ts)
