@@ -24,6 +24,7 @@ export const epicApi = async () => {
       const start = new Date(data.startDate)
       const end = new Date(data.endDate)
       if (start.getTime() + 8 * 60 * 1000 > now || end.getTime() + 8 * 60 * 1000 < now) return false
+      if (!item.catalogNs.mappings) return false
       return true
     })
     .map(async (item: any) => {
