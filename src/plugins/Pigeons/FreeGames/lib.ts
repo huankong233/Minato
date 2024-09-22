@@ -4,59 +4,59 @@
  */
 
 import axios from '@/libs/axios.ts'
+import dayjs from 'dayjs'
 
-const locale = 'zh-CN'
-const country = 'CN'
-
-export const epicApi = async () => {
+export const epicApi = async (locale = 'zh-CN', country = 'CN') => {
   const rootUrl = 'https://store.epicgames.com'
   const apiUrl = `https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=${locale}&country=${country}&allowCountries=${country}`
   const contentBaseUrl = `https://store-content-ipv4.ak.epicgames.com/api/${locale}/content`
 
   const response = await axios.get(apiUrl).then((res) => res.data)
 
-  const now = Date.now()
+  const now = dayjs()
 
   const items = response.data.Catalog.searchStore.elements
-    .filter((item: any) => {
-      const data = item?.promotions?.promotionalOffers?.[0]?.promotionalOffers?.[0]
-      if (data === undefined) return false
-      const start = new Date(data.startDate)
-      const end = new Date(data.endDate)
-      if (start.getTime() + 8 * 60 * 1000 > now || end.getTime() + 8 * 60 * 1000 < now) return false
-      return true
-    })
+    .filter(
+      (item: any) =>
+        item.promotions &&
+        item.promotions.promotionalOffers &&
+        item.promotions.promotionalOffers.length &&
+        item.promotions.promotionalOffers[0].promotionalOffers[0].discountSetting.discountType ===
+          'PERCENTAGE' &&
+        item.promotions.promotionalOffers[0].promotionalOffers[0].discountSetting
+          .discountPercentage === 0 &&
+        dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].startDate) <= now &&
+        dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].endDate) > now
+    )
     .map(async (item: any) => {
       let link = `${rootUrl}/${locale}/p/`
       let contentUrl = `${contentBaseUrl}/products/`
       let isBundles = false
-      item.categories.some((category: any) => {
-        if (category.path === 'bundles') {
-          link = `${rootUrl}/${locale}/bundles/`
-          isBundles = true
-          contentUrl = `${contentBaseUrl}/bundles/`
-          return true
-        }
-        return false
-      })
-      const linkSlug =
-        item.catalogNs.mappings.length > 0
+      if (item.categories.some((category: any) => category.path === 'bundles')) {
+        link = `${rootUrl}/${locale}/bundles/`
+        isBundles = true
+        contentUrl = `${contentBaseUrl}/bundles/`
+      }
+      let linkSlug =
+        item.catalogNs.mappings && item.catalogNs.mappings.length > 0
           ? item.catalogNs.mappings[0].pageSlug
-          : item.offerMappings.length > 0
+          : item.offerMappings && item.offerMappings.length > 0
             ? item.offerMappings[0].pageSlug
-            : item.productSlug
-              ? item.productSlug
-              : item.urlSlug
+            : (item.productSlug ?? item.urlSlug)
+      if (item.offerType === 'ADD_ON') {
+        linkSlug = item.offerMappings[0].pageSlug
+      }
       link += linkSlug
       contentUrl += linkSlug
       let description = item.description
-      if (item.offerType !== 'BASE_GAME') {
-        const contentResp = await axios.get(contentUrl).then((res) => res.data)
-
-        description = isBundles
-          ? contentResp.data.about.shortDescription
-          : contentResp.pages[0].data.about.shortDescription
-      }
+      try {
+        const contentResp = await axios.get(contentUrl)
+        if (isBundles) {
+          description = contentResp.data.data.about.shortDescription
+        } else {
+          description = contentResp.data.pages[0].data.about.shortDescription
+        }
+      } catch (_error) {}
 
       let image = item.keyImages[0].url
       item.keyImages.some((keyImage: any) => {
@@ -66,7 +66,9 @@ export const epicApi = async () => {
         }
         return false
       })
-      const start = new Date(item.promotions.promotionalOffers[0].promotionalOffers[0].startDate)
+      const end = dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].endDate).format(
+        'YYYY-MM-DD HH:mm:ss'
+      )
       return {
         title: item.title,
         author: item.seller.name,
@@ -75,10 +77,7 @@ export const epicApi = async () => {
           description,
           image
         },
-        pubDate: new Date(start.getTime() + 8 * 60 * 1000)
-          .toISOString()
-          .replace('T', ' ')
-          .slice(0, 16)
+        endDate: end
       }
     })
   return await Promise.all(items)
