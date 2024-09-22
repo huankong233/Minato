@@ -49,12 +49,14 @@ export const epicApi = async (locale = 'zh-CN', country = 'CN') => {
       link += linkSlug
       contentUrl += linkSlug
       let description = item.description
-      if (isBundles) {
-        try {
-          const contentResp = await axios.get(contentUrl)
+      try {
+        const contentResp = await axios.get(contentUrl)
+        if (isBundles) {
           description = contentResp.data.data.about.shortDescription
-        } catch (_error) {}
-      }
+        } else {
+          description = contentResp.data.pages[0].data.about.shortDescription
+        }
+      } catch (_error) {}
 
       let image = item.keyImages[0].url
       item.keyImages.some((keyImage: any) => {
