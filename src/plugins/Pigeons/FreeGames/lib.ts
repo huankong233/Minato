@@ -65,7 +65,7 @@ export const epicApi = async (locale = 'zh-CN', country = 'CN') => {
         return false
       })
       const end = dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].endDate).format(
-        'YYYY-mm-dd HH:mm:ss'
+        'YYYY-MM-DD'
       )
       return {
         title: item.title,
