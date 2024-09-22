@@ -1,6 +1,6 @@
 {
   "name": "Minato",
-  "version": "0.3.15",
+  "version": "0.3.16",
   "repository": "https://github.com/huankong233/Minato",
   "description": "Minato framework in typescript",
   "type": "module",
@@ -26,6 +26,7 @@
     "commander": "^12.1.0",
     "compare-versions": "^6.1.1",
     "cron": "^3.1.7",
+    "dayjs": "^1.11.13",
     "fs-extra": "^11.2.0",
     "image_searcher": "^0.3.4",
     "jimp": "^1.6.0",

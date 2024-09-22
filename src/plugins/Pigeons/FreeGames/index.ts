@@ -70,7 +70,7 @@ export default class FreeGames extends BasePlugin {
               [
                 `游戏名:${item.title}`,
                 `开发商:${item.author}`,
-                `发行日期:${item.pubDate}`,
+                `截止日期:${item.endDate}`,
                 `简介:${item.description.description}`,
                 `购买链接:${item.link}`
               ].join('\n')
