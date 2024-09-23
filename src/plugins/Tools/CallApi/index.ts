@@ -58,7 +58,12 @@ export default class CallApi extends BasePlugin {
 
   async message(context: AllHandlers['message']) {
     const firstMessage = context.message[0]
-    if (firstMessage.type === 'reply') {
+    const secondMessage = context.message[1]
+    if (
+      firstMessage.type === 'reply' &&
+      secondMessage.type === 'text' &&
+      secondMessage.data.text === 'get_id'
+    ) {
       await sendMsg(context, [Structs.text(`消息ID: ${firstMessage.data.id}`)])
     }
   }
