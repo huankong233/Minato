@@ -61,7 +61,7 @@ export default class CorpusPlugin extends BasePlugin {
       return message.data.id === keyword.data.id
     },
     image: (keyword: Receive['image'], message: Receive['image']) => {
-      return parse(keyword.data.file).name === parse(message.data.file).name
+      return keyword.data.file_id.split('.')[1] === message.data.file_id.split('.')[1]
     }
   }
 
@@ -191,13 +191,15 @@ export default class CorpusPlugin extends BasePlugin {
         const imageNodes = await this.checkNodeAvaliable(context)
         if (!imageNodes) return 'quit'
 
+        console.log(imageNodes)
+
         // 检查是否重复
         const rule = await knex<Corpus>('corpus')
           .where(
             'keyword',
             'like',
             imageNodes.length !== 0
-              ? `%${parse(imageNodes[0].data.file).name}%`
+              ? `%${imageNodes[0].data.file_id.split('.')[1]}%`
               : JSON.stringify(context.message)
           )
           .where('deleted_at', null)
@@ -283,7 +285,7 @@ export default class CorpusPlugin extends BasePlugin {
         'keyword',
         'like',
         context.message[0].type === 'image'
-          ? `%${parse(context.message[0].data.file).name}%`
+          ? `%${context.message[0].data.file_id.split('.')[1]}%`
           : keyword
       )
       .update('deleted_at', Date.now())
