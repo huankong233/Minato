@@ -4,7 +4,7 @@ import { BasePlugin } from '@/plugins/Base.ts'
 import { config as BotConfig } from '@/plugins/BuiltIn/Bot/config.ts'
 import clc from 'cli-color'
 import type { AllHandlers } from 'node-napcat-ts'
-import { NCWebsocket, Structs } from 'node-napcat-ts'
+import { convertCQCodeToJSON, convertJSONToCQCode, NCWebsocket, Structs } from 'node-napcat-ts'
 import { config } from './config.ts'
 
 export default class Bot extends BasePlugin {
@@ -76,7 +76,12 @@ export default class Bot extends BasePlugin {
     ])
   }
 
-  static parseMessage(message: string): Command | false {
+  static parseMessage(message: string, needReply = false): Command | false {
+    if (needReply) {
+      const json = convertCQCodeToJSON(message)
+      if (json.length === 0 || json[0].type !== 'reply') return false
+      message = convertJSONToCQCode(json.slice(1))
+    }
     if (config.command_prefix !== '') {
       if (message.startsWith(config.command_prefix)) {
         message = message.slice(config.command_prefix.length)
@@ -177,10 +182,15 @@ export default class Bot extends BasePlugin {
       const messageEvents = events.message
 
       for (let i = 0; i < messageEvents.length; i++) {
-        const { callback, pluginName } = messageEvents[i]
+        const { callback, pluginName, needReply = false } = messageEvents[i]
+
+        this.logger.DEBUG(`插件 ${pluginName} 处理中`)
+        if (needReply && context.message[0].type !== 'reply') {
+          this.logger.DEBUG(`消息不满足插件 ${pluginName} 需求的回复消息触发条件`)
+          continue
+        }
 
         try {
-          this.logger.DEBUG(`插件 ${pluginName} 处理中`)
           const response = await callback(context)
           if (response === 'quit') {
             this.logger.DEBUG(clc.red(`插件${pluginName} 申请终止继续触发其他插件`))
@@ -196,12 +206,16 @@ export default class Bot extends BasePlugin {
       const commandEvent = events.command
 
       for (let i = 0; i < commandEvent.length; i++) {
-        const { callback, pluginName } = commandEvent[i]
+        const { callback, pluginName, needReply = false } = commandEvent[i]
+
+        this.logger.DEBUG(`插件 ${pluginName} 处理中`)
+        if (needReply && context.message[0].type !== 'reply') {
+          this.logger.DEBUG(`消息不满足插件 ${pluginName} 需求的回复消息触发条件`)
+          continue
+        }
 
         try {
-          this.logger.DEBUG(`插件 ${pluginName} 处理中`)
-
-          const command = Bot.parseMessage(context.raw_message)
+          const command = Bot.parseMessage(context.raw_message, needReply)
           if (!command) continue
 
           const canContinue = await this.checkCommand(context, commandEvent[i], command)

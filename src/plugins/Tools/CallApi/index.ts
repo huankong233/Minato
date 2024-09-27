@@ -14,8 +14,11 @@ export default class CallApi extends BasePlugin {
       callback: this.send.bind(this)
     },
     {
-      type: 'message',
-      callback: this.message.bind(this)
+      type: 'command',
+      commandName: 'get_id',
+      description: 'get_id [回复消息]',
+      callback: this.get_id.bind(this),
+      needReply: true
     }
   ]
 
@@ -56,15 +59,9 @@ export default class CallApi extends BasePlugin {
     }
   }
 
-  async message(context: AllHandlers['message']) {
+  async get_id(context: AllHandlers['message']) {
     const firstMessage = context.message[0]
-    const secondMessage = context.message[1]
-    if (
-      firstMessage.type === 'reply' &&
-      secondMessage.type === 'text' &&
-      secondMessage.data.text === 'get_id'
-    ) {
-      await sendMsg(context, [Structs.text(`消息ID: ${firstMessage.data.id}`)])
-    }
+    if (!firstMessage || firstMessage.type !== 'reply') return
+    await sendMsg(context, [Structs.text(`消息ID: ${firstMessage.data.id}`)])
   }
 }
