@@ -1,11 +1,13 @@
 import type { allEvents, Command } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
+import type { LookupAddress } from 'dns'
+import { lookup } from 'dns/promises'
 import mc from 'minecraftstatuspinger'
 import type { ServerStatus } from 'minecraftstatuspinger/dist/types.js'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
 
-export default class Mute extends BasePlugin {
+export default class Motd extends BasePlugin {
   events: allEvents[] = [
     {
       type: 'command',
@@ -26,6 +28,7 @@ export default class Mute extends BasePlugin {
     }
 
     let status: ServerStatus
+    let ip: LookupAddress
     try {
       status = await mc.lookup({
         host,
@@ -33,6 +36,7 @@ export default class Mute extends BasePlugin {
         timeout: 10000,
         ping: true
       })
+      ip = await lookup(host)
     } catch (error) {
       this.logger.ERROR(`查询${host}:${port}失败`)
       this.logger.DIR(error, false)
@@ -51,6 +55,7 @@ export default class Mute extends BasePlugin {
     await sendMsg(context, [
       Structs.image('base64://' + data.favicon.split(',')[1]),
       Structs.text(`服务器信息: ${data.version.name}\n`),
+      Structs.text(`服务器ip: ${ip.address}\n`),
       Structs.text(`在线玩家: [${data.players.online}/${data.players.max}]\n`),
       Structs.text(`MOTD: ${this.extractTextFromJson(data.description)}\n`)
     ])
