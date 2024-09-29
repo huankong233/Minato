@@ -28,6 +28,13 @@ export default class Log extends BasePlugin {
         originFunction(...args)
       }
     })(console.log)
+
+    console.dir = ((originFunction) => {
+      return (...args) => {
+        this.saveLog(args)
+        originFunction(...args)
+      }
+    })(console.log)
   }
 
   saveLog(args: any[]) {
