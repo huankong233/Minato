@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 /**
  * 格式化时间,将秒转换为HH:MM:SS的格式
  * @param ms 毫秒
@@ -36,10 +38,10 @@ export function isBeforeToday(timestamp: number) {
  * @returns 2023/6/26 09:46:39
  */
 export const getDateTime = (split = '/', split2 = ':') =>
-  new Date().toLocaleString().replaceAll('/', split).replaceAll(':', split2)
+  dayjs().format(`YYYY${split}MM${split}DD HH${split2}mm${split2}ss`)
 
 /**
  * 获取日期
  * @returns 2023-06-26
  */
-export const getDate = () => new Date().toISOString().slice(0, 10)
+export const getDate = () => dayjs().format(`YYYY-MM-DD`)

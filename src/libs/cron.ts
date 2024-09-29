@@ -1,10 +1,10 @@
 import { CronJob } from 'cron'
 
-export const cron = (cron: string, func: () => void) =>
+export const cron = (cron: string, func: () => void, onComplete = null, start = true) =>
   new CronJob(
     cron, // cronTime
     func, // onTick
-    null, // onComplete
-    true, // start
+    onComplete, // onComplete
+    start, // start
     process.env.TZ ?? 'Asia/Shanghai' // timeZone
   )
