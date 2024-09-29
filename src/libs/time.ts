@@ -35,8 +35,8 @@ export function isBeforeToday(timestamp: number) {
  * 获取时间
  * @returns 2023/6/26 09:46:39
  */
-export const getDateTime = (split = '/', split2 = ':') =>
-  new Date().toLocaleString().replaceAll('/', split).replaceAll(':', split2)
+export const getDateTime = (split = '/', split2 = ':', locales = 'zh-CN') =>
+  new Date().toLocaleString(locales).replaceAll('/', split).replaceAll(':', split2)
 
 /**
  * 获取日期
