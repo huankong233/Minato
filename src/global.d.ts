@@ -53,6 +53,7 @@ export interface commandEvent {
   priority?: number
   hide?: boolean
   pluginName: string
+  needReply?: boolean
 }
 
 export interface messageEvent {
@@ -60,6 +61,7 @@ export interface messageEvent {
   callback: (context: AllHandlers['message']) => Promise<void | 'quit'>
   priority?: number
   pluginName: string
+  needReply?: boolean
 }
 
 export interface noticeEvent {

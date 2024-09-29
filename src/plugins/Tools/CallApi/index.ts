@@ -12,6 +12,13 @@ export default class CallApi extends BasePlugin {
       description: 'call [API端点] [参数]',
       params: [{ type: 'string' }, { type: 'string', default: '{}' }],
       callback: this.send.bind(this)
+    },
+    {
+      type: 'command',
+      commandName: 'get_id',
+      description: 'get_id [回复消息]',
+      callback: this.get_id.bind(this),
+      needReply: true
     }
   ]
 
@@ -50,5 +57,11 @@ export default class CallApi extends BasePlugin {
     } else {
       await sendMsg(context, [Structs.text('API 端点不存在')])
     }
+  }
+
+  async get_id(context: AllHandlers['message']) {
+    const firstMessage = context.message[0]
+    if (!firstMessage || firstMessage.type !== 'reply') return
+    await sendMsg(context, [Structs.text(`消息ID: ${firstMessage.data.id}`)])
   }
 }
