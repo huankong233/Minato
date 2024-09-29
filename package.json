@@ -32,6 +32,7 @@
     "jimp": "^1.6.0",
     "knex": "^3.1.0",
     "mime-types": "^2.1.35",
+    "minecraftstatuspinger": "^1.1.5",
     "mysql2": "^3.11.3",
     "node-napcat-ts": "^0.3.0",
     "tsx": "^4.19.1"
