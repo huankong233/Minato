@@ -1,5 +1,6 @@
 import type { allEvents, Command, Corpus } from '@/global.js'
 import { sendMsg } from '@/libs/sendMsg.ts'
+import { getDateTime } from '@/libs/time.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
 import { config as BotConfig } from '@/plugins/BuiltIn/Bot/config.ts'
 import PigeonTool from '@/plugins/Pigeons/PigeonTool/index.ts'
@@ -288,7 +289,7 @@ export default class CorpusPlugin extends BasePlugin {
           ? `%${context.message[0].data.file_id.split('.')[1]}%`
           : keyword
       )
-      .update('deleted_at', Date.now())
+      .update('deleted_at', getDateTime('-'))
     await sendMsg(context, [Structs.text('忘记成功~')])
     await this.loadRules()
   }

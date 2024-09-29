@@ -1,4 +1,4 @@
-import { getTime } from '@/libs/time.ts'
+import { getDateTime } from '@/libs/time.ts'
 import clc from 'cli-color'
 
 interface loggerParams {
@@ -87,7 +87,7 @@ export class Logger {
     if (this.#subModule) type += `${type}:${this.#subModule}`
 
     const log = this.formatMessages(messages)
-    console.log(clc.cyan(`[${getTime()}]`), clc.blackBright(`[${type}]`), ...log)
+    console.log(clc.cyan(`[${getDateTime()}]`), clc.blackBright(`[${type}]`), ...log)
   }
 }
 
