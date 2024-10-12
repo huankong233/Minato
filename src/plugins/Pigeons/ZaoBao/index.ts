@@ -59,7 +59,9 @@ export default class ZaoBao extends BasePlugin {
       return [Structs.text('早报获取失败了喵~')]
     }
     if (!url.checkSuccess(response.data)) return [Structs.text('获取失败了喵~')]
-    return [Structs.image(url.getImage(response.data))]
+    const image = url.getImage(response.data)
+    const base64 = await axios.get(image, { responseType: 'arraybuffer' })
+    return [Structs.image(`base64://${Buffer.from(base64.data).toString('base64')}`)]
   }
 
   init = () => {

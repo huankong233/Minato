@@ -9,7 +9,7 @@ import { config } from './config.ts'
 
 export default class Bot extends BasePlugin {
   async init() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const bot = new NCWebsocket(config.connect)
 
       if (debug) {
@@ -59,7 +59,7 @@ export default class Bot extends BasePlugin {
         resolve(true)
       })
 
-      bot.connect()
+      await bot.connect()
     })
   }
 
