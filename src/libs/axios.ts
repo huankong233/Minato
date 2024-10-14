@@ -3,9 +3,11 @@ import { makeSystemLogger } from './logger.ts'
 
 const logger = makeSystemLogger({ pluginName: 'axios' })
 
-const instance = axios.create({
-  timeout: 300000
-})
+const retry = 10
+const retryDelay = 1000
+const timeout = 300000
+
+const instance = axios.create({ timeout })
 
 if (debug) {
   instance.interceptors.request.use(
@@ -33,10 +35,16 @@ if (debug) {
       })
       return response
     },
-    (err) => {
-      logger.ERROR('收到网络请求错误响应')
-      logger.DIR(err, false)
-      return Promise.reject(err)
+    (config) => {
+      const _retry = config.retry ?? 0
+      logger.ERROR(`收到网络请求错误响应[${_retry}/${retry}]`)
+      logger.DIR(config, false)
+      if (_retry >= retry) return Promise.reject(config)
+      // 重试
+      config.retry = _retry + 1
+      return new Promise((resolve) =>
+        setTimeout(() => resolve(instance(config)), config.retry ?? retryDelay)
+      )
     }
   )
 }
