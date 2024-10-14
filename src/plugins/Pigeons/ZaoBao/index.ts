@@ -2,6 +2,7 @@ import type { allEvents, Command } from '@/global.js'
 import axios from '@/libs/axios.ts'
 import { cron } from '@/libs/cron.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
+import { sleep } from '@/libs/sleep.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
 import { Structs, type Send } from 'node-napcat-ts'
 import { config, type ZaoBaoConfig } from './config.ts'
@@ -50,13 +51,16 @@ export default class ZaoBao extends BasePlugin {
     }
   }
 
-  async getData(type: ZaoBaoConfig['type']): Promise<Send[keyof Send][]> {
+  async getData(type: ZaoBaoConfig['type'], times = 1): Promise<Send[keyof Send][]> {
     const url = this.urls[type]
     let response
     try {
       response = await axios.get(url.api)
     } catch (_error) {
-      return [Structs.text('早报获取失败了喵~')]
+      // 接口调用失败
+      if (times >= 3) return [Structs.text('获取失败了喵~')]
+      await sleep(1000)
+      return this.getData(type, times + 1)
     }
     if (!url.checkSuccess(response.data)) return [Structs.text('获取失败了喵~')]
     const image = url.getImage(response.data)
