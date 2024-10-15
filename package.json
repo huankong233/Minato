@@ -21,6 +21,7 @@
   "dependencies": {
     "@huan_kong/node-global-proxy": "1.0.2",
     "axios": "^1.7.7",
+    "axios-retry": "^4.5.0",
     "cheerio": "^1.0.0",
     "cli-color": "^2.0.4",
     "commander": "^12.1.0",
