@@ -192,8 +192,6 @@ export default class CorpusPlugin extends BasePlugin {
         const imageNodes = await this.checkNodeAvaliable(context)
         if (!imageNodes) return 'quit'
 
-        console.log(imageNodes)
-
         // 检查是否重复
         const rule = await knex<Corpus>('corpus')
           .where(

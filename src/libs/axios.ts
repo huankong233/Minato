@@ -32,12 +32,12 @@ if (debug) {
       })
       return response
     },
-    async (config) => {
+    async (error) => {
       logger.ERROR(
-        `收到网络请求错误响应[${config['axios-retry'].retryCount}/${config['axios-retry'].retries}]`
+        `收到网络请求错误响应[${error.config['axios-retry'].retryCount}/${error.config['axios-retry'].retries}]`
       )
-      logger.DIR(config, false)
-      return Promise.reject(config)
+      logger.DIR(error, false)
+      return Promise.reject(error)
     }
   )
 }
