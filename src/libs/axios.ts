@@ -40,7 +40,7 @@ if (debug) {
   )
 }
 
-export default axiosRetry(instance, {
+axiosRetry(instance, {
   retries: 10,
   retryDelay: (retryCount, error) => {
     logger.ERROR(`收到网络请求错误响应[${retryCount}/10]`)
@@ -48,3 +48,5 @@ export default axiosRetry(instance, {
     return 1000
   }
 })
+
+export default instance
