@@ -15,12 +15,6 @@ if (debug) {
     (config) => {
       logger.DEBUG('发送网络请求')
       logger.DIR(config)
-      // @ts-expect-error 重试次数
-      config.retry = config.retry ?? retry
-      // @ts-expect-error 已重试次数
-      config.retryCount = config.retryCount ?? 0
-      // @ts-expect-error 重试间隔
-      config.retruDelay = config.retryDelay ?? retryDelay
       return config
     },
     (err) => {
@@ -43,18 +37,24 @@ if (debug) {
       return response
     },
     async (config) => {
-      if (config.retryCount) {
-        logger.ERROR(`收到网络请求错误响应[${config.retryCount}/${config.retry}]`)
-        logger.DIR(config, false)
-        if (config.retryCount >= retry) return Promise.reject(config)
-        config.retryCount = config.retryCount + 1
-        await sleep(config.retry)
-        return instance(config)
-      } else {
+      if (!config.retry) {
         logger.ERROR(`收到网络请求错误响应[0/0]`)
         logger.DIR(config, false)
         return Promise.reject(config)
       }
+
+      config.retry = config.retry ?? retry
+      config.retryCount = config.retryCount ?? 1
+      config.retryDelay = config.retryDelay ?? retryDelay
+
+      logger.ERROR(`收到网络请求错误响应[${config.retryCount}/${config.retry}]`)
+      logger.DIR(config, false)
+
+      if (config.retryCount >= retry) return Promise.reject(config)
+
+      config.retryCount = config.retryCount + 1
+      await sleep(config.retryDelay)
+      return instance(config)
     }
   )
 }
