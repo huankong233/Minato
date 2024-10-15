@@ -1,13 +1,10 @@
 import axios from 'axios'
+import axiosRetry from 'axios-retry'
 import { makeSystemLogger } from './logger.ts'
 
 const logger = makeSystemLogger({ pluginName: 'axios' })
 
-const retry = 10
-const retryDelay = 1000
-const timeout = 300000
-
-const instance = axios.create({ timeout })
+const instance = axios.create({ timeout: 300000 })
 
 if (debug) {
   instance.interceptors.request.use(
@@ -35,18 +32,19 @@ if (debug) {
       })
       return response
     },
-    (config) => {
-      const _retry = config.retry ?? 0
-      logger.ERROR(`收到网络请求错误响应[${_retry}/${retry}]`)
-      logger.DIR(config, false)
-      if (_retry >= retry) return Promise.reject(config)
-      // 重试
-      config.retry = _retry + 1
-      return new Promise((resolve) =>
-        setTimeout(() => resolve(instance(config)), config.retry ?? retryDelay)
+    async (error) => {
+      logger.ERROR(
+        `收到网络请求错误响应[${error.config['axios-retry'].retryCount}/${error.config['axios-retry'].retries}]`
       )
+      logger.DIR(error, false)
+      return Promise.reject(error)
     }
   )
 }
+
+axiosRetry(instance, {
+  retries: 10,
+  retryDelay: () => 1000
+})
 
 export default instance

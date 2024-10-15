@@ -1,6 +1,6 @@
 {
   "name": "Minato",
-  "version": "0.3.22",
+  "version": "0.3.23",
   "repository": "https://github.com/huankong233/Minato",
   "description": "Minato framework in typescript",
   "type": "module",
@@ -21,6 +21,7 @@
   "dependencies": {
     "@huan_kong/node-global-proxy": "1.0.2",
     "axios": "^1.7.7",
+    "axios-retry": "^4.5.0",
     "cheerio": "^1.0.0",
     "cli-color": "^2.0.4",
     "commander": "^12.1.0",
