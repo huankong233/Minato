@@ -33,8 +33,10 @@ if (debug) {
       return response
     },
     async (config) => {
-      // logger.ERROR(`收到网络请求错误响应[${config.retryCount}/${config.retry}]`)
-      // logger.DIR(config, false)
+      logger.ERROR(
+        `收到网络请求错误响应[${config['axios-retry'].retryCount}/${config['axios-retry'].retries}]`
+      )
+      logger.DIR(config, false)
       return Promise.reject(config)
     }
   )
@@ -42,11 +44,7 @@ if (debug) {
 
 axiosRetry(instance, {
   retries: 10,
-  retryDelay: (retryCount, error) => {
-    logger.ERROR(`收到网络请求错误响应[${retryCount}/10]`)
-    logger.DIR(error, false)
-    return 1000
-  }
+  retryDelay: () => 1000
 })
 
 export default instance
