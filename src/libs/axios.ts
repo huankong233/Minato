@@ -37,12 +37,6 @@ if (debug) {
       return response
     },
     async (config) => {
-      if (!config.retry) {
-        logger.ERROR(`收到网络请求错误响应[0/0]`)
-        logger.DIR(config, false)
-        return Promise.reject(config)
-      }
-
       config.retry = config.retry ?? retry
       config.retryCount = config.retryCount ?? 1
       config.retryDelay = config.retryDelay ?? retryDelay
