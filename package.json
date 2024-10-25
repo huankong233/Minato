@@ -1,6 +1,6 @@
 {
   "name": "Minato",
-  "version": "0.3.23",
+  "version": "0.3.24",
   "repository": "https://github.com/huankong233/Minato",
   "description": "Minato framework in typescript",
   "type": "module",

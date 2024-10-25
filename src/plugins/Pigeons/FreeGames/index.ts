@@ -60,46 +60,54 @@ export default class FreeGames extends BasePlugin {
     const messages = []
 
     if (type === 'epic' || type === 'all') {
-      const epic = await epicApi()
-      messages.push(Structs.customNode([Structs.text(`今日epic共有${epic.length}个免费游戏~`)]))
-      epic.forEach((item) => {
-        messages.push(
-          Structs.customNode([
-            Structs.image(item.description.image),
-            Structs.text(
-              [
-                `游戏名: ${item.title}`,
-                `开发商: ${item.author}`,
-                `截止日期: ${item.endDate}`,
-                `简介: ${item.description.description}`,
-                `购买链接: ${item.link}`
-              ].join('\n')
-            )
-          ])
-        )
-      })
+      try {
+        const epic = await epicApi()
+        messages.push(Structs.customNode([Structs.text(`今日epic共有${epic.length}个免费游戏~`)]))
+        epic.forEach((item) => {
+          messages.push(
+            Structs.customNode([
+              Structs.image(item.description.image),
+              Structs.text(
+                [
+                  `游戏名: ${item.title}`,
+                  `开发商: ${item.author}`,
+                  `截止日期: ${item.endDate}`,
+                  `简介: ${item.description.description}`,
+                  `购买链接: ${item.link}`
+                ].join('\n')
+              )
+            ])
+          )
+        })
+      } catch (_error) {
+        messages.push(Structs.customNode([Structs.text(`epic获取免费游戏失败~`)]))
+      }
     }
 
     if (type === 'steam' || type === 'all') {
-      const steam = await steamApi()
+      try {
+        const steam = await steamApi()
 
-      messages.push(Structs.customNode([Structs.text(`今日steam共有${steam.length}个免费游戏~`)]))
+        messages.push(Structs.customNode([Structs.text(`今日steam共有${steam.length}个免费游戏~`)]))
 
-      steam.forEach((item) => {
-        if (!item.img) return
-        messages.push(
-          Structs.customNode([
-            Structs.image(item.img),
-            Structs.text(
-              [
-                `游戏名: ${item.title}`,
-                `发行日期: ${item.releasedTime}`,
-                `购买链接: ${item.url}`
-              ].join('\n')
-            )
-          ])
-        )
-      })
+        steam.forEach((item) => {
+          if (!item.img) return
+          messages.push(
+            Structs.customNode([
+              Structs.image(item.img),
+              Structs.text(
+                [
+                  `游戏名: ${item.title}`,
+                  `发行日期: ${item.releasedTime}`,
+                  `购买链接: ${item.url}`
+                ].join('\n')
+              )
+            ])
+          )
+        })
+      } catch (_error) {
+        messages.push(Structs.customNode([Structs.text(`steam获取免费游戏失败~`)]))
+      }
     }
 
     return messages
