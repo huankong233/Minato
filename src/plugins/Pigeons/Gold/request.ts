@@ -3,18 +3,23 @@ import type { Logger } from '@/libs/logger.ts'
 
 export const getGoldPrice = async (logger: Logger) => {
   // https://api.jijinhao.com/sQuoteCenter/realTime.htm?code=JO_9753&_=1725002244237
-  const res = await axios.get(
-    `https://api.jijinhao.com/sQuoteCenter/realTime.htm?code=JO_9753&_=${Date.now()}`,
-    {
+  const res = await axios
+    .get(`https://api.jijinhao.com/sQuoteCenter/realTime.htm?code=JO_9753&_=${Date.now()}`, {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
         Referer: 'https://quote.cngold.org/'
       }
-    }
-  )
+    })
+    .catch((error) => {
+      logger.ERROR('获取金价失败')
+      logger.DIR(error, false)
+      return null
+    })
 
-  let data: string[]
+  if (!res) return null
+
+  let data: string[] = []
   try {
     data = res.data
       .replaceAll('var hq_str = "', '')
@@ -26,6 +31,8 @@ export const getGoldPrice = async (logger: Logger) => {
     logger.DIR(error, false)
     return null
   }
+
+  if (data.length === 0) return null
 
   return {
     name: data[0],

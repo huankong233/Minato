@@ -55,13 +55,21 @@ export default class ZaoBao extends BasePlugin {
     let response
     try {
       response = await axios.get(url.api)
-    } catch (_error) {
-      return [Structs.text('获取失败了喵~')]
+    } catch (error) {
+      this.logger.ERROR('获取早报失败了喵')
+      this.logger.DIR(error, false)
+      return [Structs.text('获取早报失败了喵~')]
     }
-    if (!url.checkSuccess(response.data)) return [Structs.text('获取失败了喵~')]
+    if (!url.checkSuccess(response.data)) return [Structs.text('获取早报失败了喵~')]
     const image = url.getImage(response.data)
-    const base64 = await axios.get(image, { responseType: 'arraybuffer' })
-    return [Structs.image(`base64://${Buffer.from(base64.data).toString('base64')}`)]
+    try {
+      const base64 = await axios.get(image, { responseType: 'arraybuffer' })
+      return [Structs.image(`base64://${Buffer.from(base64.data).toString('base64')}`)]
+    } catch (error) {
+      this.logger.ERROR('下载图片失败了喵')
+      this.logger.DIR(error, false)
+      return [Structs.text('下载图片失败了喵~')]
+    }
   }
 
   init = () => {
