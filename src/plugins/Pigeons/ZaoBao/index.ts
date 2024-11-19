@@ -39,7 +39,7 @@ export default class ZaoBao extends BasePlugin {
 
   urls = {
     每天60秒: {
-      api: 'https://api.2xb.cn/zaob',
+      api: 'http://api.2xb.cn/zaob',
       checkSuccess: (data: any) => data.msg === 'Success',
       getImage: (data: any) => data.imageUrl
     },
