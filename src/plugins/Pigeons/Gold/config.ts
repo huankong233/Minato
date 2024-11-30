@@ -13,5 +13,5 @@ export const config: GoldConfig = {
     users: []
   },
   changeGroupName: [],
-  cron: '30 14 * * *'
+  cron: '30 9-16 * * 1-5'
 }
