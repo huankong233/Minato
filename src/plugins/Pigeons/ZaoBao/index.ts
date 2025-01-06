@@ -16,38 +16,36 @@ export default class ZaoBao extends BasePlugin {
         {
           type: 'enum',
           enum: ['每天60秒', '摸鱼人日历'],
-          default: config.type
-        }
+          default: config.type,
+        },
       ],
-      callback: (context, command) => this.zaobao(context, command)
+      callback: (context, command) => this.zaobao(context, command),
     },
     {
       type: 'command',
       commandName: '每日60秒',
       description: '每日60秒',
-      callback: (context, command) =>
-        this.zaobao(context, { name: command.name, args: ['每天60秒'] })
+      callback: (context, command) => this.zaobao(context, { name: command.name, args: ['每天60秒'] }),
     },
     {
       type: 'command',
       commandName: '摸鱼人日历',
       description: '摸鱼人日历',
-      callback: (context, command) =>
-        this.zaobao(context, { name: command.name, args: ['摸鱼人日历'] })
-    }
+      callback: (context, command) => this.zaobao(context, { name: command.name, args: ['摸鱼人日历'] }),
+    },
   ]
 
   urls = {
     每天60秒: {
-      api: 'http://api.2xb.cn/zaob',
+      api: 'https://api.southerly.top/api/60s?format=json',
       checkSuccess: (data: any) => data.msg === 'Success',
-      getImage: (data: any) => data.imageUrl
+      getImage: (data: any) => data.data.image,
     },
     摸鱼人日历: {
       api: 'https://api.vvhan.com/api/moyu?type=json',
       checkSuccess: (data: any) => data.success,
-      getImage: (data: any) => data.url
-    }
+      getImage: (data: any) => data.url,
+    },
   }
 
   async getData(type: ZaoBaoConfig['type']): Promise<Send[keyof Send][]> {
@@ -85,12 +83,7 @@ export default class ZaoBao extends BasePlugin {
     })
   }
 
-  async zaobao(
-    context:
-      | { message_type: 'private'; user_id: number }
-      | { message_type: 'group'; group_id: number },
-    command: Command
-  ) {
+  async zaobao(context: { message_type: 'private'; user_id: number } | { message_type: 'group'; group_id: number }, command: Command) {
     const type = command.args[0] as ZaoBaoConfig['type']
     const response = await this.getData(type)
     await sendMsg(context, response)

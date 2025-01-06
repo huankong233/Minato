@@ -7,64 +7,60 @@ import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 import { getGoldPrice } from './request.ts'
 
-export const enable =
-  config.boardcast.groups.length !== 0 ||
-  config.boardcast.users.length !== 0 ||
-  config.changeGroupName.length !== 0
+export const enable = config.boardcast.groups.length !== 0 || config.boardcast.users.length !== 0
 
 export default class Gold extends BasePlugin {
   events: allEvents[] = [
     {
       type: 'command',
       commandName: '实时金价',
-      description: '实时金价 [获取价格/更新群名]',
-      params: [
-        {
-          type: 'enum',
-          enum: ['获取价格', '更新群名'],
-          default: '获取价格'
-        }
-      ],
-      callback: (context, command) => this.checkGoldPrice(false, context, command)
-    }
+      description: '实时金价',
+      callback: (context, command) => this.checkGoldPrice(context, command),
+    },
   ]
 
-  init = () => cron(config.cron, this.checkGoldPrice)
+  init = () => cron(config.cron, this.cronSend)
 
-  async checkGoldPrice(isCron = true, context?: AllHandlers['message'], command?: Command) {
-    let action = '获取价格'
-    if (command) action = command.args[0]
+  async checkGoldPrice(context: AllHandlers['message'], _command: Command) {
+    const response = await getGoldPrice(this.logger)
+    if (!response) {
+      await sendMsg(context, [Structs.text('获取金价失败了喵~')])
+      return
+    }
+
+    const message = [
+      Structs.text(
+        [
+          `金价播报`,
+          `开盘价: ${response.open}`,
+          `实时金价: ${response.price}`,
+          `波动情况: ${response.pricedownPrice}(${response.pricedownPrecent.slice(0, 5)}%)`,
+          `买入价格: ${response.buyPrice}`,
+          `卖出价格: ${response.sellPrice}`,
+          `最高点价: ${response.high}`,
+          `最低点价: ${response.low}`,
+        ].join('\n'),
+      ),
+    ]
+
+    await sendMsg(context, message)
+  }
+
+  async cronSend() {
+    const { boardcast } = config
 
     const response = await getGoldPrice(this.logger)
     if (!response) {
       const message = [Structs.text('获取金价失败了喵~')]
 
-      if (action === '获取价格' && context) {
-        await sendMsg(context, message)
-        return
+      for (const group_id of boardcast.groups) {
+        await sendMsg({ message_type: 'group', group_id }, message)
+        await sleep(1000)
       }
 
-      if (action === '更新群名' || isCron) {
-        for (const group_id of config.changeGroupName) {
-          await bot.set_group_name({
-            group_id,
-            group_name: `黄金导购群: 获取金价失败了喵~`
-          })
-          await sleep(1000)
-        }
-      }
-
-      if (isCron) {
-        const { boardcast } = config
-        for (const group_id of boardcast.groups) {
-          await sendMsg({ message_type: 'group', group_id }, message)
-          await sleep(1000)
-        }
-
-        for (const user_id of boardcast.users) {
-          await sendMsg({ message_type: 'private', user_id }, message)
-          await sleep(1000)
-        }
+      for (const user_id of boardcast.users) {
+        await sendMsg({ message_type: 'private', user_id }, message)
+        await sleep(1000)
       }
 
       return
@@ -80,38 +76,19 @@ export default class Gold extends BasePlugin {
           `买入价格: ${response.buyPrice}`,
           `卖出价格: ${response.sellPrice}`,
           `最高点价: ${response.high}`,
-          `最低点价: ${response.low}`
-        ].join('\n')
-      )
+          `最低点价: ${response.low}`,
+        ].join('\n'),
+      ),
     ]
 
-    if (action === '获取价格' && context) {
-      await sendMsg(context, message)
-      return
+    for (const group_id of boardcast.groups) {
+      await sendMsg({ message_type: 'group', group_id }, message)
+      await sleep(1000)
     }
 
-    if (action === '更新群名' || isCron) {
-      for (const group_id of config.changeGroupName) {
-        await bot.set_group_name({
-          group_id,
-          group_name: `黄金导购群: ${response.price}`
-        })
-        await sleep(1000)
-      }
-    }
-
-    if (isCron) {
-      const { boardcast } = config
-
-      for (const group_id of boardcast.groups) {
-        await sendMsg({ message_type: 'group', group_id }, message)
-        await sleep(1000)
-      }
-
-      for (const user_id of boardcast.users) {
-        await sendMsg({ message_type: 'private', user_id }, message)
-        await sleep(1000)
-      }
+    for (const user_id of boardcast.users) {
+      await sendMsg({ message_type: 'private', user_id }, message)
+      await sleep(1000)
     }
   }
 }
