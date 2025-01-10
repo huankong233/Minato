@@ -37,9 +37,9 @@ export default class ZaoBao extends BasePlugin {
 
   urls = {
     每天60秒: {
-      api: 'https://api.southerly.top/api/60s?format=json',
-      checkSuccess: (data: any) => data.msg === 'Success',
-      getImage: (data: any) => data.data.image,
+      api: 'https://api.03c3.cn/api/zb?type=jsonImg',
+      checkSuccess: (data: any) => data.msg === 'ok',
+      getImage: (data: any) => data.data.imageUrl,
     },
     摸鱼人日历: {
       api: 'https://api.vvhan.com/api/moyu?type=json',
