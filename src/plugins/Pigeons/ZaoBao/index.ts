@@ -39,7 +39,7 @@ export default class ZaoBao extends BasePlugin {
     每天60秒: {
       api: 'https://api.03c3.cn/api/zb?type=jsonImg',
       checkSuccess: (data: any) => data.msg === 'ok',
-      getImage: (data: any) => data.data.imageUrl,
+      getImage: (data: any) => data.data.imageurl,
     },
     摸鱼人日历: {
       api: 'https://api.vvhan.com/api/moyu?type=json',
