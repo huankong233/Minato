@@ -15,7 +15,7 @@ function randomModifyPixels(img: any) {
     [0, 0],
     [w - 1, 0],
     [0, h - 1],
-    [w - 1, h - 1]
+    [w - 1, h - 1],
   ]
   for (const [x, y] of pixels) {
     img.setPixelColor(rgbaToInt(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255), 1), x, y)
@@ -31,7 +31,7 @@ const getRandomDeg = () => [90, -90, 180, -180][Math.floor(Math.random() * 4)]
  * @returns base64
  */
 export const imgAntiShielding = async (image: Buffer, mode: number) => {
-  const img = await Jimp.fromBuffer(image)
+  const img = await Jimp.fromBuffer(image, { 'image/jpeg': { maxMemoryUsageInMB: 1024 } })
 
   if (mode === 1) {
     randomModifyPixels(img)
