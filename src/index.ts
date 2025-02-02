@@ -62,6 +62,6 @@ serve(
     port: 8080,
   },
   (info) => {
-    logger.SUCCESS(`Hono 服务在 ${info.address}${info.port} 上启动了`)
+    logger.SUCCESS(`Hono 服务在 ${info.address}:${info.port} 上启动了`)
   },
 )
