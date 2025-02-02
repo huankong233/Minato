@@ -9,8 +9,8 @@ export const getArticleInfo = async (id: string, logger: Logger) => {
     const response = await axios.get(`https://api.bilibili.com/x/article/viewinfo?id=${id}`, {
       timeout: 10000,
       headers: {
-        'User-Agent': USER_AGENT
-      }
+        'User-Agent': USER_AGENT,
+      },
     })
 
     const { code, message, data } = response.data
@@ -21,19 +21,12 @@ export const getArticleInfo = async (id: string, logger: Logger) => {
       stats: { view, reply },
       title,
       author_name,
-      origin_image_urls: [img]
+      origin_image_urls: [img],
     } = data
 
     return [
       Structs.image(img),
-      Structs.text(
-        [
-          title,
-          `UP: ${author_name}`,
-          `${humanNum(view)}阅读 ${humanNum(reply)}评论`,
-          `https://www.bilibili.com/read/cv${id}`
-        ].join('\n')
-      )
+      Structs.text([title, `UP: ${author_name}`, `${humanNum(view)}阅读 ${humanNum(reply)}评论`, `https://www.bilibili.com/read/cv${id}`].join('\n')),
     ]
   } catch (error) {
     logger.ERROR(`B站文章信息获取失败`)

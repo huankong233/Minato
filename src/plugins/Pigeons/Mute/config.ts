@@ -3,5 +3,5 @@ export interface MuteConfig {
 }
 
 export const config: MuteConfig = {
-  time: [1, 72000]
+  time: [1, 72000],
 }

@@ -20,5 +20,4 @@ export const purgeLink = (link: string) => {
  * 净化文本中的链接
  * @param text b站链接
  */
-export const purgeLinkInText = (text: string) =>
-  text.replace(/https?:\/\/[-\w~!@#$%&*()+=;':,.?/]+/g, (url) => purgeLink(url))
+export const purgeLinkInText = (text: string) => text.replace(/https?:\/\/[-\w~!@#$%&*()+=;':,.?/]+/g, (url) => purgeLink(url))

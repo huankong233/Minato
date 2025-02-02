@@ -13,12 +13,12 @@ export default class CorpusPlugin extends BasePlugin {
     {
       type: 'message',
       callback: this.message.bind(this),
-      priority: 999
+      priority: 999,
     },
     {
       type: 'message',
       callback: this.checkRules.bind(this),
-      priority: 998
+      priority: 998,
     },
     {
       type: 'command',
@@ -26,16 +26,16 @@ export default class CorpusPlugin extends BasePlugin {
       description: '空空学习 [匹配模式:模糊/精准] [生效范围:全部/私聊/群聊]',
       params: [
         { type: 'enum', enum: ['模糊', '精准'], default: '模糊' },
-        { type: 'enum', enum: ['全部', '私聊', '群聊'], default: '全部' }
+        { type: 'enum', enum: ['全部', '私聊', '群聊'], default: '全部' },
       ],
-      callback: this.learn.bind(this)
+      callback: this.learn.bind(this),
     },
     {
       type: 'command',
       description: '空空忘记',
       commandName: '空空忘记',
-      callback: this.forget.bind(this)
-    }
+      callback: this.forget.bind(this),
+    },
   ]
 
   rules: rule[] = []
@@ -48,22 +48,20 @@ export default class CorpusPlugin extends BasePlugin {
       keyword: JSON.parse(item.keyword),
       reply: JSON.parse(item.reply),
       mode: item.mode,
-      scene: item.scene
+      scene: item.scene,
     }))
   }
 
   matchers = {
     text: (keyword: Receive['text'], message: Receive['text'], mode: rule['mode']) => {
-      return mode === '模糊'
-        ? message.data.text.includes(keyword.data.text)
-        : message.data.text === keyword.data.text
+      return mode === '模糊' ? message.data.text.includes(keyword.data.text) : message.data.text === keyword.data.text
     },
     face: (keyword: Receive['face'], message: Receive['face']) => {
       return message.data.id === keyword.data.id
     },
     image: (keyword: Receive['image'], message: Receive['image']) => {
       return keyword.data.file_id.split('.')[1] === message.data.file_id.split('.')[1]
-    }
+    },
   }
 
   async checkRules(context: AllHandlers['message']) {
@@ -78,14 +76,11 @@ export default class CorpusPlugin extends BasePlugin {
 
       for (const [index, message] of context.message.entries()) {
         const keyword = rule.keyword[index]
-        if (
-          keyword.type === message.type &&
-          this.matchers[keyword.type](keyword as any, message as any, rule.mode)
-        ) {
+        if (keyword.type === message.type && this.matchers[keyword.type](keyword as any, message as any, rule.mode)) {
           // 修正reply
           for (const [index, item] of rule.reply.entries()) {
             if (item.type === 'image') {
-              const res = await bot.get_image({ file: item.data.file_id })
+              const res = await bot.get_image({ file_id: item.data.file_id })
               rule.reply[index].data = { ...rule.reply[index].data, url: res.url }
             }
           }
@@ -99,9 +94,7 @@ export default class CorpusPlugin extends BasePlugin {
   forgeters: { [key: number]: forget } = []
 
   async checkNodeAvaliable(context: AllHandlers['message']) {
-    const allowNodes = context.message.filter(
-      (message) => message.type === 'image' || message.type === 'text' || message.type === 'face'
-    )
+    const allowNodes = context.message.filter((message) => message.type === 'image' || message.type === 'text' || message.type === 'face')
 
     if (context.message.length !== allowNodes.length) {
       await sendMsg(context, [Structs.text('关键词只支持文本或图片节点,请重新输入关键词')])
@@ -148,13 +141,7 @@ export default class CorpusPlugin extends BasePlugin {
 
         // 检查是否重复
         const rule = await knex<Corpus>('corpus')
-          .where(
-            'keyword',
-            'like',
-            imageNodes.length !== 0
-              ? `%${parse(imageNodes[0].data.file).name}%`
-              : JSON.stringify(context.message)
-          )
+          .where('keyword', 'like', imageNodes.length !== 0 ? `%${parse(imageNodes[0].data.file).name}%` : JSON.stringify(context.message))
           .where('deleted_at', null)
 
         if (rule.length > 0) {
@@ -194,13 +181,7 @@ export default class CorpusPlugin extends BasePlugin {
 
         // 检查是否重复
         const rule = await knex<Corpus>('corpus')
-          .where(
-            'keyword',
-            'like',
-            imageNodes.length !== 0
-              ? `%${imageNodes[0].data.file_id.split('.')[1]}%`
-              : JSON.stringify(context.message)
-          )
+          .where('keyword', 'like', imageNodes.length !== 0 ? `%${imageNodes[0].data.file_id.split('.')[1]}%` : JSON.stringify(context.message))
           .where('deleted_at', null)
           .first()
 
@@ -256,7 +237,7 @@ export default class CorpusPlugin extends BasePlugin {
       reply,
       scene,
       mode,
-      deleted_at: null
+      deleted_at: null,
     })
     await sendMsg(context, [Structs.text('插入成功~')])
     await this.loadRules()
@@ -280,13 +261,7 @@ export default class CorpusPlugin extends BasePlugin {
     delete this.forgeters[context.user_id]
 
     await knex<Corpus>('corpus')
-      .where(
-        'keyword',
-        'like',
-        context.message[0].type === 'image'
-          ? `%${context.message[0].data.file_id.split('.')[1]}%`
-          : keyword
-      )
+      .where('keyword', 'like', context.message[0].type === 'image' ? `%${context.message[0].data.file_id.split('.')[1]}%` : keyword)
       .update('deleted_at', getDateTime('-'))
     await sendMsg(context, [Structs.text('忘记成功~')])
     await this.loadRules()

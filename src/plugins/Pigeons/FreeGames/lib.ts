@@ -21,12 +21,10 @@ export const epicApi = async (locale = 'zh-CN', country = 'CN') => {
         item.promotions &&
         item.promotions.promotionalOffers &&
         item.promotions.promotionalOffers.length &&
-        item.promotions.promotionalOffers[0].promotionalOffers[0].discountSetting.discountType ===
-          'PERCENTAGE' &&
-        item.promotions.promotionalOffers[0].promotionalOffers[0].discountSetting
-          .discountPercentage === 0 &&
+        item.promotions.promotionalOffers[0].promotionalOffers[0].discountSetting.discountType === 'PERCENTAGE' &&
+        item.promotions.promotionalOffers[0].promotionalOffers[0].discountSetting.discountPercentage === 0 &&
         dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].startDate) <= now &&
-        dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].endDate) > now
+        dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].endDate) > now,
     )
     .map(async (item: any) => {
       let link = `${rootUrl}/${locale}/p/`
@@ -66,18 +64,16 @@ export const epicApi = async (locale = 'zh-CN', country = 'CN') => {
         }
         return false
       })
-      const end = dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].endDate).format(
-        'YYYY-MM-DD HH:mm:ss'
-      )
+      const end = dayjs(item.promotions.promotionalOffers[0].promotionalOffers[0].endDate).format('YYYY-MM-DD HH:mm:ss')
       return {
         title: item.title,
         author: item.seller.name,
         link,
         description: {
           description,
-          image
+          image,
         },
-        endDate: end
+        endDate: end,
       }
     })
   return await Promise.all(items)
@@ -90,8 +86,8 @@ export const steamApi = async () => {
       params: {
         maxprice: 'free',
         specials: 1,
-        nd: 1
-      }
+        nd: 1,
+      },
     })
     .then((res) => res.data)
 
@@ -106,7 +102,7 @@ export const steamApi = async () => {
         url: `https://store.steampowered.com/app/${id}`,
         img: $(item).find('.search_capsule img').attr('src'),
         title: info.find('.search_name .title').text(),
-        releasedTime: $(item).find('.search_released').text().trim()
+        releasedTime: $(item).find('.search_released').text().trim(),
       }
     })
     .toArray()

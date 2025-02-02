@@ -11,8 +11,8 @@ export default class HttpCat extends BasePlugin {
       callback: this.cat.bind(this),
       commandName: 'httpcat',
       params: [{ type: 'number', default: '200' }],
-      description: 'httpcat [statuscode]'
-    }
+      description: 'httpcat [statuscode]',
+    },
   ]
 
   async cat(context: AllHandlers['message'], command: Command) {
@@ -21,11 +21,11 @@ export default class HttpCat extends BasePlugin {
 
     try {
       image = await axios.get(`https://httpcats.com/${code}.jpg`, {
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
       })
     } catch (_error) {
       image = await axios.get(`https://httpcats.com/404.jpg`, {
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
       })
     }
 

@@ -6,10 +6,9 @@ export const getGoldPrice = async (logger: Logger) => {
   const res = await axios
     .get(`https://api.jijinhao.com/sQuoteCenter/realTime.htm?code=JO_9753&_=${Date.now()}`, {
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
-        Referer: 'https://quote.cngold.org/'
-      }
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+        Referer: 'https://quote.cngold.org/',
+      },
     })
     .catch((error) => {
       logger.ERROR('获取金价失败')
@@ -21,11 +20,7 @@ export const getGoldPrice = async (logger: Logger) => {
 
   let data: string[] = []
   try {
-    data = res.data
-      .replaceAll('var hq_str = "', '')
-      .replaceAll(',";', '')
-      .replaceAll('\n', '')
-      .split(',')
+    data = res.data.replaceAll('var hq_str = "', '').replaceAll(',";', '').replaceAll('\n', '').split(',')
   } catch (error) {
     logger.ERROR('处理数据失败')
     logger.DIR(error, false)
@@ -52,6 +47,6 @@ export const getGoldPrice = async (logger: Logger) => {
     open: data[38],
     status: data[39],
     quoteToday: data[40],
-    quotetime: data[41]
+    quotetime: data[41],
   }
 }

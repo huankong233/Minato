@@ -29,15 +29,11 @@ export default class Bot extends BasePlugin {
       })
 
       bot.on('socket.connecting', (context) => {
-        this.logger.INFO(
-          `连接中#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`
-        )
+        this.logger.INFO(`连接中#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`)
       })
 
       bot.on('socket.error', (context) => {
-        this.logger.ERROR(
-          `连接失败#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`
-        )
+        this.logger.ERROR(`连接失败#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`)
         this.logger.ERROR(context)
 
         if (context.reconnection.nowAttempts >= context.reconnection.attempts) {
@@ -52,9 +48,7 @@ export default class Bot extends BasePlugin {
       })
 
       bot.on('socket.open', async (context) => {
-        this.logger.SUCCESS(
-          `连接成功#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`
-        )
+        this.logger.SUCCESS(`连接成功#${context.reconnection.nowAttempts}/${context.reconnection.attempts}`)
         await this.connectSuccess(bot)
         resolve(true)
       })
@@ -71,9 +65,7 @@ export default class Bot extends BasePlugin {
     if (debug || !config.online) return
     if (config.online.to <= 0) return this.logger.INFO('未设置发送账户,请注意~')
 
-    await sendMsg({ message_type: 'private', user_id: config.online.to }, [
-      Structs.text(config.online.msg)
-    ])
+    await sendMsg({ message_type: 'private', user_id: config.online.to }, [Structs.text(config.online.msg)])
   }
 
   static parseMessage(message: string, needReply = false): Command | false {
@@ -93,7 +85,7 @@ export default class Bot extends BasePlugin {
     const messageArr = message.split(' ')
     return {
       name: messageArr[0],
-      args: messageArr.slice(1)
+      args: messageArr.slice(1),
     }
   }
 
@@ -119,14 +111,7 @@ export default class Bot extends BasePlugin {
       if (!arg) {
         if (!param.default) {
           this.logger.DEBUG(`参数长度不符合插件 ${pluginName} 需求的 ${commandName} 触发条件`)
-          await sendMsg(context, [
-            Structs.text(
-              [
-                `参数长度不足~`,
-                `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
-              ].join('\n')
-            )
-          ])
+          await sendMsg(context, [Structs.text([`参数长度不足~`, `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`].join('\n'))])
           return false
         }
 
@@ -138,12 +123,8 @@ export default class Bot extends BasePlugin {
         this.logger.DEBUG(`参数类型不符合插件 ${pluginName} 需求的 ${commandName} 触发条件`)
         await sendMsg(context, [
           Structs.text(
-            [
-              `参数不合法~`,
-              `参数第 [${index + 1}] 位需要是数字哦`,
-              `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
-            ].join('\n')
-          )
+            [`参数不合法~`, `参数第 [${index + 1}] 位需要是数字哦`, `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`].join('\n'),
+          ),
         ])
         return false
       } else if (param.type === 'enum' && !param.enum.includes(arg)) {
@@ -153,9 +134,9 @@ export default class Bot extends BasePlugin {
             [
               `参数不合法~`,
               `参数第 [${index + 1}] 位可用值: [${param.enum}]`,
-              `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`
-            ].join('\n')
-          )
+              `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`,
+            ].join('\n'),
+          ),
         ])
         return false
       }
@@ -172,7 +153,7 @@ export default class Bot extends BasePlugin {
       command: [],
       message: [],
       notice: [],
-      request: []
+      request: [],
     }
 
     bot.on('message', async (context) => {
@@ -221,9 +202,7 @@ export default class Bot extends BasePlugin {
           const canContinue = await this.checkCommand(context, commandEvent[i], command)
           if (!canContinue) continue
 
-          this.logger.DEBUG(
-            clc.green(`消息符合插件 ${pluginName} 需求的 ${commandEvent[i].commandName} 的触发条件`)
-          )
+          this.logger.DEBUG(clc.green(`消息符合插件 ${pluginName} 需求的 ${commandEvent[i].commandName} 的触发条件`))
 
           const response = await callback(context, command)
           if (response === 'quit') {

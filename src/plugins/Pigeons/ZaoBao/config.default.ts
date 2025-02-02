@@ -18,5 +18,5 @@ export const config: ZaoBaoConfig = {
   // 参考: https://crontab.guru/
   crontab: '30 8 * * *',
   // 需要发送的群组
-  boardcast: []
+  boardcast: [],
 }

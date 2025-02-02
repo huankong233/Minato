@@ -19,6 +19,6 @@ export const config: BilibiliConfig = {
     getVideoInfo: true,
     getDynamicInfo: true,
     getArticleInfo: true,
-    getLiveRoomInfo: true
-  }
+    getLiveRoomInfo: true,
+  },
 }

@@ -14,8 +14,8 @@ export default class FreeGames extends BasePlugin {
       commandName: 'freegames',
       params: [{ type: 'enum', enum: ['epic', 'steam', 'all'], default: 'all' }],
       description: 'freegames [epic/steam/all]',
-      callback: this.message.bind(this)
-    }
+      callback: this.message.bind(this),
+    },
   ]
 
   groups: { group_id: number; type: 'epic' | 'steam' | 'all' }[] = []
@@ -73,10 +73,10 @@ export default class FreeGames extends BasePlugin {
                   `开发商: ${item.author}`,
                   `截止日期: ${item.endDate}`,
                   `简介: ${item.description.description}`,
-                  `购买链接: ${item.link}`
-                ].join('\n')
-              )
-            ])
+                  `购买链接: ${item.link}`,
+                ].join('\n'),
+              ),
+            ]),
           )
         })
       } catch (_error) {
@@ -95,14 +95,8 @@ export default class FreeGames extends BasePlugin {
           messages.push(
             Structs.customNode([
               Structs.image(item.img),
-              Structs.text(
-                [
-                  `游戏名: ${item.title}`,
-                  `发行日期: ${item.releasedTime}`,
-                  `购买链接: ${item.url}`
-                ].join('\n')
-              )
-            ])
+              Structs.text([`游戏名: ${item.title}`, `发行日期: ${item.releasedTime}`, `购买链接: ${item.url}`].join('\n')),
+            ]),
           )
         })
       } catch (_error) {

@@ -24,8 +24,8 @@ export default class Bilibili extends BasePlugin {
   events: allEvents[] = [
     {
       type: 'message',
-      callback: this.message.bind(this)
-    }
+      callback: this.message.bind(this),
+    },
   ]
 
   async message(context: AllHandlers['message']) {
@@ -52,12 +52,9 @@ export default class Bilibili extends BasePlugin {
       if (context.message_type === 'group' && config.recallMiniProgram) {
         const userInfo = await bot.get_group_member_info({
           group_id: context.group_id,
-          user_id: context.self_id
+          user_id: context.self_id,
         })
-        if (
-          userInfo.role === 'owner' ||
-          (userInfo.role === 'admin' && context.sender.role === 'member')
-        ) {
+        if (userInfo.role === 'owner' || (userInfo.role === 'admin' && context.sender.role === 'member')) {
           await bot.delete_msg({ message_id: context.message_id })
         }
       }
@@ -96,10 +93,7 @@ export default class Bilibili extends BasePlugin {
   getIdFromNormalLink = (link: string) => {
     const searchVideo = /bilibili\.com\/video\/(?:av(\d+)|(bv[\da-z]+))/i.exec(link) || []
     const searchDynamic =
-      /t\.bilibili\.com\/(\d+)/i.exec(link) ||
-      /m\.bilibili\.com\/dynamic\/(\d+)/i.exec(link) ||
-      /www\.bilibili\.com\/opus\/(\d+)/i.exec(link) ||
-      []
+      /t\.bilibili\.com\/(\d+)/i.exec(link) || /m\.bilibili\.com\/dynamic\/(\d+)/i.exec(link) || /www\.bilibili\.com\/opus\/(\d+)/i.exec(link) || []
     const searchArticle = /bilibili\.com\/read\/(?:cv|mobile\/)(\d+)/i.exec(link) || []
     const searchLiveRoom = /live\.bilibili\.com\/(\d+)/i.exec(link) || []
     return {
@@ -107,7 +101,7 @@ export default class Bilibili extends BasePlugin {
       bvid: searchVideo[2],
       dyid: searchDynamic[1],
       arid: searchArticle[1],
-      lrid: searchLiveRoom[1]
+      lrid: searchLiveRoom[1],
     }
   }
 
@@ -115,7 +109,7 @@ export default class Bilibili extends BasePlugin {
     return await axios
       .head(shortLink, {
         maxRedirects: 0,
-        validateStatus: (status) => status >= 200 && status < 400
+        validateStatus: (status) => status >= 200 && status < 400,
       })
       .then((ret) => this.getIdFromNormalLink(ret.headers.location))
       .catch((error) => {
@@ -126,7 +120,7 @@ export default class Bilibili extends BasePlugin {
           bvid: undefined,
           dyid: undefined,
           arid: undefined,
-          lrid: undefined
+          lrid: undefined,
         }
       })
   }

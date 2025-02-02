@@ -11,8 +11,8 @@ export default class Transfer extends BasePlugin {
       commandName: '鸽子转账',
       description: '鸽子转账 [转账的QQ号] [转账的数目]',
       params: [{ type: 'number' }, { type: 'number' }],
-      callback: this.transfer.bind(this)
-    }
+      callback: this.transfer.bind(this),
+    },
   ]
 
   async transfer(context: AllHandlers['message'], command: Command) {

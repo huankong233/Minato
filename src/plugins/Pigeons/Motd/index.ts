@@ -14,8 +14,8 @@ export default class Motd extends BasePlugin {
       commandName: 'motd',
       params: [{ type: 'string' }, { type: 'number', default: '25565' }],
       description: 'motd (host) [port]',
-      callback: this.motd.bind(this)
-    }
+      callback: this.motd.bind(this),
+    },
   ]
 
   async motd(context: AllHandlers['message'], command: Command) {
@@ -34,7 +34,7 @@ export default class Motd extends BasePlugin {
         host,
         port: parseFloat(port),
         timeout: 10000,
-        ping: true
+        ping: true,
       })
       ip = await lookup(host)
     } catch (error) {
@@ -57,7 +57,7 @@ export default class Motd extends BasePlugin {
       Structs.text(`服务器信息: ${data.version.name}\n`),
       Structs.text(`服务器ip: ${ip.address}\n`),
       Structs.text(`在线玩家: [${data.players.online}/${data.players.max}]\n`),
-      Structs.text(`MOTD: ${this.extractTextFromJson(data.description)}\n`)
+      Structs.text(`MOTD: ${this.extractTextFromJson(data.description)}\n`),
     ])
   }
 

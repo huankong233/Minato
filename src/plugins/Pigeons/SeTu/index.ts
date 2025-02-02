@@ -17,8 +17,8 @@ export default class SeTu extends BasePlugin {
       type: 'command',
       commandName: config.reg,
       description: `${config.reg}`,
-      callback: this.send.bind(this)
-    }
+      callback: this.send.bind(this),
+    },
   ]
 
   async send(context: AllHandlers['message'], command: Command) {
@@ -62,7 +62,7 @@ export default class SeTu extends BasePlugin {
     } = {
       r18: match[1] ? 1 : 0,
       tag: [],
-      proxy: ProxyConfig.enable ? false : config.proxy.enable ? config.proxy.url : false
+      proxy: ProxyConfig.enable ? false : config.proxy.enable ? config.proxy.url : false,
     }
 
     if (match[2]) requestData.tag = match[2].split('|').map((element) => element.split('&'))
@@ -70,9 +70,7 @@ export default class SeTu extends BasePlugin {
     let responseData
 
     try {
-      responseData = await axios
-        .post('https://api.lolicon.app/setu/v2', requestData)
-        .then((res) => res.data)
+      responseData = await axios.post('https://api.lolicon.app/setu/v2', requestData).then((res) => res.data)
     } catch (error) {
       this.logger.ERROR('请求色图接口失败~')
       this.logger.DIR(error, false)
@@ -102,7 +100,7 @@ export default class SeTu extends BasePlugin {
       try {
         shortUrlData = await axios
           .get(`${config.short.url}/api/url`, {
-            params: { url: fullUrl }
+            params: { url: fullUrl },
           })
           .then((res) => res.data)
       } catch (error) {
@@ -120,9 +118,9 @@ export default class SeTu extends BasePlugin {
           `标题: ${responseData.title}`,
           `标签: ${responseData.tags.join(' ')}`,
           `AI作品: ${responseData.aiType ? '是' : '不是'}`,
-          `作品地址: ${config.short.enable ? shortUrlData.url : confuseURL(fullUrl)}`
-        ].join('\n')
-      )
+          `作品地址: ${config.short.enable ? shortUrlData.url : confuseURL(fullUrl)}`,
+        ].join('\n'),
+      ),
     ])
     if (!infoMessage) return
 
@@ -132,7 +130,7 @@ export default class SeTu extends BasePlugin {
       image = await axios
         .get(responseData.urls.original, {
           headers: { Referer: 'https://www.pixiv.net/' },
-          responseType: 'arraybuffer'
+          responseType: 'arraybuffer',
         })
         .then((res) => res.data)
     } catch (error) {

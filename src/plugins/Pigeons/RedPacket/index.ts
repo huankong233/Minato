@@ -11,33 +11,33 @@ export default class RedPacket extends BasePlugin {
   events: allEvents[] = [
     {
       type: 'message',
-      callback: this.get.bind(this)
+      callback: this.get.bind(this),
     },
     {
       type: 'message',
       callback: this.message.bind(this),
-      priority: 999
+      priority: 999,
     },
     {
       type: 'command',
       commandName: '发送红包',
       description: '发送红包 (红包个数) (鸽子数) [口令]',
       params: [{ type: 'number' }, { type: 'number' }],
-      callback: this.send.bind(this)
+      callback: this.send.bind(this),
     },
     {
       type: 'command',
       commandName: '鸽子红包',
       description: '鸽子红包 (红包个数) (鸽子数) [口令]',
       params: [{ type: 'number' }, { type: 'number' }],
-      callback: this.send.bind(this)
+      callback: this.send.bind(this),
     },
     {
       type: 'command',
       commandName: '剩余红包',
       description: '剩余红包',
-      callback: this.remaining.bind(this)
-    }
+      callback: this.remaining.bind(this),
+    },
   ]
 
   init = this.freshRedPacketList
@@ -45,13 +45,11 @@ export default class RedPacket extends BasePlugin {
   redPackets: redPackets[] = []
 
   async freshRedPacketList() {
-    this.redPackets = (await knex<RedPacketModel>('red_packet').where('pigeon_num', '>', 0)).map(
-      (item) => {
-        item.code = JSON.parse(item.code)
-        item.picked_user = JSON.parse(item.picked_user)
-        return item as unknown as redPackets
-      }
-    )
+    this.redPackets = (await knex<RedPacketModel>('red_packet').where('pigeon_num', '>', 0)).map((item) => {
+      item.code = JSON.parse(item.code)
+      item.picked_user = JSON.parse(item.picked_user)
+      return item as unknown as redPackets
+    })
   }
 
   sender: {
@@ -90,12 +88,10 @@ export default class RedPacket extends BasePlugin {
       context,
       pigeon_num,
       packet_num,
-      level: 1
+      level: 1,
     }
 
-    await sendMsg(context, [
-      Structs.text('请输入红包口令,口令可以是任意文本、图片节点\n输入 "退出" 取消发送')
-    ])
+    await sendMsg(context, [Structs.text('请输入红包口令,口令可以是任意文本、图片节点\n输入 "退出" 取消发送')])
   }
 
   async message(context: AllHandlers['message']) {
@@ -111,9 +107,7 @@ export default class RedPacket extends BasePlugin {
     }
 
     if (isAdd.level === 1) {
-      const avaliableNodes = context.message.filter(
-        (item) => item.type === 'text' || item.type === 'face' || item.type === 'image'
-      )
+      const avaliableNodes = context.message.filter((item) => item.type === 'text' || item.type === 'face' || item.type === 'image')
 
       if (avaliableNodes.length !== context.message.length) {
         await sendMsg(context, [Structs.text('红包发送失败,只支持文本、图片节点')])
@@ -155,7 +149,7 @@ export default class RedPacket extends BasePlugin {
         packet_num,
         pigeon_num,
         code,
-        picked_user: '[]'
+        picked_user: '[]',
       })
 
       //更新红包列表
@@ -176,27 +170,15 @@ export default class RedPacket extends BasePlugin {
           success = false
         }
 
-        if (
-          node.type === 'text' &&
-          context.message[index].type === 'text' &&
-          node.data.text !== context.message[index].data.text
-        ) {
+        if (node.type === 'text' && context.message[index].type === 'text' && node.data.text !== context.message[index].data.text) {
           success = false
         }
 
-        if (
-          node.type === 'face' &&
-          context.message[index].type === 'face' &&
-          node.data.id !== context.message[index].data.id
-        ) {
+        if (node.type === 'face' && context.message[index].type === 'face' && node.data.id !== context.message[index].data.id) {
           success = false
         }
 
-        if (
-          node.type === 'image' &&
-          context.message[index].type === 'image' &&
-          node.data.file_unique !== context.message[index].data.file_unique
-        ) {
+        if (node.type === 'image' && context.message[index].type === 'image' && node.data.file_unique !== context.message[index].data.file_unique) {
           success = false
         }
       }
@@ -211,8 +193,7 @@ export default class RedPacket extends BasePlugin {
       }
 
       //判断剩余红包数(如果剩余1个,全部拿走)
-      const get_pigeon_num =
-        packet_num === 1 ? pigeon_num : randomInt(1, (pigeon_num * randomInt(50, 70)) / 100)
+      const get_pigeon_num = packet_num === 1 ? pigeon_num : randomInt(1, (pigeon_num * randomInt(50, 70)) / 100)
 
       picked_user.push(context.user_id)
 
@@ -223,15 +204,11 @@ export default class RedPacket extends BasePlugin {
         .update({
           packet_num: packet_num - 1,
           pigeon_num: pigeon_num - get_pigeon_num,
-          picked_user: JSON.stringify(picked_user)
+          picked_user: JSON.stringify(picked_user),
         })
 
       await this.freshRedPacketList()
-      await sendMsg(context, [
-        Structs.text(
-          `红包${JSON.stringify(item.code)}领取成功,恭喜你领取了${get_pigeon_num}只鸽子!`
-        )
-      ])
+      await sendMsg(context, [Structs.text(`红包${JSON.stringify(item.code)}领取成功,恭喜你领取了${get_pigeon_num}只鸽子!`)])
 
       return
     }
@@ -248,9 +225,7 @@ export default class RedPacket extends BasePlugin {
     for (let i = 0; i < this.redPackets.length; i++) {
       const item = this.redPackets[i]
       const username = await getUserName({ user_id: item.user_id })
-      msg.push(
-        `由${username}发送的口令: ${JSON.stringify(item.code)} ,剩余: ${item.pigeon_num} 只鸽子`
-      )
+      msg.push(`由${username}发送的口令: ${JSON.stringify(item.code)} ,剩余: ${item.pigeon_num} 只鸽子`)
     }
 
     await sendMsg(context, [Structs.text(msg.join('\n'))])

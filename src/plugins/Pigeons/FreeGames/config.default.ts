@@ -7,5 +7,5 @@ export interface FreeGamesConfig {
 export const config: FreeGamesConfig = {
   crontab: '0 0 8 * * *',
   groups: [],
-  cd: 10
+  cd: 10,
 }

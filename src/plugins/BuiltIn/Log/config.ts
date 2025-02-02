@@ -7,5 +7,5 @@ export interface LogConfig {
 
 export const config: LogConfig = {
   max: 100,
-  force: false
+  force: false,
 }

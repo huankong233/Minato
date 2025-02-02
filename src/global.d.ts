@@ -1,6 +1,7 @@
 /* eslint-disable no-var */
-import { type Knex } from 'knex'
-import { type AllHandlers, type NCWebsocket } from 'node-napcat-ts'
+import type { Hono } from 'hono'
+import type { Knex } from 'knex'
+import type { AllHandlers, NCWebsocket } from 'node-napcat-ts'
 
 declare global {
   var debug: boolean
@@ -13,6 +14,7 @@ declare global {
     request: requestEvent[]
   }
   var knex: Knex<any, unknown[]>
+  var hono: Hono
 }
 
 // 使用映射类型去除 pluginName 属性
