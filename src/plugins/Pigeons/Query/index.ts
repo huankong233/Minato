@@ -11,22 +11,22 @@ export default class Query extends BasePlugin {
       commandName: '我的鸽子',
       description: '我的鸽子 [查询的QQ号]',
       params: [{ type: 'number', default: '-1' }],
-      callback: this.query.bind(this)
+      callback: this.query.bind(this),
     },
     {
       type: 'command',
       commandName: '查鸽子',
       description: '查鸽子 [查询的QQ号]',
       params: [{ type: 'number', default: '-1' }],
-      callback: this.query.bind(this)
+      callback: this.query.bind(this),
     },
     {
       type: 'command',
       commandName: '鸽子排名',
       description: '鸽子排名 [asc/desc]',
       params: [{ type: 'enum', enum: ['asc', 'desc'], default: 'desc' }],
-      callback: this.rankList.bind(this)
-    }
+      callback: this.rankList.bind(this),
+    },
   ]
 
   async query(context: AllHandlers['message'], command: Command) {
@@ -41,9 +41,7 @@ export default class Query extends BasePlugin {
       return
     }
 
-    await sendMsg(context, [
-      Structs.text(`用户 ${username}(${user_id}) 有 ${userData.pigeon_num} 只鸽子`)
-    ])
+    await sendMsg(context, [Structs.text(`用户 ${username}(${user_id}) 有 ${userData.pigeon_num} 只鸽子`)])
   }
 
   async rankList(context: AllHandlers['message'], command: Command) {

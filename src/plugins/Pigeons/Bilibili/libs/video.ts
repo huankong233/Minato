@@ -10,8 +10,8 @@ export const getVideoInfo = async (params: { aid?: string; bvid?: string }, logg
       params,
       timeout: 10000,
       headers: {
-        'User-Agent': USER_AGENT
-      }
+        'User-Agent': USER_AGENT,
+      },
     })
 
     const { code, message, data } = response.data
@@ -25,20 +25,14 @@ export const getVideoInfo = async (params: { aid?: string; bvid?: string }, logg
       pic,
       title,
       owner: { name },
-      stat: { view, danmaku }
+      stat: { view, danmaku },
     } = data
 
     return [
       Structs.image(pic),
       Structs.text(
-        [
-          `av${aid}`,
-          title,
-          `UP: ${name}`,
-          `${humanNum(view)}播放 ${humanNum(danmaku)}弹幕`,
-          `https://www.bilibili.com/video/${bvid}`
-        ].join('\n')
-      )
+        [`av${aid}`, title, `UP: ${name}`, `${humanNum(view)}播放 ${humanNum(danmaku)}弹幕`, `https://www.bilibili.com/video/${bvid}`].join('\n'),
+      ),
     ]
   } catch (error) {
     logger.ERROR(`B站视频信息获取失败`)

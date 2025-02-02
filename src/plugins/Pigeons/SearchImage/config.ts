@@ -32,6 +32,6 @@ export const config: SearchImageConfig = {
     //关闭搜图模式后的回复
     off_reply: '已退出搜图模式~',
     //收到图片后的回复
-    receive: '收到咯~处理中~(自动退出不影响处理)'
-  }
+    receive: '收到咯~处理中~(自动退出不影响处理)',
+  },
 }

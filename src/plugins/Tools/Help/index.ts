@@ -11,8 +11,8 @@ export default class Help extends BasePlugin {
       commandName: 'help',
       description: 'help [commandName]',
       params: [{ type: 'string', default: 'all' }],
-      callback: this.message.bind(this)
-    }
+      callback: this.message.bind(this),
+    },
   ]
 
   // 加载所有命令到缓存
@@ -22,11 +22,7 @@ export default class Help extends BasePlugin {
     const commandName = command.args[0]
 
     if (commandName === 'all') {
-      await sendMsg(context, [
-        Structs.text(
-          '可用命令: ' + this.commands.map((command) => command.commandName.toString()).join(', ')
-        )
-      ])
+      await sendMsg(context, [Structs.text('可用命令: ' + this.commands.map((command) => command.commandName.toString()).join(', '))])
       return
     }
 
@@ -36,13 +32,6 @@ export default class Help extends BasePlugin {
       return
     }
 
-    await sendMsg(context, [
-      Structs.text(
-        [
-          `命令参数格式(括号必选 中括号可选):`,
-          `${botConfig.command_prefix}${found.description}`
-        ].join('\n')
-      )
-    ])
+    await sendMsg(context, [Structs.text([`命令参数格式(括号必选 中括号可选):`, `${botConfig.command_prefix}${found.description}`].join('\n'))])
   }
 }

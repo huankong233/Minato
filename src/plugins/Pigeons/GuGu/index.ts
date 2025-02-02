@@ -13,14 +13,14 @@ export default class Gugu extends BasePlugin {
       type: 'command',
       description: '咕咕咕',
       commandName: /咕咕/,
-      callback: Gugu.gugu.bind(this)
-    }
+      callback: Gugu.gugu.bind(this),
+    },
   ]
 
   static async gugu(context: AllHandlers['message']) {
     const user = await knex<Pigeon>('pigeons')
       .where({
-        user_id: context.user_id
+        user_id: context.user_id,
       })
       .first()
 
@@ -35,7 +35,7 @@ export default class Gugu extends BasePlugin {
     const userData = await knex<PigeonHistory>('pigeon_histories')
       .where({
         user_id: context.user_id,
-        reason: '每日咕咕'
+        reason: '每日咕咕',
       })
       .orderBy('created_at', 'desc')
       .first()

@@ -1,4 +1,4 @@
-import { version as local_version } from '@/../package.json'
+import PackageJson from '@/../package.json' assert { type: 'json' }
 import type { allEvents } from '@/global.js'
 import axios from '@/libs/axios.ts'
 import { cron } from '@/libs/cron.ts'
@@ -10,6 +10,7 @@ import { Structs, type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 
 export const enable = config.enable
+const local_version = PackageJson.version
 
 export default class CheckUpdate extends BasePlugin {
   events: allEvents[] = [
@@ -17,8 +18,8 @@ export default class CheckUpdate extends BasePlugin {
       type: 'command',
       commandName: '检查更新',
       description: '检查更新',
-      callback: this.checkUpdate.bind(this)
-    }
+      callback: this.checkUpdate.bind(this),
+    },
   ]
 
   init = () => cron(config.cron, () => this.checkUpdate())
@@ -31,28 +32,18 @@ export default class CheckUpdate extends BasePlugin {
       this.logger.ERROR('获取最新版本号失败')
       this.logger.DIR(error, false)
       await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [
-        Structs.text(
-          ['检查更新失败', `当前版本: ${local_version}`, `请检查您的网络状况！`].join('\n')
-        )
+        Structs.text(['检查更新失败', `当前版本: ${local_version}`, `请检查您的网络状况！`].join('\n')),
       ])
       return
     }
 
     if (compare(local_version, remote_version, '>=')) {
       if (!context) return
-      await sendMsg(context, [
-        Structs.text(
-          ['kkbot无需更新哟~', `最新版本: ${remote_version}`, `当前版本: ${local_version}`].join(
-            '\n'
-          )
-        )
-      ])
+      await sendMsg(context, [Structs.text(['kkbot无需更新哟~', `最新版本: ${remote_version}`, `当前版本: ${local_version}`].join('\n'))])
     } else {
       //需要更新，通知admin
       await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [
-        Structs.text(
-          ['kkbot有更新哟~', `最新版本: ${remote_version}`, `当前版本: ${local_version}`].join('\n')
-        )
+        Structs.text(['kkbot有更新哟~', `最新版本: ${remote_version}`, `当前版本: ${local_version}`].join('\n')),
       ])
     }
   }

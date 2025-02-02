@@ -12,8 +12,8 @@ export default class Repeat extends BasePlugin {
   events: allEvents[] = [
     {
       type: 'message',
-      callback: this.checkRepeat.bind(this)
-    }
+      callback: this.checkRepeat.bind(this),
+    },
   ]
 
   repeat: { [key: number]: { message: AllHandlers['message']['message']; user_ids: number[] } } = {}
@@ -40,10 +40,7 @@ export default class Repeat extends BasePlugin {
     // 长度一致
     let isSame = context.message.length === this.repeat[group_id].message.length
     if (isSame) {
-      for (const [_index, contextMessage, repeatMessage] of zip(
-        context.message,
-        this.repeat[group_id].message
-      )) {
+      for (const [_index, contextMessage, repeatMessage] of zip(context.message, this.repeat[group_id].message)) {
         // 如果有类型不一致退出
         if (contextMessage.type !== repeatMessage.type) {
           isSame = false

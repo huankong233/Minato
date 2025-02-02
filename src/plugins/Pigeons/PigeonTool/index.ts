@@ -41,7 +41,7 @@ export default class PigeonTool extends BasePlugin {
       operation: operation,
       origin_pigeon,
       new_pigeon,
-      reason
+      reason,
     })
     return true
   }

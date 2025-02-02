@@ -11,8 +11,8 @@ export default class Mute extends BasePlugin {
       type: 'command',
       commandName: '鸽了',
       description: '鸽了',
-      callback: this.mute.bind(this)
-    }
+      callback: this.mute.bind(this),
+    },
   ]
 
   async mute(context: AllHandlers['message']) {
@@ -32,9 +32,7 @@ export default class Mute extends BasePlugin {
     }
 
     if (userInfo.role !== 'member') {
-      await sendMsg(context, [
-        Structs.text(`╭(╯^╰)╮ 快来人给他把${userInfo.role === 'admin' ? '管理员' : '群主'}下了！！`)
-      ])
+      await sendMsg(context, [Structs.text(`╭(╯^╰)╮ 快来人给他把${userInfo.role === 'admin' ? '管理员' : '群主'}下了！！`)])
       return
     }
 
@@ -44,7 +42,7 @@ export default class Mute extends BasePlugin {
       .set_group_ban({
         group_id,
         user_id,
-        duration: muteTime
+        duration: muteTime,
       })
       .then(async () => {
         await sendMsg(context, [Structs.text('还鸽不鸽了(•ิ_•ิ)')])

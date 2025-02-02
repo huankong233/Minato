@@ -13,5 +13,5 @@ export type CronJobConfig = {
 }
 
 export const config: CronJobConfig = {
-  crons: []
+  crons: [],
 }

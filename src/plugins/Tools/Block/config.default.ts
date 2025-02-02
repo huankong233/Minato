@@ -31,7 +31,7 @@ export const config: BlockConfig = {
       name: /^空空.*[来來发發给給][张張个個幅点點份]?(?<r18>[Rr]18的?)?(?<tag>.*?)?的?[色瑟][图圖]/,
       blockUsers: [10001],
       blockGroups: [{ group_id: 2333, reply: '2333' }],
-      defaultReply: '233'
-    }
-  ]
+      defaultReply: '233',
+    },
+  ],
 }

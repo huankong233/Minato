@@ -12,5 +12,5 @@ export const config: UpdateConfig = {
   enable: true,
   proxy: '',
   cron: '0 8 * * *',
-  packageJsonUrl: 'https://raw.githubusercontent.com/huankong233/kkbot-ts/master/package.json'
+  packageJsonUrl: 'https://raw.githubusercontent.com/huankong233/kkbot-ts/master/package.json',
 }

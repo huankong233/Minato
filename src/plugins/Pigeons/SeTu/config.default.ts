@@ -30,5 +30,5 @@ export const config: SeTuConfig = {
   // 推荐自己搭地址: pixiv.re
   proxy: { enable: false, url: 'i.pixiv.re' },
   //短链(服务仓库:https://github.com/huankong233/easyShortUrl)
-  short: { enable: false, url: '' }
+  short: { enable: false, url: '' },
 }

@@ -7,5 +7,5 @@ export interface RepeatConfig {
 
 export const config: RepeatConfig = {
   count: 3,
-  commonProb: 0.6
+  commonProb: 0.6,
 }

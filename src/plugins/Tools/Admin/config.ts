@@ -21,15 +21,15 @@ export interface AdminConfig {
 export const config: AdminConfig = {
   invite: {
     message: true,
-    auto: 'accept'
+    auto: 'accept',
   },
   add: {
     message: true,
-    auto: ''
+    auto: '',
   },
   friend: {
     message: true,
-    auto: 'accept'
+    auto: 'accept',
   },
-  notice: true
+  notice: true,
 }

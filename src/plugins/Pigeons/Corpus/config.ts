@@ -28,5 +28,5 @@ export interface CorpusConfig {
 
 export const config: CorpusConfig = {
   add: 50,
-  delete: 20
+  delete: 20,
 }

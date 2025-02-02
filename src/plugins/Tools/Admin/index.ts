@@ -12,21 +12,17 @@ export default class Admin extends BasePlugin {
       type: 'command',
       description: 'admin (accept/reject) (invite/add/friend) (flag)',
       commandName: 'admin',
-      params: [
-        { type: 'enum', enum: ['invite', 'add', 'friend'] },
-        { type: 'enum', enum: ['accept', 'reject'] },
-        { type: 'string' }
-      ],
-      callback: this.handler.bind(this)
+      params: [{ type: 'enum', enum: ['invite', 'add', 'friend'] }, { type: 'enum', enum: ['accept', 'reject'] }, { type: 'string' }],
+      callback: this.handler.bind(this),
     },
     {
       type: 'notice',
-      callback: this.notice.bind(this)
+      callback: this.notice.bind(this),
     },
     {
       type: 'request',
-      callback: this.request.bind(this)
-    }
+      callback: this.request.bind(this),
+    },
   ]
 
   async handler(context: AllHandlers['message'], command: Command) {
@@ -50,9 +46,7 @@ export default class Admin extends BasePlugin {
       if (context) await sendMsg(context, [Structs.text('操作成功~')])
     } catch (error) {
       this.logger.ERROR('操作失败', error)
-      await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [
-        Structs.text('操作失败')
-      ])
+      await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [Structs.text('操作失败')])
     }
   }
 
@@ -67,10 +61,8 @@ export default class Admin extends BasePlugin {
 
       await sendMsg({ message_type: 'group', group_id }, [
         Structs.text(
-          notice_type === 'group_increase'
-            ? `${await getUserName(context)} 欢迎加群呀~ ヾ(≧▽≦*)o`
-            : `${await getUserName(context)} 退群了 (*>.<*)`
-        )
+          notice_type === 'group_increase' ? `${await getUserName(context)} 欢迎加群呀~ ヾ(≧▽≦*)o` : `${await getUserName(context)} 退群了 (*>.<*)`,
+        ),
       ])
     }
   }
@@ -124,12 +116,10 @@ export default class Admin extends BasePlugin {
       const sub_type = request_type === 'group' ? context.sub_type : request_type
       text.push(
         `接受回复 : ${botConfig.command_prefix}admin ${sub_type} accept ${flag}`,
-        `拒绝回复 : ${botConfig.command_prefix}admin ${sub_type} reject ${flag}`
+        `拒绝回复 : ${botConfig.command_prefix}admin ${sub_type} reject ${flag}`,
       )
     }
 
-    await sendMsg({ message_type: 'private', user_id: botConfig.admin_id }, [
-      Structs.text(text.join('\n'))
-    ])
+    await sendMsg({ message_type: 'private', user_id: botConfig.admin_id }, [Structs.text(text.join('\n'))])
   }
 }

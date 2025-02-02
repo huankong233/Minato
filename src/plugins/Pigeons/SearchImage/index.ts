@@ -15,7 +15,7 @@ import {
   type ascii2dReq,
   type IqDBReq,
   type SauceNAOReq,
-  type TraceMoeReq
+  type TraceMoeReq,
 } from 'image_searcher'
 import { Structs, type AllHandlers, type Send } from 'node-napcat-ts'
 import { config } from './config.ts'
@@ -26,13 +26,13 @@ export default class SearchImage extends BasePlugin {
       type: 'command',
       commandName: '空空搜图',
       description: '空空搜图',
-      callback: this.search.bind(this)
+      callback: this.search.bind(this),
     },
     {
       type: 'message',
       callback: this.message.bind(this),
-      priority: 999
-    }
+      priority: 999,
+    },
   ]
 
   users: { [key: number]: { surplus_time: number; context: AllHandlers['message'] } } = {}
@@ -43,9 +43,7 @@ export default class SearchImage extends BasePlugin {
       for (const key in this.users) {
         const user = this.users[key]
         if (user.surplus_time <= 0) {
-          await sendMsg(user.context, [
-            Structs.text(`已自动退出搜图模式~\n下次记得说 退出 来退出搜图模式哦~`)
-          ])
+          await sendMsg(user.context, [Structs.text(`已自动退出搜图模式~\n下次记得说 退出 来退出搜图模式哦~`)])
           delete this.users[key]
         } else {
           this.users[key].surplus_time--
@@ -57,7 +55,7 @@ export default class SearchImage extends BasePlugin {
   async search(context: AllHandlers['message'], _command: Command) {
     this.users[context.user_id] = {
       surplus_time: config.autoLeave,
-      context
+      context,
     }
     await sendMsg(context, [Structs.text(config.word.on_reply)])
   }
@@ -123,42 +121,33 @@ export default class SearchImage extends BasePlugin {
         params: {
           type: 'color',
           proxy: config.ascii2dProxy,
-          imagePath
-        } as ascii2dReq
+          imagePath,
+        } as ascii2dReq,
       },
       {
         name: 'SauceNAO',
         callback: SauceNAO,
         params: {
           hide: false,
-          imagePath
-        } as SauceNAOReq
+          imagePath,
+        } as SauceNAOReq,
       },
       {
         name: 'IqDB',
         callback: IqDB,
         params: {
           discolor: true,
-          services: [
-            'danbooru',
-            'konachan',
-            'yandere',
-            'gelbooru',
-            'sankaku_channel',
-            'e_shuushuu',
-            'zerochan',
-            'anime_pictures'
-          ],
-          imagePath
-        } as IqDBReq
+          services: ['danbooru', 'konachan', 'yandere', 'gelbooru', 'sankaku_channel', 'e_shuushuu', 'zerochan', 'anime_pictures'],
+          imagePath,
+        } as IqDBReq,
       },
       {
         name: 'TraceMoe',
         callback: TraceMoe,
         params: {
           cutBorders: true,
-          imagePath
-        } as TraceMoeReq
+          imagePath,
+        } as TraceMoeReq,
       },
       {
         name: 'AnimeTraceAnime',
@@ -167,8 +156,8 @@ export default class SearchImage extends BasePlugin {
           model: 'anime_model_lovelive',
           force_one: 1,
           preview: true,
-          imagePath
-        } as AnimeTraceReq
+          imagePath,
+        } as AnimeTraceReq,
       },
       {
         name: 'AnimeTraceGame',
@@ -177,16 +166,13 @@ export default class SearchImage extends BasePlugin {
           model: 'game_model_kirakira',
           force_one: 1,
           preview: true,
-          imagePath
-        } as AnimeTraceReq
-      }
+          imagePath,
+        } as AnimeTraceReq,
+      },
     ]
 
     // 每次只能发一个请求
-    const response: (
-      | { success: true; name: string; response: any; cost: number }
-      | { success: false; name: string }
-    )[] = []
+    const response: ({ success: true; name: string; response: any; cost: number } | { success: false; name: string })[] = []
 
     for (const requestParam of requestParams) {
       try {
@@ -195,14 +181,14 @@ export default class SearchImage extends BasePlugin {
           success: true,
           name: requestParam.name,
           response: await requestParam.callback(requestParam.params as any),
-          cost: performance.now() - start
+          cost: performance.now() - start,
         })
       } catch (error) {
         this.logger.ERROR(`${requestParam.name}请求失败`)
         this.logger.DIR(error, false)
         response.push({
           success: false,
-          name: requestParam.name
+          name: requestParam.name,
         })
       }
     }
@@ -212,10 +198,7 @@ export default class SearchImage extends BasePlugin {
 
   async parseData(
     context: AllHandlers['message'],
-    response: (
-      | { success: true; name: string; response: any; cost: number }
-      | { success: false; name: string }
-    )[]
+    response: ({ success: true; name: string; response: any; cost: number } | { success: false; name: string })[],
   ) {
     // 总节点
     const messages: Send['node'][] = []
@@ -247,55 +230,32 @@ export default class SearchImage extends BasePlugin {
         const item = results[index]
         if (apiResponse.name === 'ascii2d') {
           message.push(
-            item.image && item.image !== ''
-              ? Structs.image(`base64://${await getFileBase64(item.image)}`)
-              : Structs.text('无图片~'),
+            item.image && item.image !== '' ? Structs.image(`base64://${await getFileBase64(item.image)}`) : Structs.text('无图片~'),
             Structs.text(
               [
                 `图片信息:${item.info}`,
                 `链接: ${confuseURL(item.source?.link ?? '未知', true)}(${item.source?.text ?? '未知'})`,
                 `作者: ${item.author?.text ?? '未知'}(${confuseURL(item.author?.link ?? '未知', true)})`,
                 ``,
-                ``
-              ].join('\n')
-            )
+                ``,
+              ].join('\n'),
+            ),
           )
         } else if (apiResponse.name === 'SauceNAO') {
           message.push(
             item.image !== 'https://saucenao.com/' || item.image !== ''
               ? Structs.image(`base64://${await getFileBase64(item.image)}`)
               : Structs.text('无图片~'),
-            Structs.text(
-              [
-                `标题: ${item.title}`,
-                `相似度: ${item.similarity}`,
-                `图片信息:`,
-                ...this.joinContent(item.content),
-                ``,
-                ``
-              ].join('\n')
-            )
+            Structs.text([`标题: ${item.title}`, `相似度: ${item.similarity}`, `图片信息:`, ...this.joinContent(item.content), ``, ``].join('\n')),
           )
         } else if (apiResponse.name === 'IqDB') {
           message.push(
-            item.image && item.image !== ''
-              ? Structs.image(`base64://${await getFileBase64(item.image)}`)
-              : Structs.text('无图片~'),
-            Structs.text(
-              [
-                `分辨率: ${item.resolution}`,
-                `相似度: ${item.similarity}`,
-                `链接: ${confuseURL(item.url, true)}`,
-                ``,
-                ``
-              ].join('\n')
-            )
+            item.image && item.image !== '' ? Structs.image(`base64://${await getFileBase64(item.image)}`) : Structs.text('无图片~'),
+            Structs.text([`分辨率: ${item.resolution}`, `相似度: ${item.similarity}`, `链接: ${confuseURL(item.url, true)}`, ``, ``].join('\n')),
           )
         } else if (apiResponse.name === 'TraceMoe') {
           message.push(
-            item.image && item.image !== ''
-              ? Structs.image(`base64://${await getFileBase64(item.image)}`)
-              : Structs.text('无图片~'),
+            item.image && item.image !== '' ? Structs.image(`base64://${await getFileBase64(item.image)}`) : Structs.text('无图片~'),
             Structs.text(
               [
                 `预览视频: ${item.video ?? '无'}`,
@@ -304,15 +264,11 @@ export default class SearchImage extends BasePlugin {
                 `集数: ${item.episode}`,
                 `大概位置: ${formatTime(item.from)}——${formatTime(item.to)}`,
                 ``,
-                ``
-              ].join('\n')
-            )
+                ``,
+              ].join('\n'),
+            ),
           )
-        } else if (
-          apiResponse.name === 'AnimeTraceAll' ||
-          apiResponse.name === 'AnimeTraceAnime' ||
-          apiResponse.name === 'AnimeTraceGame'
-        ) {
+        } else if (apiResponse.name === 'AnimeTraceAll' || apiResponse.name === 'AnimeTraceAnime' || apiResponse.name === 'AnimeTraceGame') {
           message.push(
             item.preview !== 'failed unsupported image type' && item.preview
               ? Structs.image(`base64://${item.preview}`)
@@ -321,8 +277,8 @@ export default class SearchImage extends BasePlugin {
               item.char
                 .slice(0, config.limit2)
                 .flatMap((char: any) => [`角色名: ${char.name}`, `动漫名: ${char.cartoonname}`, ``])
-                .join('\n')
-            )
+                .join('\n'),
+            ),
           )
         }
       }

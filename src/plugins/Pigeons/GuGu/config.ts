@@ -7,5 +7,5 @@ export interface GuguConfig {
 
 export const config: GuguConfig = {
   newUserAdd: 300,
-  oldUserAdd: 100
+  oldUserAdd: 100,
 }
