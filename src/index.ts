@@ -57,6 +57,7 @@ logger.SUCCESS('所有插件已加载完成!')
 
 serve(
   {
+    hostname: '0.0.0.0',
     fetch: global.hono.fetch,
     port: 8080,
   },
