@@ -5,6 +5,7 @@ import { sendMsg } from '@/libs/sendMsg.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
 import PigeonTool from '@/plugins/Pigeons/PigeonTool/index.ts'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
+import { parse } from 'path'
 import type { redPackets } from './config.ts'
 
 export default class RedPacket extends BasePlugin {
@@ -178,7 +179,7 @@ export default class RedPacket extends BasePlugin {
           success = false
         }
 
-        if (node.type === 'image' && context.message[index].type === 'image' && node.data.file_unique !== context.message[index].data.file_unique) {
+        if (node.type === 'image' && context.message[index].type === 'image' && parse(node.data.file).name !== parse(context.message[index].data.file).name) {
           success = false
         }
       }

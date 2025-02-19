@@ -60,17 +60,13 @@ export default class CorpusPlugin extends BasePlugin {
       return message.data.id === keyword.data.id
     },
     image: (keyword: Receive['image'], message: Receive['image']) => {
-      return keyword.data.file_id.split('.')[1] === message.data.file_id.split('.')[1]
+      return parse(keyword.data.file).name === parse(message.data.file).name
     },
   }
 
   async checkRules(context: AllHandlers['message']) {
     for (const rule of this.rules) {
-      if (
-        (rule.scene === '私聊' && context.message_type !== 'private') ||
-        (rule.scene === '群聊' && context.message_type !== 'group') ||
-        rule.keyword.length !== context.message.length
-      ) {
+      if ((rule.scene === '私聊' && context.message_type !== 'private') || (rule.scene === '群聊' && context.message_type !== 'group') || rule.keyword.length !== context.message.length) {
         continue
       }
 
@@ -80,7 +76,7 @@ export default class CorpusPlugin extends BasePlugin {
           // 修正reply
           for (const [index, item] of rule.reply.entries()) {
             if (item.type === 'image') {
-              const res = await bot.get_image({ file_id: item.data.file_id })
+              const res = await bot.get_image({ file: item.data.file })
               rule.reply[index].data = { ...rule.reply[index].data, url: res.url }
             }
           }
@@ -181,7 +177,7 @@ export default class CorpusPlugin extends BasePlugin {
 
         // 检查是否重复
         const rule = await knex<Corpus>('corpus')
-          .where('keyword', 'like', imageNodes.length !== 0 ? `%${imageNodes[0].data.file_id.split('.')[1]}%` : JSON.stringify(context.message))
+          .where('keyword', 'like', imageNodes.length !== 0 ? `%${parse(imageNodes[0].data.file).name}%` : JSON.stringify(context.message))
           .where('deleted_at', null)
           .first()
 
@@ -261,7 +257,7 @@ export default class CorpusPlugin extends BasePlugin {
     delete this.forgeters[context.user_id]
 
     await knex<Corpus>('corpus')
-      .where('keyword', 'like', context.message[0].type === 'image' ? `%${context.message[0].data.file_id.split('.')[1]}%` : keyword)
+      .where('keyword', 'like', context.message[0].type === 'image' ? `%${parse(context.message[0].data.file).name}%` : keyword)
       .update('deleted_at', getDateTime('-'))
     await sendMsg(context, [Structs.text('忘记成功~')])
     await this.loadRules()
