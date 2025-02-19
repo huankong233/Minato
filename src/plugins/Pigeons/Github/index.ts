@@ -9,7 +9,7 @@ export default class Github extends BasePlugin {
     secret: config.secret,
   })
 
-  eventHandler = createEventHandler({
+  eventHandler: ReturnType<typeof createEventHandler> = createEventHandler({
     async transform(event) {
       return event
     },
@@ -42,15 +42,7 @@ export default class Github extends BasePlugin {
 
     this.eventHandler.on('release.published', async (event) => {
       const message = [
-        Structs.text(
-          [
-            `[Github] Release推送:`,
-            `仓库: ${event.payload.repository.html_url}`,
-            `版本号: ${event.payload.release.tag_name}`,
-            `更新信息:`,
-            event.payload.release.body,
-          ].join('\n'),
-        ),
+        Structs.text([`[Github] Release推送:`, `仓库: ${event.payload.repository.html_url}`, `版本号: ${event.payload.release.tag_name}`, `更新信息:`, event.payload.release.body].join('\n')),
       ]
       config.groups.forEach(async (group_id) => await sendMsg({ message_type: 'group', group_id }, message))
     })

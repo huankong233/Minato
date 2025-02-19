@@ -178,7 +178,7 @@ export default class RedPacket extends BasePlugin {
           success = false
         }
 
-        if (node.type === 'image' && context.message[index].type === 'image' && node.data.file_unique !== context.message[index].data.file_unique) {
+        if (node.type === 'image' && context.message[index].type === 'image' && node.data.file.split('.')[1] !== context.message[index].data.file.split('.')[1]) {
           success = false
         }
       }
