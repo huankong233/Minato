@@ -60,7 +60,7 @@ export default class CorpusPlugin extends BasePlugin {
       return message.data.id === keyword.data.id
     },
     image: (keyword: Receive['image'], message: Receive['image']) => {
-      return keyword.data.file.split('.')[1] === message.data.file.split('.')[1]
+      return parse(keyword.data.file).name === parse(message.data.file).name
     },
   }
 
@@ -177,7 +177,7 @@ export default class CorpusPlugin extends BasePlugin {
 
         // 检查是否重复
         const rule = await knex<Corpus>('corpus')
-          .where('keyword', 'like', imageNodes.length !== 0 ? `%${imageNodes[0].data.file.split('.')[1]}%` : JSON.stringify(context.message))
+          .where('keyword', 'like', imageNodes.length !== 0 ? `%${parse(imageNodes[0].data.file).name}%` : JSON.stringify(context.message))
           .where('deleted_at', null)
           .first()
 
@@ -257,7 +257,7 @@ export default class CorpusPlugin extends BasePlugin {
     delete this.forgeters[context.user_id]
 
     await knex<Corpus>('corpus')
-      .where('keyword', 'like', context.message[0].type === 'image' ? `%${context.message[0].data.file.split('.')[1]}%` : keyword)
+      .where('keyword', 'like', context.message[0].type === 'image' ? `%${parse(context.message[0].data.file).name}%` : keyword)
       .update('deleted_at', getDateTime('-'))
     await sendMsg(context, [Structs.text('忘记成功~')])
     await this.loadRules()
