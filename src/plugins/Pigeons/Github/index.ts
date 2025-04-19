@@ -46,25 +46,5 @@ export default class Github extends BasePlugin {
       ]
       config.groups.forEach(async (group_id) => await sendMsg({ message_type: 'group', group_id }, message))
     })
-
-    this.eventHandler.on('push', async (event) => {
-      console.log(event)
-      const message = [
-        Structs.text(
-          [
-            `[Github] Push推送:`,
-            `仓库: ${event.payload.repository.html_url}`,
-            `分支: ${event.payload.ref}`,
-            `提交信息:`,
-            event.payload.commits
-              .map((commit) => {
-                return `  - ${commit.message}`
-              })
-              .join('\n'),
-          ].join('\n'),
-        ),
-      ]
-      config.groups.forEach(async (group_id) => await sendMsg({ message_type: 'group', group_id }, message))
-    })
   }
 }

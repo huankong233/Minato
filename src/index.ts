@@ -1,4 +1,4 @@
-import PackageJson from '@/../package.json' assert { type: 'json' }
+import PackageJson from '@/../package.json' with { type: 'json' }
 import { getDirname } from '@/libs/getDirname.ts'
 import { loadPlugin } from '@/libs/loadPlugin.ts'
 import { makeSystemLogger } from '@/libs/logger.ts'
