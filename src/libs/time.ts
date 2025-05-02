@@ -1,4 +1,7 @@
 import dayjs from 'dayjs'
+import isToday from 'dayjs/plugin/isToday.js'
+
+dayjs.extend(isToday)
 
 /**
  * 格式化时间,将秒转换为HH:MM:SS的格式
@@ -22,23 +25,14 @@ export function formatTime(ms: number) {
  * @returns 是否是今天
  */
 export function isBeforeToday(timestamp: number) {
-  // 创建一个新的 Date 对象，并使用传入的时间戳
-  const date = new Date(timestamp)
-
-  // 创建一个表示今天日期的 Date 对象，但不包含时间部分
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-
-  // 比较传入时间戳的日期是否早于今天
-  return date < today
+  return dayjs(timestamp).isToday()
 }
 
 /**
  * 获取时间
  * @returns 2023/6/26 09:46:39
  */
-export const getDateTime = (split = '/', split2 = ':') =>
-  dayjs().format(`YYYY${split}MM${split}DD HH${split2}mm${split2}ss`)
+export const getDateTime = (split = '/', split2 = ':') => dayjs().format(`YYYY${split}MM${split}DD HH${split2}mm${split2}ss`)
 
 /**
  * 获取日期
