@@ -1,7 +1,4 @@
 import dayjs from 'dayjs'
-import isToday from 'dayjs/plugin/isToday.js'
-
-dayjs.extend(isToday)
 
 /**
  * 格式化时间,将秒转换为HH:MM:SS的格式
@@ -25,7 +22,7 @@ export function formatTime(ms: number) {
  * @returns 是否是今天
  */
 export function isBeforeToday(timestamp: number) {
-  return dayjs(timestamp).isToday()
+  return dayjs(timestamp).isBefore(dayjs(), 'day')
 }
 
 /**
