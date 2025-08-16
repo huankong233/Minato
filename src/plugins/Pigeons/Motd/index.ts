@@ -4,7 +4,6 @@ import { BasePlugin } from '@/plugins/Base.ts'
 import type { LookupAddress } from 'dns'
 import { lookup } from 'dns/promises'
 import mc from 'minecraftstatuspinger'
-import type { ServerStatus } from 'minecraftstatuspinger/dist/types.js'
 import { Structs, type AllHandlers } from 'node-napcat-ts'
 
 export default class Motd extends BasePlugin {
@@ -27,7 +26,7 @@ export default class Motd extends BasePlugin {
       port = arr[1]
     }
 
-    let status: ServerStatus
+    let status: Awaited<ReturnType<typeof mc.lookup>>
     let ip: LookupAddress
     try {
       status = await mc.lookup({

@@ -3,7 +3,7 @@ import axios from '@/libs/axios.ts'
 import { cron } from '@/libs/cron.ts'
 import { sendMsg } from '@/libs/sendMsg.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
-import { Structs, type Send } from 'node-napcat-ts'
+import { Structs, type SendMessageSegment } from 'node-napcat-ts'
 import { config, type ZaoBaoConfig } from './config.ts'
 
 export default class ZaoBao extends BasePlugin {
@@ -42,13 +42,13 @@ export default class ZaoBao extends BasePlugin {
       getImage: (data: any) => data.data.imageurl,
     },
     摸鱼人日历: {
-      api: 'https://api.vvhan.com/api/moyu?type=json',
-      checkSuccess: (data: any) => data.success,
-      getImage: (data: any) => data.url,
+      api: 'https://api.huankong.top/moyu',
+      checkSuccess: (data: any) => data.code === 200,
+      getImage: (data: any) => data.data.image,
     },
   }
 
-  async getData(type: ZaoBaoConfig['type']): Promise<Send[keyof Send][]> {
+  async getData(type: ZaoBaoConfig['type']): Promise<SendMessageSegment[]> {
     const url = this.urls[type]
     let response
     try {

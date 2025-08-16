@@ -1,4 +1,4 @@
-import PackageJson from '@/../package.json' assert { type: 'json' }
+import PackageJson from '@/../package.json' with { type: 'json' }
 import type { allEvents } from '@/global.js'
 import axios from '@/libs/axios.ts'
 import { cron } from '@/libs/cron.ts'
@@ -31,9 +31,7 @@ export default class CheckUpdate extends BasePlugin {
     } catch (error) {
       this.logger.ERROR('获取最新版本号失败')
       this.logger.DIR(error, false)
-      await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [
-        Structs.text(['检查更新失败', `当前版本: ${local_version}`, `请检查您的网络状况！`].join('\n')),
-      ])
+      await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [Structs.text(['检查更新失败', `当前版本: ${local_version}`, `请检查您的网络状况！`].join('\n'))])
       return
     }
 
@@ -42,9 +40,7 @@ export default class CheckUpdate extends BasePlugin {
       await sendMsg(context, [Structs.text(['kkbot无需更新哟~', `最新版本: ${remote_version}`, `当前版本: ${local_version}`].join('\n'))])
     } else {
       //需要更新，通知admin
-      await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [
-        Structs.text(['kkbot有更新哟~', `最新版本: ${remote_version}`, `当前版本: ${local_version}`].join('\n')),
-      ])
+      await sendMsg(context ?? { message_type: 'private', user_id: botConfig.admin_id }, [Structs.text(['kkbot有更新哟~', `最新版本: ${remote_version}`, `当前版本: ${local_version}`].join('\n'))])
     }
   }
 }
