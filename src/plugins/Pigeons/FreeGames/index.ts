@@ -67,15 +67,7 @@ export default class FreeGames extends BasePlugin {
           messages.push(
             Structs.customNode([
               Structs.image(item.description.image),
-              Structs.text(
-                [
-                  `游戏名: ${item.title}`,
-                  `开发商: ${item.author}`,
-                  `截止日期: ${item.endDate}`,
-                  `简介: ${item.description.description}`,
-                  `购买链接: ${item.link}`,
-                ].join('\n'),
-              ),
+              Structs.text([`游戏名: ${item.title}`, `开发商: ${item.author}`, `截止日期: ${item.endDate}`, `简介: ${item.description.description}`, `购买链接: ${item.link}`].join('\n')),
             ]),
           )
         })
@@ -92,12 +84,7 @@ export default class FreeGames extends BasePlugin {
 
         steam.forEach((item) => {
           if (!item.img) return
-          messages.push(
-            Structs.customNode([
-              Structs.image(item.img),
-              Structs.text([`游戏名: ${item.title}`, `发行日期: ${item.releasedTime}`, `购买链接: ${item.url}`].join('\n')),
-            ]),
-          )
+          messages.push(Structs.customNode([Structs.image(item.img), Structs.text([`游戏名: ${item.title}`, `发行日期: ${item.releasedTime}`, `购买链接: ${item.url}`].join('\n'))]))
         })
       } catch (_error) {
         messages.push(Structs.customNode([Structs.text(`steam获取免费游戏失败~`)]))

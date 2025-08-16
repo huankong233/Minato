@@ -6,5 +6,5 @@ export const cron = (cron: string, func: () => void, onComplete = null, start = 
     func, // onTick
     onComplete, // onComplete
     start, // start
-    process.env.TZ ?? 'Asia/Shanghai' // timeZone
+    process.env.TZ ?? 'Asia/Shanghai', // timeZone
   )

@@ -9,16 +9,11 @@ import { BasePlugin } from '@/plugins/Base.ts'
 import { type AllHandlers } from 'node-napcat-ts'
 import { config } from './config.ts'
 import { getArticleInfo } from './libs/article.ts'
-import { getDynamicInfo } from './libs/dynamic.ts'
 import { getLiveRoomInfo } from './libs/live.ts'
+import { getVideoJumpTime } from './libs/utils.ts'
 import { getVideoInfo } from './libs/video.ts'
 
-export const enable =
-  config.recallMiniProgram ||
-  config.getInfo.getVideoInfo ||
-  config.getInfo.getDynamicInfo ||
-  config.getInfo.getArticleInfo ||
-  config.getInfo.getLiveRoomInfo
+export const enable = config.recallMiniProgram || config.getInfo.getVideoInfo || config.getInfo.getArticleInfo || config.getInfo.getLiveRoomInfo
 
 export default class Bilibili extends BasePlugin {
   events: allEvents[] = [
@@ -45,8 +40,8 @@ export default class Bilibili extends BasePlugin {
     if (!url) return
 
     const param = await this.getIdFromMsg(url)
-    const { avid, bvid, dyid, arid, lrid } = param
-    if (!avid && !bvid && !arid && !dyid && !lrid) return
+    const { avid, bvid, arid, lrid, videoJump } = param
+    if (!avid && !bvid && !arid && !lrid) return
 
     if (isMiniProgram) {
       if (context.message_type === 'group' && config.recallMiniProgram) {
@@ -61,7 +56,7 @@ export default class Bilibili extends BasePlugin {
     }
 
     if (config.getInfo.getVideoInfo && (avid || bvid)) {
-      const res = await getVideoInfo({ aid: avid, bvid }, this.logger)
+      const res = await getVideoInfo({ aid: avid, bvid, videoJump }, this.logger)
       await sendMsg(context, res)
       return
     }
@@ -76,32 +71,24 @@ export default class Bilibili extends BasePlugin {
       await sendMsg(context, res)
       return
     }
-
-    if (config.getInfo.getDynamicInfo && dyid) {
-      const res = await getDynamicInfo(dyid, this.logger)
-      await sendMsg(context, res)
-      return
-    }
   }
 
   getIdFromMsg = async (msg: string) => {
-    const match = /((b23|acg)\.tv|bili2233.cn)\/[0-9a-zA-Z]+/.exec(msg)
+    const match = /((b23|acg)\.tv|bili2233\.cn)\/[0-9a-zA-Z]+/.exec(msg)
     if (match) return this.getIdFromShortLink(`https://${match[0]}`)
     return this.getIdFromNormalLink(msg)
   }
 
   getIdFromNormalLink = (link: string) => {
-    const searchVideo = /bilibili\.com\/video\/(?:av(\d+)|(bv[\da-z]+))/i.exec(link) || []
-    const searchDynamic =
-      /t\.bilibili\.com\/(\d+)/i.exec(link) || /m\.bilibili\.com\/dynamic\/(\d+)/i.exec(link) || /www\.bilibili\.com\/opus\/(\d+)/i.exec(link) || []
+    const searchVideo = /bilibili\.com\/video\/(?:av(\d+)|(bv[\da-z]+))(?:\/?\?\S*\b(t|start_progress)=([\d.]+))?/i.exec(link) || []
     const searchArticle = /bilibili\.com\/read\/(?:cv|mobile\/)(\d+)/i.exec(link) || []
     const searchLiveRoom = /live\.bilibili\.com\/(\d+)/i.exec(link) || []
     return {
       avid: searchVideo[1],
       bvid: searchVideo[2],
-      dyid: searchDynamic[1],
       arid: searchArticle[1],
       lrid: searchLiveRoom[1],
+      videoJump: getVideoJumpTime(searchVideo[3], searchVideo[4]),
     }
   }
 
@@ -118,9 +105,9 @@ export default class Bilibili extends BasePlugin {
         return {
           avid: undefined,
           bvid: undefined,
-          dyid: undefined,
           arid: undefined,
           lrid: undefined,
+          videoJump: undefined,
         }
       })
   }

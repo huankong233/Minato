@@ -6,23 +6,27 @@ import { USER_AGENT } from './const.ts'
 
 export const getLiveRoomInfo = async (id: string, logger: Logger) => {
   try {
-    const response = await axios.get(`https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom?room_id=${id}`, {
-      timeout: 10000,
-      headers: {
-        'User-Agent': USER_AGENT,
-      },
-    })
+    const [mainResponse, unameResponse] = await Promise.all([
+      axios.get(`https://api.live.bilibili.com/room/v1/Room/get_info?room_id=${id}`, {
+        timeout: 10000,
+        headers: {
+          'User-Agent': USER_AGENT,
+        },
+      }),
+      axios.get(`https://api.live.bilibili.com/live_user/v1/UserInfo/get_anchor_in_room?roomid=${id}`, {
+        timeout: 10000,
+        headers: {
+          'User-Agent': USER_AGENT,
+        },
+      }),
+    ])
 
-    const { code, message, data } = response.data
+    const { code, message, data } = mainResponse.data
 
     if (code !== 0) return [Structs.text(`Error: (${code})${message}`)]
 
-    const {
-      room_info: { room_id, short_id, title, live_status, area_name, parent_area_name, keyframe, online },
-      anchor_info: {
-        base_info: { uname },
-      },
-    } = data
+    const { room_id, short_id, title, live_status, area_name, parent_area_name, keyframe, online } = data
+    const uname = unameResponse?.data?.data?.info?.uname ?? '不知道叫什么喵'
 
     return [
       Structs.image(keyframe),
