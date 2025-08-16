@@ -2,7 +2,7 @@ import axios from '@/libs/axios.ts'
 import { humanNum } from '@/libs/humanNum.ts'
 import { type Logger } from '@/libs/logger.ts'
 import { Structs } from 'node-napcat-ts'
-import { USER_AGENT } from './const.ts'
+import { FAKE_COOKIE, USER_AGENT } from './const.ts'
 
 export const getArticleInfo = async (id: string, logger: Logger) => {
   try {
@@ -10,6 +10,7 @@ export const getArticleInfo = async (id: string, logger: Logger) => {
       timeout: 10000,
       headers: {
         'User-Agent': USER_AGENT,
+        Cookie: FAKE_COOKIE,
       },
     })
 
@@ -24,10 +25,7 @@ export const getArticleInfo = async (id: string, logger: Logger) => {
       origin_image_urls: [img],
     } = data
 
-    return [
-      Structs.image(img),
-      Structs.text([title, `UP: ${author_name}`, `${humanNum(view)}阅读 ${humanNum(reply)}评论`, `https://www.bilibili.com/read/cv${id}`].join('\n')),
-    ]
+    return [Structs.image(img), Structs.text([title, `UP: ${author_name}`, `${humanNum(view)}阅读 ${humanNum(reply)}评论`, `https://www.bilibili.com/read/cv${id}`].join('\n'))]
   } catch (error) {
     logger.ERROR(`B站文章信息获取失败`)
     logger.DIR({ id }, false)

@@ -60,9 +60,7 @@ export default class Admin extends BasePlugin {
       if (user_id === self_id) return
 
       await sendMsg({ message_type: 'group', group_id }, [
-        Structs.text(
-          notice_type === 'group_increase' ? `${await getUserName(context)} 欢迎加群呀~ ヾ(≧▽≦*)o` : `${await getUserName(context)} 退群了 (*>.<*)`,
-        ),
+        Structs.text(notice_type === 'group_increase' ? `${await getUserName(context)} 欢迎加群呀~ ヾ(≧▽≦*)o` : `${await getUserName(context)} 退群了 (*>.<*)`),
       ])
     }
   }
@@ -114,10 +112,7 @@ export default class Admin extends BasePlugin {
       text.push('已自动拒绝了哦~')
     } else {
       const sub_type = request_type === 'group' ? context.sub_type : request_type
-      text.push(
-        `接受回复 : ${botConfig.command_prefix}admin ${sub_type} accept ${flag}`,
-        `拒绝回复 : ${botConfig.command_prefix}admin ${sub_type} reject ${flag}`,
-      )
+      text.push(`接受回复 : ${botConfig.command_prefix}admin ${sub_type} accept ${flag}`, `拒绝回复 : ${botConfig.command_prefix}admin ${sub_type} reject ${flag}`)
     }
 
     await sendMsg({ message_type: 'private', user_id: botConfig.admin_id }, [Structs.text(text.join('\n'))])

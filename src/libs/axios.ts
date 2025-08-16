@@ -17,7 +17,7 @@ if (debug) {
       logger.ERROR('发送网络请求时错误')
       logger.DIR(err, false)
       return Promise.reject(err)
-    }
+    },
   )
 
   instance.interceptors.response.use(
@@ -28,23 +28,21 @@ if (debug) {
         statusText: response.statusText,
         config: response.config,
         headers: response.headers,
-        data: response.data
+        data: response.data,
       })
       return response
     },
     async (error) => {
-      logger.ERROR(
-        `收到网络请求错误响应[${error.config['axios-retry'].retryCount}/${error.config['axios-retry'].retries}]`
-      )
+      logger.ERROR(`收到网络请求错误响应[${error.config['axios-retry'].retryCount}/${error.config['axios-retry'].retries}]`)
       logger.DIR(error, false)
       return Promise.reject(error)
-    }
+    },
   )
 }
 
 axiosRetry(instance, {
   retries: 10,
-  retryDelay: () => 1000
+  retryDelay: () => 1000,
 })
 
 export default instance

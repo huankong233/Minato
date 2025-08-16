@@ -42,8 +42,8 @@ export default class Bot extends BasePlugin {
         }
 
         if (context.error_type === 'response_error') {
-          reject(`napcat服务端返回错误: ${context.info.message}`)
-          throw new Error(`napcat服务端返回错误: ${context.info.message}`)
+          this.logger.ERROR(`napcat服务端返回错误: ${context.info.message}`)
+          process.exit(1)
         }
       })
 
@@ -93,11 +93,7 @@ export default class Bot extends BasePlugin {
     const { commandName, params, pluginName } = event
 
     // 检查命令名
-    if (
-      commandName !== '*' &&
-      ((typeof commandName === 'string' && commandName !== command.name) ||
-        (commandName instanceof RegExp && command.name.match(commandName) === null))
-    ) {
+    if (commandName !== '*' && ((typeof commandName === 'string' && commandName !== command.name) || (commandName instanceof RegExp && command.name.match(commandName) === null))) {
       this.logger.DEBUG(`命令不满足插件 ${pluginName} 需求的 ${commandName} 触发条件`)
       return false
     }
@@ -121,23 +117,11 @@ export default class Bot extends BasePlugin {
 
       if (param.type === 'number' && isNaN(Number(arg))) {
         this.logger.DEBUG(`参数类型不符合插件 ${pluginName} 需求的 ${commandName} 触发条件`)
-        await sendMsg(context, [
-          Structs.text(
-            [`参数不合法~`, `参数第 [${index + 1}] 位需要是数字哦`, `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`].join('\n'),
-          ),
-        ])
+        await sendMsg(context, [Structs.text([`参数不合法~`, `参数第 [${index + 1}] 位需要是数字哦`, `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`].join('\n'))])
         return false
       } else if (param.type === 'enum' && !param.enum.includes(arg)) {
         this.logger.DEBUG(`参数值不在插件 ${pluginName} 需求的 ${commandName} 可用范围内`)
-        await sendMsg(context, [
-          Structs.text(
-            [
-              `参数不合法~`,
-              `参数第 [${index + 1}] 位可用值: [${param.enum}]`,
-              `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`,
-            ].join('\n'),
-          ),
-        ])
+        await sendMsg(context, [Structs.text([`参数不合法~`, `参数第 [${index + 1}] 位可用值: [${param.enum}]`, `请使用: ${BotConfig.command_prefix}help ${commandName} 查看使用方法`].join('\n'))])
         return false
       }
     }

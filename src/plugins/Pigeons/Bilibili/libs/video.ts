@@ -3,8 +3,9 @@ import { humanNum } from '@/libs/humanNum.ts'
 import { type Logger } from '@/libs/logger.ts'
 import { Structs } from 'node-napcat-ts'
 import { USER_AGENT } from './const.ts'
+import { getVideoJumpTimeStr } from './utils.ts'
 
-export const getVideoInfo = async (params: { aid?: string; bvid?: string }, logger: Logger) => {
+export const getVideoInfo = async (params: { aid?: string; bvid?: string; videoJump?: number }, logger: Logger) => {
   try {
     const response = await axios.get(`https://api.bilibili.com/x/web-interface/view`, {
       params,
@@ -28,11 +29,12 @@ export const getVideoInfo = async (params: { aid?: string; bvid?: string }, logg
       stat: { view, danmaku },
     } = data
 
+    const { videoJump } = params
+    const videoJumpText = videoJump ? `精准空降(${getVideoJumpTimeStr(videoJump)}): https://www.bilibili.com/video/${bvid}?t=${videoJump}` : null
+
     return [
       Structs.image(pic),
-      Structs.text(
-        [`av${aid}`, title, `UP: ${name}`, `${humanNum(view)}播放 ${humanNum(danmaku)}弹幕`, `https://www.bilibili.com/video/${bvid}`].join('\n'),
-      ),
+      Structs.text([`av${aid}`, title, `UP: ${name}`, `${humanNum(view)}播放 ${humanNum(danmaku)}弹幕`, videoJumpText ?? `https://www.bilibili.com/video/${bvid}`].join('\n')),
     ]
   } catch (error) {
     logger.ERROR(`B站视频信息获取失败`)
