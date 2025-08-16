@@ -5,19 +5,8 @@ import { sendForwardMsg, sendMsg } from '@/libs/sendMsg.ts'
 import { formatTime } from '@/libs/time.ts'
 import { BasePlugin } from '@/plugins/Base.ts'
 import PigeonTool from '@/plugins/Pigeons/PigeonTool/index.ts'
-import {
-  AnimeTrace,
-  ascii2d,
-  IqDB,
-  SauceNAO,
-  TraceMoe,
-  type AnimeTraceReq,
-  type ascii2dReq,
-  type IqDBReq,
-  type SauceNAOReq,
-  type TraceMoeReq,
-} from 'image_searcher'
-import { Structs, type AllHandlers, type Send } from 'node-napcat-ts'
+import { AnimeTrace, ascii2d, IqDB, SauceNAO, TraceMoe, type AnimeTraceReq, type ascii2dReq, type IqDBReq, type SauceNAOReq, type TraceMoeReq } from 'image_searcher'
+import { Structs, type AllHandlers, type NodeSegment, type SendMessageSegment } from 'node-napcat-ts'
 import { config } from './config.ts'
 
 export default class SearchImage extends BasePlugin {
@@ -196,16 +185,13 @@ export default class SearchImage extends BasePlugin {
     return response
   }
 
-  async parseData(
-    context: AllHandlers['message'],
-    response: ({ success: true; name: string; response: any; cost: number } | { success: false; name: string })[],
-  ) {
+  async parseData(context: AllHandlers['message'], response: ({ success: true; name: string; response: any; cost: number } | { success: false; name: string })[]) {
     // 总节点
-    const messages: Send['node'][] = []
+    const messages: NodeSegment[] = []
 
     for (const apiResponse of response) {
       // 自定义节点内容节点
-      const message: Send[keyof Send][] = []
+      const message: SendMessageSegment[] = []
 
       if (!apiResponse.success) {
         await PigeonTool.add(context, config.back, `${apiResponse.name}搜图失败力`)
@@ -243,9 +229,7 @@ export default class SearchImage extends BasePlugin {
           )
         } else if (apiResponse.name === 'SauceNAO') {
           message.push(
-            item.image !== 'https://saucenao.com/' || item.image !== ''
-              ? Structs.image(`base64://${await getFileBase64(item.image)}`)
-              : Structs.text('无图片~'),
+            item.image !== 'https://saucenao.com/' || item.image !== '' ? Structs.image(`base64://${await getFileBase64(item.image)}`) : Structs.text('无图片~'),
             Structs.text([`标题: ${item.title}`, `相似度: ${item.similarity}`, `图片信息:`, ...this.joinContent(item.content), ``, ``].join('\n')),
           )
         } else if (apiResponse.name === 'IqDB') {
@@ -270,9 +254,7 @@ export default class SearchImage extends BasePlugin {
           )
         } else if (apiResponse.name === 'AnimeTraceAll' || apiResponse.name === 'AnimeTraceAnime' || apiResponse.name === 'AnimeTraceGame') {
           message.push(
-            item.preview !== 'failed unsupported image type' && item.preview
-              ? Structs.image(`base64://${item.preview}`)
-              : Structs.text('不支持处理的图片格式'),
+            item.preview !== 'failed unsupported image type' && item.preview ? Structs.image(`base64://${item.preview}`) : Structs.text('不支持处理的图片格式'),
             Structs.text(
               item.char
                 .slice(0, config.limit2)

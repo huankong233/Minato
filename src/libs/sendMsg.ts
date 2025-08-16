@@ -1,19 +1,15 @@
-import { Structs, type Receive, type Send } from 'node-napcat-ts'
+import { Structs, type NodeSegment, type Receive, type SendMessageSegment } from 'node-napcat-ts'
 import { makeSystemLogger } from './logger.ts'
 
 const logger = makeSystemLogger({ pluginName: 'sendMsg' })
 
 export async function sendMsg(
-  context:
-    | { message_type: 'private'; user_id: number; message_id?: number }
-    | { message_type: 'group'; group_id: number; user_id?: number; message_id?: number },
-  msg: Send[keyof Send][] | Receive[keyof Receive][],
-  { reply = true, at = false } = {}
+  context: { message_type: 'private'; user_id: number; message_id?: number } | { message_type: 'group'; group_id: number; user_id?: number; message_id?: number },
+  msg: SendMessageSegment[] | Receive[keyof Receive][],
+  { reply = true, at = false } = {},
 ) {
   // 过滤 received message
-  const message = msg.filter(
-    (message) => !['markdown', 'forward'].includes(message.type)
-  ) as Send[keyof Send][]
+  const message = msg.filter((message) => !['markdown', 'forward'].includes(message.type)) as SendMessageSegment[]
 
   let response
   try {
@@ -53,25 +49,20 @@ export async function sendMsg(
  * @param context 消息对象
  * @param messages
  */
-export async function sendForwardMsg(
-  context:
-    | { message_type: 'group'; group_id: number }
-    | { message_type: 'private'; user_id: number },
-  message: Send['node'][]
-) {
+export async function sendForwardMsg(context: { message_type: 'group'; group_id: number } | { message_type: 'private'; user_id: number }, message: NodeSegment[]) {
   let response
   try {
     switch (context.message_type) {
       case 'private':
         response = await bot.send_private_forward_msg({
           user_id: context.user_id,
-          message
+          message,
         })
         break
       case 'group':
         response = await bot.send_group_forward_msg({
           group_id: context.group_id,
-          message
+          message,
         })
         break
     }
