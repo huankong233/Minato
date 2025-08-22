@@ -1,0 +1,15 @@
+{
+  "name": "@huan_kong/minato-example",
+  "description": "example for minato framework",
+  "author": "huankong233",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "tsx ./src/index.ts"
+  },
+  "dependencies": {
+    "@huan_kong/minato": "workspace:*",
+    "nodemon": "^3.1.10"
+  }
+}

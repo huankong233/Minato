@@ -1,0 +1,20 @@
+{
+  "name": "@huan_kong/minato",
+  "version": "1.0.0",
+  "description": "QQBOT TypeScript framework",
+  "author": "huankong233",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist/**/*"
+  ],
+  "scripts": {
+    "build": "tsdown --clean"
+  },
+  "dependencies": {
+    "tsdown": "^0.14.1",
+    "node-napcat-ts": "^0.4.15"
+  }
+}

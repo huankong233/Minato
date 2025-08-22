@@ -1,0 +1,6 @@
+{
+  "watch": ["./src", "../core/src"],
+  "ext": ".ts",
+  "ignore": [],
+  "exec": "pnpm --filter @huan_kong/minato build --silent && pnpm --filter @huan_kong/minato-example start"
+}
