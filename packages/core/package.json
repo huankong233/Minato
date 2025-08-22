@@ -14,7 +14,12 @@
     "build": "tsdown --clean"
   },
   "dependencies": {
-    "tsdown": "^0.14.1",
-    "node-napcat-ts": "^0.4.15"
+    "cli-color": "^2.0.4",
+    "dayjs": "^1.11.13",
+    "node-napcat-ts": "^0.4.15",
+    "tsdown": "^0.14.1"
+  },
+  "devDependencies": {
+    "@types/cli-color": "^2.0.6"
   }
 }
