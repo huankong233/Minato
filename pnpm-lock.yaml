@@ -58,6 +58,9 @@ importers:
       '@huan_kong/minato':
         specifier: workspace:*
         version: link:../core
+      dotenv:
+        specifier: ^17.2.1
+        version: 17.2.1
       nodemon:
         specifier: ^3.1.10
         version: 3.1.10
@@ -608,6 +611,10 @@ packages:
   diff@8.0.2:
     resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
     engines: {node: '>=0.3.1'}
+
+  dotenv@17.2.1:
+    resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
+    engines: {node: '>=12'}
 
   dts-resolver@2.1.1:
     resolution: {integrity: sha512-3BiGFhB6mj5Kv+W2vdJseQUYW+SKVzAFJL6YNP6ursbrwy1fXHRotfHi3xLNxe4wZl/K8qbAFeCDjZLjzqxxRw==}
@@ -1636,6 +1643,8 @@ snapshots:
   defu@6.1.4: {}
 
   diff@8.0.2: {}
+
+  dotenv@17.2.1: {}
 
   dts-resolver@2.1.1: {}
 

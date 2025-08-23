@@ -4,7 +4,8 @@
   "packageManager": "pnpm@10.11.0",
   "scripts": {
     "build": "pnpm --filter @huan_kong/minato build",
-    "dev": "pnpm --filter @huan_kong/minato-example dev"
+    "dev": "pnpm --filter @huan_kong/minato-example dev",
+    "start": "pnpm --filter @huan_kong/minato-example start"
   },
   "dependencies": {
     "tsx": "^4.20.4"

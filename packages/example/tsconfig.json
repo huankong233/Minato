@@ -4,7 +4,8 @@
     "outDir": "out",
     "declaration": false,
     "paths": {
-      "@/*": ["../core/src/*"]
+      "@/*": ["../core/src/*"],
+      "@huan_kong/minato": ["../core/src/index.ts"]
     }
   },
   "include": ["src"]
