@@ -1,4 +1,4 @@
-import { Minato } from '@huan_kong/minato'
+import { Logger, Minato } from '@huan_kong/minato'
 import { config } from 'dotenv'
 import path from 'node:path'
 import process from 'node:process'
@@ -7,6 +7,8 @@ config({
   path: path.join(import.meta.dirname, '../.env'),
   quiet: true,
 })
+
+const logger = new Logger('KKBot')
 
 const minato = await Minato.init(
   {
@@ -24,7 +26,7 @@ const minato = await Minato.init(
   process.argv.includes('--debug'),
 )
 
-await minato.load_plugin('./plugins/hello')
+await minato.load_plugin('./plugins/ping')
 await minato.load_plugin('./plugins/call')
 
-minato.logger.SUCCESS(`所有插件已加载完成`)
+logger.SUCCESS(`所有插件已加载完成`)

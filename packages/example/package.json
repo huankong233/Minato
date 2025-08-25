@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon",
-    "start": "tsx ./src/index.ts"
+    "start": "tsx ./src/index.ts",
+    "type-check": "tsc --noEmit -p tsconfig.json --composite false"
   },
   "dependencies": {
     "@huan_kong/minato": "workspace:*",

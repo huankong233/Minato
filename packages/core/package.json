@@ -11,10 +11,12 @@
     "./dist/**/*"
   ],
   "scripts": {
-    "build": "tsdown --clean"
+    "build": "tsdown --clean",
+    "type-check": "tsc --noEmit -p tsconfig.json --composite false"
   },
   "dependencies": {
     "cli-color": "^2.0.4",
+    "compare-versions": "^6.1.1",
     "dayjs": "^1.11.13",
     "node-napcat-ts": "^0.4.15",
     "tsdown": "^0.14.1"

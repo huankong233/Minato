@@ -1,5 +1,6 @@
-import { getDateTime } from '@/utils.ts'
+import { get_date_time, is_object } from '@/utils.ts'
 import clc from 'cli-color'
+import util from 'node:util'
 
 export class Logger {
   prefix: string
@@ -39,8 +40,9 @@ export class Logger {
 
   private print(...messages: unknown[]) {
     if (typeof messages === 'string') messages = [messages]
+    messages = messages.map((message) => (is_object(message) ? util.inspect(message, { depth: null, colors: true }) : message))
 
-    const message = [clc.cyan(`[${getDateTime()}]`)]
+    const message = [clc.cyan(`[${get_date_time()}]`)]
     if (this.prefix) message.push(clc.yellow(`[${this.prefix}]`))
     message.push(...this.formatMessages(messages))
 
