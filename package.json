@@ -1,9 +1,10 @@
 {
   "name": "minato",
   "version": "1.0.0",
-  "description": "qqbot powered by atri framework",
-  "author": "huankong233",
   "license": "MIT",
+  "author": "huankong233",
+  "repository": "https://github.com/HkTeamX/Minato",
+  "description": "qqbot powered by atri framework",
   "type": "module",
   "scripts": {
     "dev": "nodemon",
