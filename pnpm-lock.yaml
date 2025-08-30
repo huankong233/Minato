@@ -12,8 +12,8 @@ importers:
         specifier: ^9.34.0
         version: 9.34.0
       '@huan_kong/atri':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.3
+        version: 1.0.3
       '@types/node':
         specifier: ^24.3.0
         version: 24.3.0
@@ -30,8 +30,8 @@ importers:
         specifier: ^16.3.0
         version: 16.3.0
       node-napcat-ts:
-        specifier: ^0.4.17
-        version: 0.4.17
+        specifier: ^0.4.18
+        version: 0.4.18
       nodemon:
         specifier: ^3.1.10
         version: 3.1.10
@@ -244,8 +244,8 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@huan_kong/atri@1.0.0':
-    resolution: {integrity: sha512-HnlsONgb3Le4Z6ywXSjzsLmUWvinY2f4DbMf0a+SIE6j4J5h0KGPqgy7CgFXur5KBmuSzUbUzlZCFKn4VXTWlg==}
+  '@huan_kong/atri@1.0.3':
+    resolution: {integrity: sha512-vrzW3My3UkybjTm5oBpfjWuOwHzhMoR91p/KVVSNCL28uf77XGrQ040Kj4Q2rFgMnCjyS7lSiJGnBuS//zjGmA==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -428,9 +428,6 @@ packages:
   d@1.0.2:
     resolution: {integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==}
     engines: {node: '>=0.12'}
-
-  dayjs@1.11.15:
-    resolution: {integrity: sha512-MC+DfnSWiM9APs7fpiurHGCoeIx0Gdl6QZBy+5lu8MbYKN5FZEXqOgrundfibdfhGZ15o9hzmZ2xJjZnbvgKXQ==}
 
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
@@ -702,8 +699,8 @@ packages:
   next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
 
-  node-napcat-ts@0.4.17:
-    resolution: {integrity: sha512-WvsE0V5Ny3KUDp6xgswNa5zdpMuoDyjsgRPWuM7IWByUFdBWKjD+GCqnWNwFkjmMr8EZ+aWoQdKeAqAYWbOvEw==}
+  node-napcat-ts@0.4.18:
+    resolution: {integrity: sha512-PiTkiQ/y0V1FzmsoUAwxY4i8F5cAd05x74AGvfeZXjizi9cAvMPGO7UGr2bfVMQrwrV88lzZ8k1uqr/N5/ArqA==}
 
   nodemon@3.1.10:
     resolution: {integrity: sha512-WDjw3pJ0/0jMFmyNDp3gvY2YizjLmmOUQo6DEBY+JgdvW/yQ9mEeSw6H5ythl5Ny2ytb7f9C2nIbjSxMNzbJXw==}
@@ -1008,13 +1005,12 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@huan_kong/atri@1.0.0':
+  '@huan_kong/atri@1.0.3':
     dependencies:
       cli-color: 2.0.4
       commander: 14.0.0
       compare-versions: 6.1.1
-      dayjs: 1.11.15
-      node-napcat-ts: 0.4.17
+      node-napcat-ts: 0.4.18
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -1235,8 +1231,6 @@ snapshots:
     dependencies:
       es5-ext: 0.10.64
       type: 2.7.3
-
-  dayjs@1.11.15: {}
 
   debug@4.4.1(supports-color@5.5.0):
     dependencies:
@@ -1546,7 +1540,7 @@ snapshots:
 
   next-tick@1.1.0: {}
 
-  node-napcat-ts@0.4.17:
+  node-napcat-ts@0.4.18:
     dependencies:
       isomorphic-ws: 5.0.0(ws@8.18.3)
       nanoid: 5.1.5

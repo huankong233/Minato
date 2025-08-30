@@ -1,5 +1,6 @@
 {
   "name": "minato",
+  "version": "1.0.0",
   "description": "qqbot powered by atri framework",
   "author": "huankong233",
   "license": "MIT",
@@ -11,13 +12,13 @@
   },
   "dependencies": {
     "@eslint/js": "^9.34.0",
-    "@huan_kong/atri": "^1.0.0",
+    "@huan_kong/atri": "^1.0.3",
     "@types/node": "^24.3.0",
     "commander": "^14.0.0",
     "dotenv": "^17.2.1",
     "eslint": "^9.34.0",
     "globals": "^16.3.0",
-    "node-napcat-ts": "^0.4.17",
+    "node-napcat-ts": "^0.4.18",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
