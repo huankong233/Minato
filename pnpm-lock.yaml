@@ -12,8 +12,8 @@ importers:
         specifier: ^9.34.0
         version: 9.34.0
       '@huan_kong/atri':
-        specifier: ^1.0.8
-        version: 1.0.8
+        specifier: ^1.0.9
+        version: 1.0.9
       '@types/node':
         specifier: ^24.3.0
         version: 24.3.0
@@ -33,8 +33,8 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1
       node-napcat-ts:
-        specifier: ^0.4.18
-        version: 0.4.18
+        specifier: ^0.4.19
+        version: 0.4.19
       nodemon:
         specifier: ^3.1.10
         version: 3.1.10
@@ -247,8 +247,8 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@huan_kong/atri@1.0.8':
-    resolution: {integrity: sha512-LOUH3ifbz6kAFbsF/78CsNcNgWSAiNEr8vBWl3s57S9O2aMz1HRbvxsZXw0MLz7CwkdPbolW9vQ0lLj71QsaEQ==}
+  '@huan_kong/atri@1.0.9':
+    resolution: {integrity: sha512-L+H67jupxOgPR/2lQkQ7iEmjFooY6OIK2j1zWkrfhMS5nv2i+nSfookTlDk3IUc/cH0Hd+QepXpapQYgaoqrEw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -661,8 +661,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  node-napcat-ts@0.4.18:
-    resolution: {integrity: sha512-PiTkiQ/y0V1FzmsoUAwxY4i8F5cAd05x74AGvfeZXjizi9cAvMPGO7UGr2bfVMQrwrV88lzZ8k1uqr/N5/ArqA==}
+  node-napcat-ts@0.4.19:
+    resolution: {integrity: sha512-Kbziv/slgBmsMGiy2toAGmjCxB2o/QekXzb82LyTND0tKv2xrC1WZIDR159Le4sYf+QfgdnMjyg1FBJn6J5Zvg==}
 
   nodemon@3.1.10:
     resolution: {integrity: sha512-WDjw3pJ0/0jMFmyNDp3gvY2YizjLmmOUQo6DEBY+JgdvW/yQ9mEeSw6H5ythl5Ny2ytb7f9C2nIbjSxMNzbJXw==}
@@ -963,11 +963,11 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@huan_kong/atri@1.0.8':
+  '@huan_kong/atri@1.0.9':
     dependencies:
       commander: 14.0.0
       compare-versions: 6.1.1
-      node-napcat-ts: 0.4.18
+      node-napcat-ts: 0.4.19
       picocolors: 1.1.1
     transitivePeerDependencies:
       - bufferutil
@@ -1429,7 +1429,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  node-napcat-ts@0.4.18:
+  node-napcat-ts@0.4.19:
     dependencies:
       isomorphic-ws: 5.0.0(ws@8.18.3)
       nanoid: 5.1.5
