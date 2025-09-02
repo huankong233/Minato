@@ -36,8 +36,6 @@ const atri = await ATRI.init({
   bot,
   debug,
   base_dir: import.meta.dirname,
-
-  is_the_cake_a_lie: true,
 })
 
 await atri.load_plugins(['./plugins/call'])
